@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
 void main() {
@@ -11,11 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const RootTab(),
     );
   }
 }

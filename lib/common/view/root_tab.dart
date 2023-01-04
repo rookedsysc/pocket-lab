@@ -5,6 +5,7 @@ import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
 class RootTab extends StatefulWidget {
+  static const routeName = 'rootTab';
   const RootTab({super.key});
 
   @override
@@ -46,6 +47,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   }
 
   Widget _bottomNavigationBar() => BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           //* tab 추가시 수정
           BottomNavigationBarItem(

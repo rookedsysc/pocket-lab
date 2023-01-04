@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
-class RootTab extends StatefulWidget {
+class RootTab extends ConsumerStatefulWidget {
   static const routeName = 'rootTab';
   const RootTab({super.key});
 
   @override
-  State<RootTab> createState() => _RootTabState();
+  ConsumerState<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int index = 0;
 
   @override
   void initState() {
     super.initState();
+
+    
 
     //* length: 2 -> 2개의 탭.
     _tabController = TabController(length: 2, vsync: this);

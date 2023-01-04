@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

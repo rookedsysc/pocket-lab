@@ -29,6 +29,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_riverpod: ^2.1.3
+  go_router: ^6.0.0
   flutter:
     sdk: flutter
 

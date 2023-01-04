@@ -62,12 +62,13 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
         //: 탭을 눌렀을 때
         onTap: (int index) {
-          debugPrint(index.toString());
           //: TabBarView의 해당하는 인덱스로 움직여라
           _tabController.animateTo(index);
         },
         currentIndex: index,
         selectedItemColor: Colors.amber[800],
+        //: 연한 주황색
+        unselectedItemColor: Colors.orange[200],
       );
 
   Widget _tabBarView() {

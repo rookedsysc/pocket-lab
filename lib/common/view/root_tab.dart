@@ -69,15 +69,16 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
           _tabController.animateTo(index);
         },
         currentIndex: index,
-        selectedItemColor: Colors.amber[800],
-        //: 연한 주황색
-        unselectedItemColor: Colors.orange[200],
+
+        //: 탭 색상
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.green[700],
       );
 
   Widget _tabBarView() {
     return TabBarView(
       children: [
-        //* tab 추가시 수정
+        //TODO tab 추가시 수정
         HomeScreen(), CalendarScreen()
       ],
       physics: const NeverScrollableScrollPhysics(),

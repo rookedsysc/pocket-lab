@@ -20,7 +20,7 @@ class _GoalDetailViewState extends ConsumerState<GoalDetailView> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green,
         //: 그림자 제거
         elevation: 0,
 
@@ -29,7 +29,6 @@ class _GoalDetailViewState extends ConsumerState<GoalDetailView> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-
             },
           ),
         ],

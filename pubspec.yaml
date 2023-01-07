@@ -35,6 +35,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   uuid: ^3.0.7
+  carousel_slider: ^4.2.1
   flutter:
     sdk: flutter
 

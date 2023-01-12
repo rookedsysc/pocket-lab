@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "4e6321bdf55f0c5358727c49cd330e41bbda05265a3e4ef6ebdd6b850fa395b5"
+build_start_time: [1672832904, 674165964]
+build_end_time: [1672832904, 695778846]
+inputs:
+  "/Users/rookedsysc/Documents/pocket_lab/macos/Flutter/GeneratedPluginRegistrant.swift": !private [1672832892, 332033157]
+  "/Users/rookedsysc/Documents/pocket_lab/macos/Runner/AppDelegate.swift": !private [1671141040, 0]
+  "/Users/rookedsysc/Documents/pocket_lab/macos/Runner/MainFlutterWindow.swift": !private [1671141040, 0]

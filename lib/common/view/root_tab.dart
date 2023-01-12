@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
-class RootTab extends StatefulWidget {
+class RootTab extends ConsumerStatefulWidget {
+  static const routeName = 'root_tab';
   const RootTab({super.key});
 
   @override
-  State<RootTab> createState() => _RootTabState();
+  ConsumerState<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int index = 0;
 
@@ -46,6 +48,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   }
 
   Widget _bottomNavigationBar() => BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           //* tab 추가시 수정
           BottomNavigationBarItem(
@@ -60,18 +63,20 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
         //: 탭을 눌렀을 때
         onTap: (int index) {
-          debugPrint(index.toString());
           //: TabBarView의 해당하는 인덱스로 움직여라
           _tabController.animateTo(index);
         },
         currentIndex: index,
-        selectedItemColor: Colors.amber[800],
+
+        //: 탭 색상
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.green[700],
       );
 
   Widget _tabBarView() {
     return TabBarView(
       children: [
-        //* tab 추가시 수정
+        //TODO tab 추가시 수정
         HomeScreen(), CalendarScreen()
       ],
       physics: const NeverScrollableScrollPhysics(),

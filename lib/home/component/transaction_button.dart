@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/home/view/budget_detail_screen.dart';
+import 'package:pocket_lab/home/view/transaction_screen.dart';
 
 enum TransactionType { remittance, income, expenditure }
 
@@ -12,27 +13,30 @@ class TransactionButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const SizedBox(width: 50.0,),
-                      TransactionButton(
-                          transactionType: TransactionType.income,
-                          ctx: context,
-                          ),
-                      TransactionButton(
-                        transactionType: TransactionType.remittance,
-                        ctx: context,
-                      ),
-                      TransactionButton(
-                        transactionType: TransactionType.expenditure,
-                        ctx: context,
-                      ),
-                      const SizedBox(width: 50.0,),
-                    ],
-                  );
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const SizedBox(
+          width: 50.0,
+        ),
+        TransactionButton(
+          transactionType: TransactionType.income,
+          ctx: context,
+        ),
+        TransactionButton(
+          transactionType: TransactionType.remittance,
+          ctx: context,
+        ),
+        TransactionButton(
+          transactionType: TransactionType.expenditure,
+          ctx: context,
+        ),
+        const SizedBox(
+          width: 50.0,
+        ),
+      ],
+    );
   }
 }
-
 
 class TransactionButton extends StatelessWidget {
   // final String budgetId;
@@ -79,7 +83,7 @@ class TransactionButton extends StatelessWidget {
         showCupertinoModalBottomSheet(
           elevation: 16.0,
           context: ctx,
-          builder: (context) => BudgetDetailScreen(),
+          builder: (_) => TransactionScreen(transactionType: transactionType),
         );
       },
     );

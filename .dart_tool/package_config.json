@@ -80,6 +80,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "calendar_date_picker2",
+      "rootUri": "file:///Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/calendar_date_picker2-0.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "carousel_slider",
       "rootUri": "file:///Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/carousel_slider-4.2.1",
       "packageUri": "lib/",
@@ -482,7 +488,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-07T20:19:14.137388Z",
+  "generated": "2023-01-07T23:23:55.442002Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -6,21 +6,22 @@ import 'package:pocket_lab/goal/model/goal_model.dart';
 
 
 
-class GoalDetailView extends ConsumerStatefulWidget {
-  const GoalDetailView({super.key});
+class GoalScreen extends ConsumerStatefulWidget {
+  static const routeName = 'goal_screen';
+  const GoalScreen({super.key});
 
   @override
-  ConsumerState<GoalDetailView> createState() => _GoalDetailViewState();
+  ConsumerState<GoalScreen> createState() => _GoalDetailViewState();
 }
 
-class _GoalDetailViewState extends ConsumerState<GoalDetailView> {
+class _GoalDetailViewState extends ConsumerState<GoalScreen> {
   @override
   Widget build(BuildContext context) {
     final goals = ref.watch(goalsProvider);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.deepOrange,
         //: 그림자 제거
         elevation: 0,
 

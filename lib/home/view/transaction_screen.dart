@@ -8,8 +8,8 @@ import 'package:pocket_lab/home/component/transaction_button.dart';
 final GlobalKey<FormState> _formKey = GlobalKey(debugLabel: 'formState');
 
 class TransactionScreen extends StatefulWidget {
+  static const routeName = 'transaction_screen';
   final TransactionType transactionType;
-
   const TransactionScreen({required this.transactionType,super.key});
 
   @override

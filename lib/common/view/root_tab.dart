@@ -6,7 +6,7 @@ import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 
 class RootTab extends ConsumerStatefulWidget {
-  static const routeName = 'rootTab';
+  static const routeName = 'root_tab';
   const RootTab({super.key});
 
   @override
@@ -20,8 +20,6 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-
-    
 
     //* length: 2 -> 2개의 탭.
     _tabController = TabController(length: 2, vsync: this);

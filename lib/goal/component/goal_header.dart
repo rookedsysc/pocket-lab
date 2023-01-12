@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
-import 'package:pocket_lab/goal/view/goal_detail_view.dart';
+import 'package:pocket_lab/home/view/goal_screen.dart';
 
 class GoalHeader extends ConsumerStatefulWidget {
   const GoalHeader({super.key});
@@ -25,8 +26,8 @@ class _GoalHeaderState extends ConsumerState<GoalHeader> {
     child: goals.length == 0 ? GestureDetector(
       onTap: () => showCupertinoModalBottomSheet(
           context: context,
-          builder: (context) {
-            return GoalDetailView();
+          builder: (_) {
+            return GoalScreen();
           }),
       child: Container(
         height: 50,
@@ -46,7 +47,7 @@ class _GoalHeaderState extends ConsumerState<GoalHeader> {
         onTap: () => showCupertinoModalBottomSheet(
             context: context,
             builder: (context) {
-              return GoalDetailView();
+              return GoalScreen();
             }),
 
         child: Container(

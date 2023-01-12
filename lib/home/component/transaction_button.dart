@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/home/view/budget_detail_screen.dart';
+import 'package:pocket_lab/home/view/budget_screen.dart';
 import 'package:pocket_lab/home/view/transaction_screen.dart';
 
 enum TransactionType { remittance, income, expenditure }

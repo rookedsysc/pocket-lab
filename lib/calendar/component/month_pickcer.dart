@@ -31,13 +31,6 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
     for (int i = from; i <= to; i++) {
       //# 선택된 해의 1~12월까지 생성
       DateTime dateTime = DateTime(_pickerYear, i, 1);
-
-      //# 선택된 달이 null이 아니거나 선택된 달과 같으면 보라색으로 표시
-      if(dateTime.isAtSameMomentAs(_selectedMonth)) {
-        backgroundColor = Colors.purple;
-      } else {
-        backgroundColor = Colors.transparent;
-      }
       
       months.add(
         AnimatedSwitcher(
@@ -50,7 +43,6 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
           },
           //# 달을 누르면 달이 선택되고, 선택된 달이 있으면 그 달의 색깔을 보라색으로 표시
           child: TextButton(
-            key: ValueKey(backgroundColor),
             onPressed: () {
               setState(() {
                 ref.read(calendarProvider.notifier).setFocusedDay(dateTime);
@@ -58,7 +50,6 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
               });
             },
             style: TextButton.styleFrom(
-              backgroundColor: backgroundColor,
               shape: const CircleBorder(),
             ),
             child: Text(
@@ -154,7 +145,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
               vsync: this,
               duration: Duration(milliseconds: 300),
               child: generateMonths()),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
         ],

@@ -20,6 +20,20 @@ class CalendarNotifier extends StateNotifier<CalendarModel> {
       selectedDay: null
     )
   );
+
+  void setSelectedDay(DateTime selectedDay) {
+    state = CalendarModel(
+      focusedDay: state.focusedDay,
+      selectedDay: selectedDay
+    );
+  }
+
+  void setFocusedDay(DateTime focusedDay) {
+    state = CalendarModel(
+      focusedDay: focusedDay,
+      selectedDay: state.selectedDay
+    );
+  }
 }
 
 class CalendarModel {
@@ -32,19 +46,30 @@ class CalendarModel {
   });
 }
 
-class CalendarScreen extends StatefulWidget {
+class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  ConsumerState<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
-  DateTime focusedDay = DateTime.now();
-  DateTime? selectedDay;
+class _CalendarScreenState extends ConsumerState<CalendarScreen> {
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  late CalendarModel _calendarState;
+
+  void initRiverpod() {
+    _calendarState = ref.watch(calendarProvider);
+    _focusedDay = _calendarState.focusedDay;
+    if (_calendarState.selectedDay != null) {
+      _selectedDay = _calendarState.selectedDay;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    initRiverpod();
+
     return SafeArea(
       top: true,
       child: ListView(
@@ -60,30 +85,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
               //: 가로로 스크롤
               scrollDirection: Axis.horizontal,
               children: List.generate(
-                  CalendarUtils().getWeeksInMonth(focusedDay),
+                  CalendarUtils().getWeeksInMonth(_focusedDay),
                   (index) => WeekHeader(index: index,),),
             ),
           ),
-          Calendar(onDaySelected: _onDaySelected(), onPageChanged: _onPageChanged(), focusedDay: focusedDay, selectedDay: selectedDay,)
+          Calendar()
         ],
       ),
     );
-  }
-
-  OnDaySelected _onDaySelected() {
-    return (DateTime selectedDay, DateTime focusedDay) {
-      setState(() {
-        this.selectedDay = selectedDay;
-        this.focusedDay = focusedDay;
-      });
-    };
-  }
-
-  void Function(DateTime focusedDay) _onPageChanged() {
-    return ((focusedDay) {
-      setState(() {
-        this.focusedDay = focusedDay;
-      });
-    });
   }
 }

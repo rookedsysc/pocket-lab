@@ -428,6 +428,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "syncfusion_flutter_core",
+      "rootUri": "file:///Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_core-20.4.43",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "syncfusion_flutter_datepicker",
+      "rootUri": "file:///Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_datepicker-20.4.43",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "table_calendar",
       "rootUri": "file:///Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/table_calendar-3.0.9",
       "packageUri": "lib/",
@@ -506,7 +518,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-15T18:17:54.112661Z",
+  "generated": "2023-01-16T11:58:11.374998Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -1,22 +1,21 @@
 //* Reference : https://stackoverflow.com/questions/63724025/flutter-create-dropdown-month-year-selector
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 
-class MonthPicker extends StatefulWidget {
+class MonthPicker extends ConsumerStatefulWidget {
+  const MonthPicker({super.key});
   @override
-  _MonthPickerState createState() => _MonthPickerState();
+ ConsumerState<MonthPicker> createState() => _MonthPickerState();
 }
 
-class _MonthPickerState extends State<MonthPicker>
+class _MonthPickerState extends ConsumerState<MonthPicker>
     with SingleTickerProviderStateMixin {
   bool pickerIsExpanded = false;
   int _pickerYear = DateTime.now().year;
-  DateTime _selectedMonth = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    1,
-  );
+  DateTime _selectedMonth = DateTime.now(); 
+  late CalendarModel _calendarState;
 
   dynamic _pickerOpen = false;
 
@@ -28,12 +27,18 @@ class _MonthPickerState extends State<MonthPicker>
 
   List<Widget> generateRowOfMonths(from, to) {
     List<Widget> months = [];
+    Color backgroundColor;
     for (int i = from; i <= to; i++) {
+      //# 선택된 해의 1~12월까지 생성
       DateTime dateTime = DateTime(_pickerYear, i, 1);
-      //# 선택된 달과 같으면 보라색으로 표시
-      final backgroundColor = dateTime.isAtSameMomentAs(_selectedMonth)
-          ? Colors.purple
-          : Colors.transparent;
+
+      //# 선택된 달이 null이 아니거나 선택된 달과 같으면 보라색으로 표시
+      if(dateTime.isAtSameMomentAs(_selectedMonth)) {
+        backgroundColor = Colors.purple;
+      } else {
+        backgroundColor = Colors.transparent;
+      }
+      
       months.add(
         AnimatedSwitcher(
           duration: kThemeChangeDuration,
@@ -43,16 +48,18 @@ class _MonthPickerState extends State<MonthPicker>
               child: child,
             );
           },
+          //# 달을 누르면 달이 선택되고, 선택된 달이 있으면 그 달의 색깔을 보라색으로 표시
           child: TextButton(
             key: ValueKey(backgroundColor),
             onPressed: () {
               setState(() {
-                _selectedMonth = dateTime;
+                ref.read(calendarProvider.notifier).setFocusedDay(dateTime);
+                debugPrint("[*] Month Picker Select Month : ${ref.read(calendarProvider).focusedDay}");
               });
             },
             style: TextButton.styleFrom(
               backgroundColor: backgroundColor,
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
             ),
             child: Text(
               DateFormat('MMM').format(dateTime),
@@ -82,20 +89,36 @@ class _MonthPickerState extends State<MonthPicker>
     );
   }
 
+  void initRiverpod() {
+    setState(() {
+    });
+    _calendarState = ref.watch(calendarProvider);
+    _pickerYear = _calendarState.focusedDay.year;
+    if (_calendarState.selectedDay != null) {
+      _selectedMonth = DateTime(
+        _calendarState.selectedDay!.year,
+        _calendarState.selectedDay!.month,
+        1,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    initRiverpod();
+    
     return Material(
       color: Theme.of(context).cardColor,
       child: Column(
         children: [
-          //# Header
           Row(
             children: [
-              //* 왼쪽 클릭시 이전 년도로 이동
+              //# 왼쪽 버튼 
+              //: 이전 년도로 이동
               IconButton(
                 onPressed: () {
                   setState(() {
-                    _pickerYear = _pickerYear - 1;
+                    ref.read(calendarProvider.notifier).setFocusedDay(DateTime(_pickerYear -1, _calendarState.focusedDay.month, 1));
                   });
                 },
                 icon: Icon(Icons.navigate_before_rounded),
@@ -106,7 +129,7 @@ class _MonthPickerState extends State<MonthPicker>
                   onTap: switchPicker,
                   child: Center(
                     child: Text(
-                      _pickerYear.toString(),
+                      DateFormat('yyyy. MM.').format(_calendarState.focusedDay),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.blueAccent),
@@ -114,13 +137,15 @@ class _MonthPickerState extends State<MonthPicker>
                   ),
                 ),
               ),
+              //# 오른쪽 버튼
+              //: 다음 년도로 이동
               IconButton(
                 onPressed: () {
                   setState(() {
-                    _pickerYear = _pickerYear + 1;
+                    ref.read(calendarProvider.notifier).setFocusedDay(DateTime(_pickerYear + 1, _calendarState.focusedDay.month, 1));
                   });
                 },
-                icon: Icon(Icons.navigate_next_rounded),
+                icon: const Icon(Icons.navigate_next_rounded),
               ),
             ],
           ),

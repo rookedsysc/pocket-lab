@@ -37,6 +37,9 @@ dependencies:
   uuid: ^3.0.7
   carousel_slider: ^4.2.1
   calendar_date_picker2: ^0.3.6
+  intl: ^0.18.0
+  table_calendar: ^3.0.7
+  syncfusion_flutter_datepicker: ^20.4.43
   flutter:
     sdk: flutter
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
+import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/budget_screen.dart';
-import 'package:pocket_lab/home/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/home/view/transaction_screen.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  //: GoRouter Route
+  //# GoRouter Route
   final _router = GoRouter(
     initialLocation: '/',
     routes: [

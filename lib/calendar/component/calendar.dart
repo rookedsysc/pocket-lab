@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_lab/calendar/component/month_header.dart';
+import 'package:pocket_lab/calendar/component/week_header.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 

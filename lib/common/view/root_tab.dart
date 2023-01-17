@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
+import 'package:pocket_lab/diary/view/diary_screen.dart';
 
 class RootTab extends ConsumerStatefulWidget {
   static const routeName = 'root_tab';
@@ -21,8 +22,8 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
   void initState() {
     super.initState();
 
-    //* length: 2 -> 2개의 탭.
-    _tabController = TabController(length: 2, vsync: this);
+    //TODO length: 2 -> 2개의 탭.
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(tabListner);
   }
 
@@ -49,15 +50,19 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
 
   Widget _bottomNavigationBar() => BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
-        items: const <BottomNavigationBarItem>[
-          //* tab 추가시 수정
+        items: <BottomNavigationBarItem>[
+          //TODO tab 추가시 수정
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(index == 0 ? Icons.home : Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(index == 1 ? Icons.calendar_month : Icons.calendar_month_outlined),
             label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(index == 2 ? Icons.account_balance_wallet:Icons.account_balance_wallet_outlined),
+            label: 'Diary',
           ),
         ],
 
@@ -77,7 +82,7 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
     return TabBarView(
       children: [
         //TODO tab 추가시 수정
-        HomeScreen(), CalendarScreen()
+        HomeScreen(), CalendarScreen(), DiaryScreen()
       ],
       physics: const NeverScrollableScrollPhysics(),
       controller: _tabController,

@@ -15,14 +15,14 @@ class WeekHeader extends StatelessWidget {
         width: 125.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          color: Color.fromARGB(255, 32, 251, 145)
+          color: Theme.of(context).cardColor
         ),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text(_indexToWeek(), 
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ), 

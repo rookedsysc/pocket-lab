@@ -22,7 +22,7 @@ class BudgetCard extends StatelessWidget {
       padding: const EdgeInsets.only(
           right: 36.0, left: 24.0, top: 36.0, bottom: 24.0),
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(24.0),
       ),
       child: Column(
@@ -31,10 +31,10 @@ class BudgetCard extends StatelessWidget {
           //: budget 이름 
           Text(
             name,
-            style: const TextStyle(
-                color: Colors.black,
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontSize: 20.0,
-                fontWeight: FontWeight.w900),
+                fontWeight: FontWeight.w900
+            ),
             textAlign: TextAlign.left,
           ),
           //: budget 주기 
@@ -54,10 +54,10 @@ class BudgetCard extends StatelessWidget {
                 //: budget 금액
                 Text(
                   amount.toString(),
-                  style: const TextStyle(
-                      color: Colors.black,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       fontSize: 16.0,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w500
+                  ),
                   textAlign: TextAlign.end,
                 ),
               ],

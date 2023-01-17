@@ -17,12 +17,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: _theme,
+      darkTheme: _darkTheme,
       routerConfig: _router,
+      themeMode: ThemeMode.system,
     );
   }
+
+  final ThemeData _theme = ThemeData(
+    scaffoldBackgroundColor: const Color.fromRGBO(236, 237, 240, 1),
+    bottomAppBarColor: const Color.fromRGBO(236, 237, 240, 1),
+
+    iconTheme: const IconThemeData(color: Colors.black),
+
+    //# 메인 색상
+    primaryColor: const Color.fromRGBO(74, 110, 94, 1),
+    primaryColorLight: const Color.fromRGBO(74, 110, 94, 0.75),
+
+    //# 텍스트 색상
+    textTheme: const TextTheme(
+      //: 보통 글귀
+      bodyText1: TextStyle(color: Colors.black),
+    ),
+
+    cardColor: Colors.white
+  );
+
+  final ThemeData _darkTheme = ThemeData(
+    scaffoldBackgroundColor: const Color.fromRGBO(30, 30, 30, 1),
+    bottomAppBarColor: const Color.fromRGBO(30, 30, 30, 1),
+
+    iconTheme: const IconThemeData(color: Colors.white),
+
+    //# 메인 색상
+    primaryColor: const Color.fromRGBO(74, 110, 94, 1),
+    primaryColorLight: const Color.fromRGBO(74, 110, 94, 0.75),
+
+    //# 텍스트 색상
+    textTheme: const TextTheme(
+      //: 보통 글귀
+      bodyText1: TextStyle(color: Colors.white),
+    ),
+
+    cardColor: Colors.black,
+  );
 
   //# GoRouter Route
   final _router = GoRouter(

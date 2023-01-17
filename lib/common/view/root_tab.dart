@@ -74,8 +74,8 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
         currentIndex: index,
 
         //: 탭 색상
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.green[700],
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Theme.of(context).primaryColorLight,
       );
 
   Widget _tabBarView() {

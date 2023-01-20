@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.18.0
   table_calendar: ^3.0.7
   syncfusion_flutter_datepicker: ^20.4.43
+  google_fonts: ^3.0.1
   flutter:
     sdk: flutter
 
@@ -71,6 +72,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+    - family: Dongle 
+      fonts:
+        - asset: asset/fonts/Dongle-Bold.ttf
+          weight: 900
+        - asset: asset/fonts/Dongle-Regular.ttf
+          weight: 500
+        - asset: asset/fonts/Dongle-Light.ttf
 
 
   # To add assets to your application, add an assets section, like this:

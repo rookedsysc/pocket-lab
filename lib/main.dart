@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/budget_screen.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
 
   final ThemeData _theme = ThemeData(
     scaffoldBackgroundColor: const Color.fromRGBO(236, 237, 240, 1),
-    bottomAppBarColor: const Color.fromRGBO(236, 237, 240, 1),
+    //* Bottom Navigation Bar 색
+    canvasColor: const Color.fromRGBO(236, 237, 240, 1),
 
     iconTheme: const IconThemeData(color: Colors.black),
 
@@ -45,7 +47,8 @@ class MyApp extends StatelessWidget {
 
   final ThemeData _darkTheme = ThemeData(
     scaffoldBackgroundColor: const Color.fromRGBO(30, 30, 30, 1),
-    bottomAppBarColor: const Color.fromRGBO(30, 30, 30, 1),
+    //* Bottom Navigation Bar 색
+    canvasColor: const Color.fromRGBO(30, 30, 30, 1),
 
     iconTheme: const IconThemeData(color: Colors.white),
 
@@ -56,7 +59,7 @@ class MyApp extends StatelessWidget {
     //# 텍스트 색상
     textTheme: const TextTheme(
       //: 보통 글귀
-      bodyText1: TextStyle(color: Colors.white),
+      bodyText1: TextStyle(color: Colors.white, ),
     ),
 
     cardColor: Colors.black,

@@ -76,6 +76,9 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
         //: 탭 색상
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Theme.of(context).primaryColorLight,
+
+        selectedLabelStyle: TextStyle(fontFamily: "Dongle"),
+        unselectedLabelStyle: TextStyle(fontFamily: "Dongle"),
       );
 
   Widget _tabBarView() {

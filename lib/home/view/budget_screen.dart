@@ -12,21 +12,10 @@ class BudgetScreen extends StatelessWidget {
     final budgetList = ["1", "2", "3"];
     
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        //: 그림자 제거
-        elevation: 0,
-
-        title: const Text("예산 목록"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-            },
-          ),
-        ],
-      ),
-      body: budgetList.length == 0
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          budgetList.isEmpty
           ? Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text("예산 목록이 없습니다."),
@@ -43,6 +32,12 @@ class BudgetScreen extends StatelessWidget {
                   )),
               itemCount: budgetList.length,
             ),
+            IconButton(
+            alignment: Alignment.topRight,
+            onPressed: (){}, icon: Icon(Icons.add), color: Theme.of(context).iconTheme.color,),
+
+        ],
+      ),
     );
   }
 }

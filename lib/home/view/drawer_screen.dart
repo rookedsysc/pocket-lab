@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_zoom_drawer/config.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:pocket_lab/home/view/menu_screen.dart';
+import 'package:pocket_lab/home/view/home_screen.dart';
 
-class DrawerScreen extends StatelessWidget {
-  const DrawerScreen ({super.key});
+class DrawerScreen extends StatefulWidget {
+  const DrawerScreen({super.key});
 
   @override
+  State<DrawerScreen> createState() => _DrawerScreenState();
+}
+
+class _DrawerScreenState extends State<DrawerScreen> {
+  final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 200,
-          color: Colors.blue,
-        ),
-        Container(
-          height: 200,
-          color: Colors.red,
-        ),
-        Container(
-          height: 200,
-          color: Colors.orange,
-        ),
-        Container(
-          height: 200,
-          color: Colors.green,
-        ),
-      ],
+    final double _slideWidth = MediaQuery.of(context).size.width * 0.75;
+    final double _memnuScreenWidth = _slideWidth - MediaQuery.of(context).size.width * 0.05;
+
+    return ZoomDrawer(
+      style: DrawerStyle.style3,
+      controller: _zoomDrawerController,
+      menuScreen: MenuScreen(),
+      mainScreen: HomeScreen(zoomDrawerController: _zoomDrawerController),
+      //# Drawer 열었을 때 main화면 크기
+      //: 작을 수록 화면 커짐
+      mainScreenScale: 0.0,
+      borderRadius: 0.0,
+      showShadow: false,
+      //# 기울기 
+      angle: 0.0,
+      drawerShadowsBackgroundColor: Colors.grey,
+      //# slide 사이즈
+      slideWidth: _slideWidth,
+      menuScreenWidth: _memnuScreenWidth,
     );
   }
 }

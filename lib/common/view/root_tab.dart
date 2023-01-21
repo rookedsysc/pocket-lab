@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
-import 'package:pocket_lab/home/component/custom_drawer.dart';
+import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/diary/view/diary_screen.dart';
 
@@ -86,7 +86,7 @@ class _RootTabState extends ConsumerState<RootTab> with SingleTickerProviderStat
     return TabBarView(
       children: [
         //TODO tab 추가시 수정
-        CustomDrawer(), CalendarScreen(), DiaryScreen()
+        DrawerScreen(), CalendarScreen(), DiaryScreen()
       ],
       physics: const NeverScrollableScrollPhysics(),
       controller: _tabController,

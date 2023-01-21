@@ -10,15 +10,27 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		oG5/OGn+vw7vp/nu5DUDoZJ4nFc=
+		jx2Dsn+iCVjY8K72A0BjHhBem14=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
-		vKJkVIcw+LGHFnKJGwrQwCREv68=
+		1rxbvonmMkbcF7OCJuDVLM2UKF0=
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		VNmPKS4ZHsWnmHL02lV2KcVd/2Q=
+		pdBiEsElrT/LoiSPTkzSIIk25bM=
+		</data>
+		<key>flutter_assets/asset/fonts/Dongle-Bold.ttf</key>
+		<data>
+		dfzEQ3rpK9Wz8MBk/JiRo7wqumc=
+		</data>
+		<key>flutter_assets/asset/fonts/Dongle-Light.ttf</key>
+		<data>
+		bmJ/+L8k1Xa2ZUi8JlKu6BbZmsQ=
+		</data>
+		<key>flutter_assets/asset/fonts/Dongle-Regular.ttf</key>
+		<data>
+		dAxTHTf9ohcvhuOXhV6ximsbWCU=
 		</data>
 		<key>flutter_assets/asset/img/bank/%E1%84%80%E1%85%B3%E1%86%B7%E1%84%8B%E1%85%B2%E1%86%BC%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_PNG_%E1%84%80%E1%85%AA%E1%86%BC%E1%84%8C%E1%85%AE.png</key>
 		<data>
@@ -278,7 +290,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		Qt14aOEGXPsSJTEbFbpLmF8KKyI=
+		pgS6QaNTUq1HhcxfuUZgrxG4byY=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -299,21 +311,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Sps95+7JukayebvM0TLjL1LW1VXXndpKp/O8tOm9ZR8=
+			rp4JWYM7Gnera1vlDoFx8z52JFUGXXUZtpE0tkH/1TY=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zX4DZFvESy3Ue3y2JvUcTsv1Whl6t3JBYotHrBZfviE=
+			ui0lgooEWKTPGs5EjwelIeV4xTelgjSktDXp54iPpDc=
 			</data>
 		</dict>
 		<key>flutter_assets/NOTICES.Z</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eUCDEXucS1lF2fCMqHAnnUpws5RWDi2nVxNM5Os3NS4=
+			6lX2yfqR/lLJzIDyakBhiMoH7Pzk+pmGBrU5E9zseWA=
+			</data>
+		</dict>
+		<key>flutter_assets/asset/fonts/Dongle-Bold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EZJKr98tJFOfhXQMnzPaxDLniTjuYs48KAjC0AvpIaU=
+			</data>
+		</dict>
+		<key>flutter_assets/asset/fonts/Dongle-Light.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Ij8MZsfjY8YXNiYnCnJ8U3ZJcsos414pqzw6iEtOPa0=
+			</data>
+		</dict>
+		<key>flutter_assets/asset/fonts/Dongle-Regular.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			AQcDr2uGqGCEfuqGgjOH4FZp+qdegeagBAOYkGoPH+c=
 			</data>
 		</dict>
 		<key>flutter_assets/asset/img/bank/%E1%84%80%E1%85%B3%E1%86%B7%E1%84%8B%E1%85%B2%E1%86%BC%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_PNG_%E1%84%80%E1%85%AA%E1%86%BC%E1%84%8C%E1%85%AE.png</key>
@@ -768,7 +801,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			QFktUTWGrQXdDTw4ZBOg57xCk1VNo4t5guKFaoo47r8=
+			G5aoajVeFiq08yVUweFpO6kXoS/ZhMdH/mYM588UsBM=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

@@ -42,6 +42,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^20.4.43
   google_fonts: ^3.0.1
   flutter_zoom_drawer: ^3.0.3
+  sheet: ^0.0.4+1
   flutter:
     sdk: flutter
 

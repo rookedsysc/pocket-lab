@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
+import 'package:sheet/route.dart';
 
 class GoalHeader extends ConsumerStatefulWidget {
   const GoalHeader({super.key});
@@ -20,29 +21,26 @@ class _GoalHeaderState extends ConsumerState<GoalHeader> {
   Widget build(BuildContext context) {
     final goals = ref.watch(goalsProvider);
 
-    //: 목표가 없을 때
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const HeaderCollection(headerType: HeaderType.goal),
         const SizedBox(
-          height: 8.0,),
+          height: 8.0,
+        ),
         //# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
         goals.isEmpty
             ? GestureDetector(
-                onTap: () => _showCupertinoModalBottomSheet(context),
+                onTap: _onTap(),
                 //# header Design
                 child: _goalContainer(
                   _isEmptyContainer(context),
                 ),
               )
+            //# 목표가 없을 때
             : ListView.builder(
                 itemBuilder: ((context, index) => GestureDetector(
-                      onTap: () => showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return GoalScreen();
-                          }),
+                      onTap: _onTap(),
                       child: _isNotEmptyContainer(goals, index),
                     )),
                 itemCount: goals.length,
@@ -51,14 +49,24 @@ class _GoalHeaderState extends ConsumerState<GoalHeader> {
     );
   }
 
+  GestureTapCallback _onTap() {
+    return () => CupertinoScaffold.showCupertinoModalBottomSheet(
+        context: context, builder: ((context) => GoalScreen()));
+    // return () => Navigator.of(context).push(
+    //       MaterialExtendedPageRoute<void>(
+    //         builder: (BuildContext context) => GoalScreen(),
+    //       ),
+    //     );
+  }
+
+
   //# 있을 때나 없을 때나 같은 디자인
   Widget _goalContainer(Widget child) {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).cardColor
-      ),
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).cardColor),
       child: child,
     );
   }
@@ -94,8 +102,6 @@ class _GoalHeaderState extends ConsumerState<GoalHeader> {
       ),
     );
   }
-
-  
 
   Future<dynamic> _showCupertinoModalBottomSheet(BuildContext context) {
     return showCupertinoModalBottomSheet(

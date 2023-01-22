@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
             ),
 
             //# 목표 header
-            _goal(),
+            _padding(child: Center(child: GoalHeader())),
             //# 예산 목록 header
             _walletHeader(Theme.of(context).iconTheme),
             SizedBox(
@@ -63,10 +63,6 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
       child: child,
     );
-  }
-
-  Padding _goal() {
-    return _padding(child: Center(child: GoalHeader()));
   }
 
   Padding _walletHeader(IconThemeData iconTheme) {

@@ -17,8 +17,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
   @override
   Widget build(BuildContext context) {
-    final double _slideWidth = MediaQuery.of(context).size.width * 0.75;
-    final double _memnuScreenWidth = _slideWidth - MediaQuery.of(context).size.width * 0.05;
+    final double _slideWidth = MediaQuery.of(context).size.width * 0.9;
 
     return ZoomDrawer(
       style: DrawerStyle.style3,
@@ -35,7 +34,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
       drawerShadowsBackgroundColor: Colors.grey,
       //# slide 사이즈
       slideWidth: _slideWidth,
-      menuScreenWidth: _memnuScreenWidth,
     );
   }
 }

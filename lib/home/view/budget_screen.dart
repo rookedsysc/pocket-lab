@@ -25,14 +25,17 @@ class BudgetScreen extends StatelessWidget {
                   height: 300,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: BudgetCard(
+                      child: WalletCard(
                         name: "Budget ${budgetList[index]}",
                         period: "7일",
-                        amount: 50000),
-                  )),
-              itemCount: budgetList.length,
-            ),
-            IconButton(
+                        amount: 50000,
+                        imgAddr: '금융아이콘_PNG_토스.png',
+                      ),
+                    ),
+                  ),
+                  itemCount: budgetList.length,
+                ),
+          IconButton(
             alignment: Alignment.topRight,
             onPressed: (){}, icon: Icon(Icons.add), color: Theme.of(context).iconTheme.color,),
 

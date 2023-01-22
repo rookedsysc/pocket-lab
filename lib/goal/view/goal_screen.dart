@@ -21,11 +21,12 @@ class _GoalDetailViewState extends ConsumerState<GoalScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         //: 그림자 제거
         elevation: 0,
 
-        title: const Text("목표 설정"),
+        title: Text("목표 설정",style: Theme.of(context).textTheme.bodyText1,),
         actions: [
           IconButton(
             icon: Icon(Icons.add),

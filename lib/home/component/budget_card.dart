@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:pocket_lab/common/component/budget__icon_and_name.dart';
 
-class BudgetCard extends StatelessWidget {
+class WalletCard extends StatelessWidget {
   //: 예산 이름
   final String name;
   //: 예산 주기
   final String period;
   //: 예산 금액
   final int amount;
+  //: 예산 아이콘 image 주소
+  final String imgAddr;
 
-  const BudgetCard(
-      {required this.name,
+  const WalletCard(
+      {required this.imgAddr,
+      required this.name,
       required this.period,
       required this.amount,
       super.key});
@@ -27,16 +31,10 @@ class BudgetCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          //: budget 이름 
-          Text(
-            name,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w900
-            ),
-            textAlign: TextAlign.left,
-          ),
+          BudgetIconAndName(imgAddr: "asset/img/bank/금융아이콘_PNG_JP모건체이스.png", name: name),
+          
           //: budget 주기 
           Expanded(
             child: Column(

@@ -80,15 +80,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
       padding:
           const EdgeInsets.only(right: 8.0, left: 8.0, top: 4.0, bottom: 8.0),
       child: TwoRowLayout(
-          firstWidget : Text(
+          firstWidget: Text(
             'Transaction Title',
             style: Theme.of(context).textTheme.bodyText1,
           ),
-          secondWidget:SizedBox(
+          secondWidget: SizedBox(
               width: MediaQuery.of(context).size.width * (9 / 20),
               child: TextFormField(
                 validator: (val) {
-                  if(val == null || val.isEmpty) {
+                  if (val == null || val.isEmpty) {
                     return 'Input Value';
                   }
                   return null;
@@ -98,7 +98,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   //   _createTransactionModel.transactionTitle = val!;
                   // });
                 },
-
                 style: Theme.of(context).textTheme.bodyText2,
                 cursorColor: Colors.purple,
               ))),

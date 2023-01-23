@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:pocket_lab/home/component/budget_card.dart';
+import 'package:pocket_lab/home/component/wallet_card.dart';
 
 class BudgetScreen extends StatelessWidget {
   static const routeName = 'budget_screen';
@@ -12,21 +12,10 @@ class BudgetScreen extends StatelessWidget {
     final budgetList = ["1", "2", "3"];
     
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        //: 그림자 제거
-        elevation: 0,
-
-        title: const Text("예산 목록"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-            },
-          ),
-        ],
-      ),
-      body: budgetList.length == 0
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          budgetList.isEmpty
           ? Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text("예산 목록이 없습니다."),
@@ -36,13 +25,22 @@ class BudgetScreen extends StatelessWidget {
                   height: 300,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: BudgetCard(
+                      child: WalletCard(
                         name: "Budget ${budgetList[index]}",
                         period: "7일",
-                        amount: 50000),
-                  )),
-              itemCount: budgetList.length,
-            ),
+                        amount: 50000,
+                        imgAddr: '금융아이콘_PNG_토스.png',
+                      ),
+                    ),
+                  ),
+                  itemCount: budgetList.length,
+                ),
+          IconButton(
+            alignment: Alignment.topRight,
+            onPressed: (){}, icon: Icon(Icons.add), color: Theme.of(context).iconTheme.color,),
+
+        ],
+      ),
     );
   }
 }

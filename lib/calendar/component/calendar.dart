@@ -89,7 +89,7 @@ class _CalendarState extends ConsumerState<Calendar> {
             //totalExpenditure: totalExpenditure?[dateFormate_yyDDmm(date)],
             //totalIncome: totalIncome?[dateFormate_yyDDmm(date)],
             context: context,
-            textColor: Colors.green,
+            // 다크 모드에선 흰색 글씨 라이트 모드에선 검은색 글씨
             date: date);
       },
       todayBuilder: (context, date, focusedDay) {
@@ -97,7 +97,7 @@ class _CalendarState extends ConsumerState<Calendar> {
             //totalExpenditure: totalExpenditure?[dateFormate_yyDDmm(date)],
             //totalIncome: totalIncome?[dateFormate_yyDDmm(date)],
             context: context,
-            textColor: Colors.purple,
+            textColor: Colors.blue,
             date: date);
       },
       defaultBuilder: (context, date, focusedDay) {
@@ -105,7 +105,6 @@ class _CalendarState extends ConsumerState<Calendar> {
             //totalExpenditure: totalExpenditure?[dateFormate_yyDDmm(date)],
             //totalIncome: totalIncome?[dateFormate_yyDDmm(date)],
             context: context,
-            textColor: Colors.green,
             date: date);
       },
       outsideBuilder: (context, date, focusedDay) {
@@ -137,8 +136,8 @@ class _CalendarState extends ConsumerState<Calendar> {
 
   Widget _calendarBox({
     required BuildContext context,
-    required Color textColor,
     required DateTime date,
+    Color? textColor,
     int? totalIncome,
     int? totalExpenditure,
   }) {
@@ -149,7 +148,10 @@ class _CalendarState extends ConsumerState<Calendar> {
         children: [
           Text(
             date.day.toString(),
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: textColor),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+              fontWeight: FontWeight.w700,
+              color: textColor ?? Theme.of(context).textTheme.bodyText1!.color,
+            ),
             textAlign: TextAlign.center,
           ),
           //: 오늘 수입/지출

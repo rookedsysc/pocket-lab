@@ -19,31 +19,38 @@ class _GoalDetailViewState extends ConsumerState<GoalScreen> {
   Widget build(BuildContext context) {
     final goals = ref.watch(goalsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
-        //: 그림자 제거
-        elevation: 0,
+    return Material(
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: Theme.of(context).iconTheme,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          //: 그림자 제거
+            elevation: 0,
 
-        title: const Text("목표 설정"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-            },
+            title: Text(
+              "목표 설정",
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {},
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SafeArea(
+          body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-        child: goals.length == 0 ? Text("설정된 목표가 없습니다.") : ListView.builder(
-          itemBuilder: (context, index) => ListTile(
-            title: Text(goals[index].name),
-            subtitle: Text(goals[index].firstDate.toString()),
-            trailing: Text(goals[index].amount.toString()),
-          ),
-          itemCount: goals.length,
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            child: goals.length == 0
+                ? Text("설정된 목표가 없습니다.")
+                : ListView.builder(
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(goals[index].name),
+                      subtitle: Text(goals[index].firstDate.toString()),
+                      trailing: Text(goals[index].amount.toString()),
+                    ),
+                    itemCount: goals.length,
+                  ),
           ),
         ),
       ),

@@ -99,7 +99,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
     initRiverpod();
     
     return Material(
-      color: Theme.of(context).cardColor,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
           Row(

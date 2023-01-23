@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_zoom_drawer/config.dart';
-import 'package:pocket_lab/home/component/budget_card.dart';
+import 'package:pocket_lab/home/component/wallet_card.dart';
 
-class BudgetCardSlider extends StatelessWidget {
-  const BudgetCardSlider ({super.key});
+class WalletCardSlider extends StatelessWidget {
+  const WalletCardSlider ({super.key});
 
   @override
   Widget build(BuildContext context) {

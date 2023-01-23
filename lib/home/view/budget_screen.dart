@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:pocket_lab/home/component/budget_card.dart';
+import 'package:pocket_lab/home/component/wallet_card.dart';
 
 class BudgetScreen extends StatelessWidget {
   static const routeName = 'budget_screen';

@@ -7,8 +7,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/budget_screen.dart';
+import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/home/view/transaction_screen.dart';
+import 'package:sheet/route.dart';
 
 void main() async {
   runApp(ProviderScope(child: MyApp()));
@@ -19,12 +21,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       theme: _theme,
       darkTheme: _darkTheme,
-      routerConfig: _router,
       themeMode: ThemeMode.system,
+
+      initialRoute: '/',
+      onGenerateRoute: _onGenerateRoute,
     );
+  }
+
+  MaterialPageRoute? _onGenerateRoute(settings) {
+    switch (settings.name) {
+      case('/'):
+        return MaterialExtendedPageRoute(builder: ((_) => RootTab()));
+      case('/drawer_screen') :
+        return MaterialExtendedPageRoute(builder: ((_) => DrawerScreen()));
+      case('/drawer_screen/goal_screen') :
+        return MaterialExtendedPageRoute(builder: (((_) => GoalScreen())));
+      case('/drawer_screen/budget_screen') :
+        return MaterialExtendedPageRoute(builder: (((_) => BudgetScreen())));
+    }
+    return null;
   }
 
   final ThemeData _theme = ThemeData(
@@ -68,7 +86,7 @@ class MyApp extends StatelessWidget {
   );
 
   //# GoRouter Route
-  final _router = GoRouter(
+  final GoRouter _router = GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(

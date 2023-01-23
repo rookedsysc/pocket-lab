@@ -7,6 +7,7 @@ import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/diary/view/diary_screen.dart';
+import 'package:sheet/route.dart';
 
 class RootTab extends ConsumerStatefulWidget {
   static const routeName = 'root_tab';

@@ -56,7 +56,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     return () => Navigator.of(context).push(
           CupertinoSheetRoute<void>(
             initialStop: 0.6,
-            stops: <double>[0.6, 1],
+            stops: <double>[0, 0.6, 1],
             // Screen은 이동할 스크린
             builder: (BuildContext context) => GoalScreen(),
           ),

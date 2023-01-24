@@ -4,10 +4,12 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/modal_fit.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
+import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
@@ -20,10 +22,22 @@ class GoalSection extends ConsumerStatefulWidget {
 }
 
 class _GoalHeaderState extends ConsumerState<GoalSection> {
+  final List<Goal> goals = [];
+  @override
+  void initState() {
+    //# 목표가 변경될 때 마다 setState 실행
+    GoalRepository(ref).getAllGoals().listen((event) {
+      setState(() {
+        goals.clear();
+        goals.addAll(event);
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final goals = ref.watch(goalsProvider);
-
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -56,14 +70,12 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     return () => Navigator.of(context).push(
           CupertinoSheetRoute<void>(
             initialStop: 0.6,
-            stops: <double>[0, 0.6, 1],
+            stops: <double>[0,0.6,1],
             // Screen은 이동할 스크린
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             builder: (BuildContext context) => GoalScreen(),
           ),
         );
-    // return () => CupertinoScaffold.showCupertinoModalBottomSheet(
-    //   expand: false,
-    //   context: context, builder: ((context) => GoalScreen()));
   }
 
 
@@ -104,7 +116,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
         children: [
           Text(goals[index].name),
           // 5000원 > 5,000원
-          Text("${goals[index].amount.toStringAsFixed(0)}원"),
+          Text("${goals[index].amount.toStringAsFixed(0)}원", style: Theme.of(context).textTheme.bodyText1,),
         ],
       ),
     );

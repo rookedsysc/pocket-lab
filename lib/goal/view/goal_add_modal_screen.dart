@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pocket_lab/goal/model/goal_model.dart';
+import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:sheet/sheet.dart';
 
-class GoalAddModalScreen extends StatefulWidget {
+class GoalAddModalScreen extends ConsumerStatefulWidget{
   final Color cardColor;
   //: body text1
   final TextStyle? textStyle;
@@ -12,7 +15,8 @@ class GoalAddModalScreen extends StatefulWidget {
   final double height;
   //: 전체 화면의 가로 사이즈
   final double width;
-  GoalAddModalScreen(
+
+  const GoalAddModalScreen(
       {required this.width,
       required this.height,
       required this.textStyle,
@@ -20,12 +24,15 @@ class GoalAddModalScreen extends StatefulWidget {
       super.key});
 
   @override
-  State<GoalAddModalScreen> createState() => _GoalAddModalScreenState();
+  ConsumerState<GoalAddModalScreen> createState() => _GoalAddModalScreenState();
 }
 
-class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
+class _GoalAddModalScreenState extends ConsumerState<GoalAddModalScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ScrollController scrollController;
+  int amount = 0;
+  String goalName = '';
+  Goal goal = Goal(amount: 0, firstDate: '', name: '');
 
   @override
   void initState() {
@@ -49,12 +56,13 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
           //# 키보드가 올라오면 bottomInsets + 안에 있는 위젯들의 높이 만큼 더해주고
           //# 그렇지 않으면 그냥 widget.height(만큼 높이를 설정
           //TODO: 하위 위젯들 높이 바뀌면 해당 부분 수정 필요
-          height: bottomInsets != 0 ? 150 + bottomInsets : widget.height,
+          height: bottomInsets != 0 ? 168 + bottomInsets : widget.height,
 
           child: Column(
             children: [
               //# 상단 버튼 (cancel, add)
-              _bottomButton(context),
+              _topButton(context),
+              SizedBox(height: 16.0,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: SizedBox(
@@ -63,8 +71,8 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
                     child: Column(
                       children: <Widget>[
                         _field(
-                            fieldName: 'Goal Name', bottomInsets: bottomInsets, isAmount: true),
-                        _field(fieldName: 'Amount', bottomInsets: bottomInsets, isAmount: false),
+                            fieldName: 'Goal Name', bottomInsets: bottomInsets, isAmount: false),
+                        _field(fieldName: 'Amount', bottomInsets: bottomInsets, isAmount: true),
                       ],
                     ),
                   ),
@@ -77,7 +85,7 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
     );
   }
 
-  SizedBox _bottomButton(BuildContext context) {
+  SizedBox _topButton(BuildContext context) {
     return SizedBox(
       height: 50.0,
       child: Row(
@@ -93,6 +101,13 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
               if (_formKey.currentState!.validate()) {
                 Navigator.pop(context);
               }
+              //: 오류가 없다면 실행하는 부분
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                Navigator.of(context).pop();
+              }
+
+              GoalRepository(ref).addGoal(goal);
             },
             child: Text(
               'Add',
@@ -105,7 +120,10 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
     );
   }
 
-  Widget _field({required String fieldName, required double bottomInsets, required isAmount}) {
+  Widget _field(
+      {required String fieldName,
+      required double bottomInsets,
+      required isAmount}) {
     return Container(
       height: 50.0,
       decoration: BoxDecoration(
@@ -125,23 +143,40 @@ class _GoalAddModalScreenState extends State<GoalAddModalScreen> {
             width: widget.width * 0.5,
             child: TextFormField(
               //: amount section에 입력하면 숫자만 입력되게 함
-              keyboardType: isAmount ? TextInputType.number : TextInputType.text,
+              keyboardType:
+                  isAmount ? TextInputType.number : TextInputType.text,
               textAlign: TextAlign.end,
-                //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
-                onTap: () {
-              scrollController.animateTo(
-                scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
-            }, validator: (String? val) {
-              // null인지 check
-              if (val == null || val.isEmpty) {
-                return ('Input Value');
-              }
+              //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
+              onTap: () {
+                scrollController.animateTo(
+                  scrollController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                );
+              },
+              validator: (String? val) {
+                // null인지 check
+                if (val == null || val.isEmpty) {
+                  return ('Input Value');
+                }
 
-              return null;
-            }),
+                return null;
+              },
+              //: 입력한 값 저장
+              onSaved: ((newValue) {
+                if (isAmount) {
+                  amount = int.parse(newValue!);
+                } else {
+                  goalName = newValue!;
+                }
+
+                goal = Goal(
+                  firstDate: DateTime.now().toUtc().toString(),
+                  name: goalName,
+                  amount: amount,
+                );
+              }),
+            ),
           ),
         ],
       ),

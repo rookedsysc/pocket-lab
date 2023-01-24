@@ -1,15 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_zoom_drawer/config.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
-import 'package:pocket_lab/home/component/wallet_card_slider.dart';
 import 'package:pocket_lab/home/component/transaction_button.dart';
-import 'package:pocket_lab/home/view/budget_screen.dart';
+import 'package:pocket_lab/home/component/wallet_card_slider.dart';
 
 class HomeScreen extends StatelessWidget {
   final ZoomDrawerController zoomDrawerController;
@@ -18,44 +14,51 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
     final TextTheme _textTheme = Theme.of(context).textTheme;
 
     return Material(
+      color: Theme.of(context).backgroundColor,
       child: Scaffold(
         body: CupertinoPageScaffold(
+
           child: SafeArea(
             top: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                //# Total Balance
-                _padding(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      HeaderCollection(headerType: HeaderType.total,),
-                      SizedBox(
-                        height: 8.0,),
-                      Text(
-                        "\$ 500,000",
-                        style: _textTheme.bodyText1
-                            ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
-                        textAlign: TextAlign.start,
+            child: SizedBox(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    //# Total Balance
+                    _padding(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          HeaderCollection(headerType: HeaderType.total,),
+                          SizedBox(
+                            height: 8.0,),
+                          Text(
+                            "\$ 500,000",
+                            style: _textTheme.bodyText1
+                                ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
 
-                //# 목표 Section
-                _padding(child: Center(child: GoalSection())),
-                //# 예산 목록 Section
-                _walletSection(Theme.of(context).iconTheme),
-                SizedBox(
-                  height: 8.0,
+                    //# 목표 Section
+                    _padding(child: Center(child: GoalSection())),
+                    //# 예산 목록 Section
+                    _walletSection(Theme.of(context).iconTheme),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    WalletCardSlider(),
+                    TransactionButtons(),
+                  ],
                 ),
-                WalletCardSlider(),
-                TransactionButtons(),
-              ],
+              ),
             ),
           ),
         ),

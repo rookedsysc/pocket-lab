@@ -5,37 +5,24 @@ import 'package:uuid/uuid.dart';
 
 part 'goal_model.g.dart';
 
-final goalsProvider = StateNotifierProvider<GoalListNotifier,List<Goal>>((ref) {
-  return GoalListNotifier(ref);
-});
-
-class GoalListNotifier extends StateNotifier<List<Goal>> {
-  GoalListNotifier(Ref ref) : super([]) {
-    syncGoal(ref);
-  }
-
-  void syncGoal(Ref ref) async {
-    final isar = await ref.read(goalIsarProvider);
-
-    if(await isar.goals.count() > 0) {
-      //: 모든 데이터 가져와서 state에 저장 
-      state = await isar.goals.where().findAll();
-    }
-  }
-}
-
 @Collection()
 class Goal {
   Id id = Isar.autoIncrement;
+  //: 목표 이름 
   final String name;
+  //: 목표 금액
   final int amount;
-  final String firstDate;
+  //: 목표 설정한 날짜
+  String? firstDate = DateTime.now().toUtc().toString();
+  //: 목표 달성한 날짜
   String? lastDate;
+  //: 목표 완료 되었는지 안되었는지
+  bool isDone = false;
 
   Goal({
     required this.name,
     required this.amount,
-    required this.firstDate,
+    this.firstDate,
     this.lastDate,
   });
 }

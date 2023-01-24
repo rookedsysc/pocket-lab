@@ -12,6 +12,8 @@ import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/home/view/transaction_screen.dart';
 import 'package:sheet/route.dart';
 
+import 'goal/view/goal_add_modal_screen.dart';
+
 void main() async {
   runApp(ProviderScope(child: MyApp()));
 }
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
     //* Bottom Navigation Bar 색
     canvasColor: const Color.fromRGBO(236, 237, 240, 1),
 
-    iconTheme: const IconThemeData(color: Colors.black),
+    iconTheme: const IconThemeData(color: Colors.blue),
 
     //# 메인 색상
     primaryColor: const Color.fromRGBO(74, 110, 94, 1),
@@ -70,7 +72,7 @@ class MyApp extends StatelessWidget {
     //* Bottom Navigation Bar 색
     canvasColor: const Color.fromRGBO(30, 30, 30, 1),
 
-    iconTheme: const IconThemeData(color: Colors.white),
+    iconTheme: const IconThemeData(color: Colors.blue),
 
     //# 메인 색상
     primaryColor: const Color.fromRGBO(74, 110, 94, 1),
@@ -83,31 +85,6 @@ class MyApp extends StatelessWidget {
     ),
 
     cardColor: Colors.black,
-  );
-
-  //# GoRouter Route
-  final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        path: '/',
-        name: RootTab.routeName,
-        builder: (_, state) => RootTab(),
-        routes: [
-          GoRoute(
-            path: 'goal_detail_screen',
-            name: GoalScreen.routeName,
-            builder: (_, state) => GoalScreen(),
-          ),
-          // budget screen
-          GoRoute(
-            path: 'budget_screen',
-            name: BudgetScreen.routeName,
-            builder: (_, state) => BudgetScreen(),
-          ),
-        ],
-      ),
-    ],
   );
 }
 

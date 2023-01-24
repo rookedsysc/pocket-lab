@@ -16,7 +16,7 @@ class MenuScreen extends StatelessWidget {
           children: [
             HeaderCollection(headerType: HeaderType.wallet,),
             _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 1", budgetAmount: 2000),
-            _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_토스.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 2", budgetAmount: 3000),
+            _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 2", budgetAmount: 3000),
             _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_한화.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 3", budgetAmount: 10000)
           ],
         ),

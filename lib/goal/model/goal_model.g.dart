@@ -27,13 +27,18 @@ const GoalSchema = CollectionSchema(
       name: r'firstDate',
       type: IsarType.string,
     ),
-    r'lastDate': PropertySchema(
+    r'isDone': PropertySchema(
       id: 2,
+      name: r'isDone',
+      type: IsarType.bool,
+    ),
+    r'lastDate': PropertySchema(
+      id: 3,
       name: r'lastDate',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -58,7 +63,12 @@ int _goalEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.firstDate.length * 3;
+  {
+    final value = object.firstDate;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.lastDate;
     if (value != null) {
@@ -77,8 +87,9 @@ void _goalSerialize(
 ) {
   writer.writeLong(offsets[0], object.amount);
   writer.writeString(offsets[1], object.firstDate);
-  writer.writeString(offsets[2], object.lastDate);
-  writer.writeString(offsets[3], object.name);
+  writer.writeBool(offsets[2], object.isDone);
+  writer.writeString(offsets[3], object.lastDate);
+  writer.writeString(offsets[4], object.name);
 }
 
 Goal _goalDeserialize(
@@ -89,11 +100,12 @@ Goal _goalDeserialize(
 ) {
   final object = Goal(
     amount: reader.readLong(offsets[0]),
-    firstDate: reader.readString(offsets[1]),
-    lastDate: reader.readStringOrNull(offsets[2]),
-    name: reader.readString(offsets[3]),
+    firstDate: reader.readStringOrNull(offsets[1]),
+    lastDate: reader.readStringOrNull(offsets[3]),
+    name: reader.readString(offsets[4]),
   );
   object.id = id;
+  object.isDone = reader.readBool(offsets[2]);
   return object;
 }
 
@@ -107,10 +119,12 @@ P _goalDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
-    case 2:
       return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
     case 3:
+      return (reader.readStringOrNull(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -257,8 +271,24 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'firstDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'firstDate',
+      ));
+    });
+  }
+
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -271,7 +301,7 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -286,7 +316,7 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -301,8 +331,8 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -435,6 +465,15 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Goal, Goal, QAfterFilterCondition> isDoneEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDone',
+        value: value,
       ));
     });
   }
@@ -742,6 +781,18 @@ extension GoalQuerySortBy on QueryBuilder<Goal, Goal, QSortBy> {
     });
   }
 
+  QueryBuilder<Goal, Goal, QAfterSortBy> sortByIsDone() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDone', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Goal, Goal, QAfterSortBy> sortByIsDoneDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDone', Sort.desc);
+    });
+  }
+
   QueryBuilder<Goal, Goal, QAfterSortBy> sortByLastDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastDate', Sort.asc);
@@ -804,6 +855,18 @@ extension GoalQuerySortThenBy on QueryBuilder<Goal, Goal, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Goal, Goal, QAfterSortBy> thenByIsDone() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDone', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Goal, Goal, QAfterSortBy> thenByIsDoneDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDone', Sort.desc);
+    });
+  }
+
   QueryBuilder<Goal, Goal, QAfterSortBy> thenByLastDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastDate', Sort.asc);
@@ -843,6 +906,12 @@ extension GoalQueryWhereDistinct on QueryBuilder<Goal, Goal, QDistinct> {
     });
   }
 
+  QueryBuilder<Goal, Goal, QDistinct> distinctByIsDone() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDone');
+    });
+  }
+
   QueryBuilder<Goal, Goal, QDistinct> distinctByLastDate(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -871,9 +940,15 @@ extension GoalQueryProperty on QueryBuilder<Goal, Goal, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Goal, String, QQueryOperations> firstDateProperty() {
+  QueryBuilder<Goal, String?, QQueryOperations> firstDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'firstDate');
+    });
+  }
+
+  QueryBuilder<Goal, bool, QQueryOperations> isDoneProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDone');
     });
   }
 

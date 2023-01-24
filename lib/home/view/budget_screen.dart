@@ -29,7 +29,7 @@ class BudgetScreen extends StatelessWidget {
                         name: "Budget ${budgetList[index]}",
                         period: "7일",
                         amount: 50000,
-                        imgAddr: '금융아이콘_PNG_토스.png',
+                        imgAddr: "금융아이콘_PNG_토스.png",
                       ),
                     ),
                   ),

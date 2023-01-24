@@ -86,30 +86,5 @@ class MyApp extends StatelessWidget {
 
     cardColor: Colors.black,
   );
-
-  //# GoRouter Route
-  final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        path: '/',
-        name: RootTab.routeName,
-        builder: (_, state) => RootTab(),
-        routes: [
-          GoRoute(
-            path: 'goal_detail_screen',
-            name: GoalScreen.routeName,
-            builder: (_, state) => GoalScreen(),
-          ),
-          // budget screen
-          GoRoute(
-            path: 'budget_screen',
-            name: BudgetScreen.routeName,
-            builder: (_, state) => BudgetScreen(),
-          ),
-        ],
-      ),
-    ],
-  );
 }
 

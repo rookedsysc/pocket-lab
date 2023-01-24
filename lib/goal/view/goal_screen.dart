@@ -50,14 +50,22 @@ class GoalScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: goals == null || goals!.isEmpty 
               ? Text("설정된 목표가 없습니다.")
               : ListView.builder(
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(goals![index].name),
-                    subtitle: Text(goals![index].firstDate.toString()),
-                    trailing: Text(goals![index].amount.toString()),
+                  itemBuilder: (context, index) => Container(
+                    //: container 둥글게
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    
+                    child: ListTile(
+                      title: Text(goals![index].name),
+                      subtitle: Text(goals![index].firstDate.toString()),
+                      trailing: Text(goals![index].amount.toString()),
+                    ),
                   ),
                   itemCount: goals!.length,
                 ),

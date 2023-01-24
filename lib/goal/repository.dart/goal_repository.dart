@@ -29,11 +29,18 @@ class GoalRepository {
         loading: (() {}));
   }
 
-  //# 목표 선택
+  //# 특정 목표 가져오기
   Future<Goal> getGoal(int id) async {
     final isar = await ref.read(goalIsarProvider.future);
     final goal = await isar.goals.get(id);
     return goal!;
+  }
+
+  //# 모든 목표 가져오기
+  Stream<List<Goal>> getAllGoals() async* {
+    final isar = await ref.watch(goalIsarProvider.future);
+    final allGoals = await isar.goals.where().findAll();
+    yield allGoals;
   }
 
   //# 목표 수정
@@ -50,10 +57,5 @@ class GoalRepository {
     await isar.goals.delete(goal.id);
   }
 
-  //# 모든 목표 return 
-  Stream<List<Goal>> getAllGoals() async* {
-    final isar = await ref.watch(goalIsarProvider.future);
-    final allGoals = await isar.goals.where().findAll();
-    yield allGoals;
-  }
+  
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -23,6 +25,7 @@ class GoalSection extends ConsumerStatefulWidget {
 
 class _GoalHeaderState extends ConsumerState<GoalSection> {
   final List<Goal> goals = [];
+
   @override
   void initState() {
     //# 목표가 변경될 때 마다 setState 실행
@@ -37,7 +40,6 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -46,23 +48,34 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
           height: 8.0,
         ),
         //# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
-        goals.isEmpty
-            ? GestureDetector(
-                onTap: _onTap(),
-                //# header Design
-                child: _goalContainer(
-                  _isEmptyContainer(context),
-                ),
-              )
-            //# 목표가 없을 때
-            : ListView.builder(
-                itemBuilder: ((context, index) => GestureDetector(
-                      onTap: _onTap(),
-                      child: _isNotEmptyContainer(goals, index),
-                    )),
-                itemCount: goals.length,
-                shrinkWrap: true),
+        _goalContainer(goals.isEmpty)
       ],
+    );
+  }
+
+  //# 있을 때나 없을 때나 같은 디자인
+  Widget _goalContainer(bool isEmpty) {
+    debugPrint("goalSection : $goals");
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+          CupertinoSheetRoute<void>(
+            initialStop: 0.6,
+            stops: <double>[0,0.6,1],
+            // Screen은 이동할 스크린
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            builder: (context) => GoalScreen(goals: goals,),
+          ),
+        ),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).cardColor),
+        child: isEmpty ? _isEmptyContainer() : _isNotEmptyContainer(
+          goal: goals[0],
+          count: goals.length,
+        ),
+      ),
     );
   }
 
@@ -78,19 +91,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
         );
   }
 
-
-  //# 있을 때나 없을 때나 같은 디자인
-  Widget _goalContainer(Widget child) {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).cardColor),
-      child: child,
-    );
-  }
-
-  Center _isEmptyContainer(BuildContext context) {
+  Center _isEmptyContainer() {
     return Center(
       child: Text(
         "목표를 설정해주세요.",
@@ -103,30 +104,28 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     );
   }
 
-  Container _isNotEmptyContainer(List<Goal> goals, int index) {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-        //: 테두리
-        border: Border.all(color: Colors.green, width: 4),
-        borderRadius: BorderRadius.circular(10),
-      ),
+  Widget _isNotEmptyContainer({required Goal goal, required int count/*목표 개수*/}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(goals[index].name),
-          // 5000원 > 5,000원
-          Text("${goals[index].amount.toStringAsFixed(0)}원", style: Theme.of(context).textTheme.bodyText1,),
+          Text(
+            goal.name,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
+          Text(
+            count.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );
-  }
-
-  Future<dynamic> _showCupertinoModalBottomSheet(BuildContext context) {
-    return showCupertinoModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return GoalScreen();
-        });
   }
 }

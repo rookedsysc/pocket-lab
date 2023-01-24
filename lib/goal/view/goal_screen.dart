@@ -10,28 +10,10 @@ import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_add_modal_screen.dart';
 import 'package:sheet/route.dart';
 
-class GoalScreen extends ConsumerStatefulWidget {
-  static const routeName = 'goal_screen';
-  const GoalScreen({super.key});
 
-  @override
-  ConsumerState<GoalScreen> createState() => _GoalDetailViewState();
-}
-
-class _GoalDetailViewState extends ConsumerState<GoalScreen> {
-  final List<Goal> goals = [];
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    GoalRepository(ref).getAllGoals().listen((event) {
-      setState(() {
-        goals.clear();
-        goals.addAll(event);
-      });
-    });
-    super.initState();
-  }
+class GoalScreen extends StatelessWidget {
+  final List<Goal>? goals;
+  const GoalScreen({this.goals,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +51,15 @@ class _GoalDetailViewState extends ConsumerState<GoalScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-          child: goals.isEmpty
+          child: goals == null || goals!.isEmpty 
               ? Text("설정된 목표가 없습니다.")
               : ListView.builder(
                   itemBuilder: (context, index) => ListTile(
-                    title: Text(goals[index].name),
-                    subtitle: Text(goals[index].firstDate.toString()),
-                    trailing: Text(goals[index].amount.toString()),
+                    title: Text(goals![index].name),
+                    subtitle: Text(goals![index].firstDate.toString()),
+                    trailing: Text(goals![index].amount.toString()),
                   ),
-                  itemCount: goals.length,
+                  itemCount: goals!.length,
                 ),
         ),
       ),

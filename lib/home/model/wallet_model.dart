@@ -1,16 +1,16 @@
 import 'package:isar/isar.dart';
 
+part 'wallet_model.g.dart';
+
 @Collection()
-class WalletModel {
+class Wallet {
   Id id = Isar.autoIncrement;
-
   final String name;
-
   final BudgetModel budget;
   //: 잔고
   int balance;
 
-  WalletModel({
+  Wallet({
     required this.name,
     required this.budget,
     this.balance = 0,

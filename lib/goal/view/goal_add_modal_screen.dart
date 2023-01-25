@@ -32,7 +32,7 @@ class _GoalAddModalScreenState extends ConsumerState<GoalAddModalScreen> {
   late ScrollController scrollController;
   int amount = 0;
   String goalName = '';
-  Goal goal = Goal(amount: 0, firstDate: '', name: '');
+  Goal goal = Goal(amount: 0, name: '');
 
   @override
   void initState() {
@@ -171,7 +171,6 @@ class _GoalAddModalScreenState extends ConsumerState<GoalAddModalScreen> {
                 }
 
                 goal = Goal(
-                  firstDate: DateTime.now().toUtc().toString(),
                   name: goalName,
                   amount: amount,
                 );

@@ -1,20 +1,31 @@
 import 'package:isar/isar.dart';
+import 'package:pocket_lab/home/component/wallet_card.dart';
 
 part 'wallet_model.g.dart';
 
 @Collection()
 class Wallet {
   Id id = Isar.autoIncrement;
+  final String imgAddr;
   final String name;
   final BudgetModel budget;
   //: 잔고
   int balance;
 
   Wallet({
+    this.imgAddr = "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
     required this.name,
     required this.budget,
     this.balance = 0,
-});
+  });
+
+  walletToWalletCard() {
+    return WalletCard(
+      imgAddr: imgAddr,
+      name: name,
+      balance: balance,
+    );
+  }
 }
 
 enum BudgetType {

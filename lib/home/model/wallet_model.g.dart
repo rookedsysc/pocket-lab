@@ -28,8 +28,13 @@ const WalletSchema = CollectionSchema(
       type: IsarType.object,
       target: r'BudgetModel',
     ),
-    r'name': PropertySchema(
+    r'imgAddr': PropertySchema(
       id: 2,
+      name: r'imgAddr',
+      type: IsarType.string,
+    ),
+    r'name': PropertySchema(
+      id: 3,
       name: r'name',
       type: IsarType.string,
     )
@@ -57,6 +62,7 @@ int _walletEstimateSize(
   bytesCount += 3 +
       BudgetModelSchema.estimateSize(
           object.budget, allOffsets[BudgetModel]!, allOffsets);
+  bytesCount += 3 + object.imgAddr.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -74,7 +80,8 @@ void _walletSerialize(
     BudgetModelSchema.serialize,
     object.budget,
   );
-  writer.writeString(offsets[2], object.name);
+  writer.writeString(offsets[2], object.imgAddr);
+  writer.writeString(offsets[3], object.name);
 }
 
 Wallet _walletDeserialize(
@@ -91,7 +98,9 @@ Wallet _walletDeserialize(
           allOffsets,
         ) ??
         BudgetModel(),
-    name: reader.readString(offsets[2]),
+    imgAddr: reader.readStringOrNull(offsets[2]) ??
+        "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
+    name: reader.readString(offsets[3]),
   );
   object.id = id;
   return object;
@@ -114,6 +123,9 @@ P _walletDeserializeProp<P>(
           ) ??
           BudgetModel()) as P;
     case 2:
+      return (reader.readStringOrNull(offset) ??
+          "asset/img/bank/금융아이콘_PNG_카카오뱅크.png") as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -313,6 +325,136 @@ extension WalletQueryFilter on QueryBuilder<Wallet, Wallet, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imgAddr',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imgAddr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imgAddr',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imgAddr',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> imgAddrIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imgAddr',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -467,6 +609,18 @@ extension WalletQuerySortBy on QueryBuilder<Wallet, Wallet, QSortBy> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByImgAddr() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imgAddr', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByImgAddrDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imgAddr', Sort.desc);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -505,6 +659,18 @@ extension WalletQuerySortThenBy on QueryBuilder<Wallet, Wallet, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByImgAddr() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imgAddr', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByImgAddrDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imgAddr', Sort.desc);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -522,6 +688,13 @@ extension WalletQueryWhereDistinct on QueryBuilder<Wallet, Wallet, QDistinct> {
   QueryBuilder<Wallet, Wallet, QDistinct> distinctByBalance() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'balance');
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QDistinct> distinctByImgAddr(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imgAddr', caseSensitive: caseSensitive);
     });
   }
 
@@ -549,6 +722,12 @@ extension WalletQueryProperty on QueryBuilder<Wallet, Wallet, QQueryProperty> {
   QueryBuilder<Wallet, BudgetModel, QQueryOperations> budgetProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'budget');
+    });
+  }
+
+  QueryBuilder<Wallet, String, QQueryOperations> imgAddrProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imgAddr');
     });
   }
 

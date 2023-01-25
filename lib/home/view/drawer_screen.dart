@@ -25,6 +25,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       body: ZoomDrawer(
         style: DrawerStyle.style3,
         controller: _zoomDrawerController,
+        //: drawer  열었을 때 열리는 화면
         menuScreen: MenuScreen(),
         mainScreen: HomeScreen(zoomDrawerController: _zoomDrawerController),
         //# Drawer 열었을 때 main화면 크기

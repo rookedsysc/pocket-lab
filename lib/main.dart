@@ -6,10 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
-import 'package:pocket_lab/home/view/budget_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/home/view/transaction_screen.dart';
+import 'package:pocket_lab/utils/app_init.dart';
 import 'package:sheet/route.dart';
 
 import 'goal/view/goal_add_modal_screen.dart';
@@ -18,11 +18,14 @@ void main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //! 어플리케이션 초기화 작업
+    AppInit.init(ref);
+    
     return MaterialApp(
       theme: _theme,
       darkTheme: _darkTheme,
@@ -41,8 +44,6 @@ class MyApp extends StatelessWidget {
         return MaterialExtendedPageRoute(builder: ((_) => DrawerScreen()));
       case('/drawer_screen/goal_screen') :
         return MaterialExtendedPageRoute(builder: (((_) => GoalScreen())));
-      case('/drawer_screen/budget_screen') :
-        return MaterialExtendedPageRoute(builder: (((_) => BudgetScreen())));
     }
     return null;
   }

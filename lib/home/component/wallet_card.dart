@@ -7,17 +7,20 @@ class WalletCard extends StatelessWidget {
   //: 예산 이름
   final String name;
   //: 예산 주기
-  final String period;
+  String? period;
+  //: 계좌 잔액
+  final int balance;
   //: 예산 금액
-  final int amount;
+  int? amount;
   //: 예산 아이콘 image 주소
   final String imgAddr;
 
-  const WalletCard(
+  WalletCard(
       {required this.imgAddr,
       required this.name,
-      required this.period,
-      required this.amount,
+      required this.balance,
+      this.period,
+      this.amount,
       super.key});
 
   @override
@@ -33,7 +36,7 @@ class WalletCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          BudgetIconAndName(imgAddr: "asset/img/bank/금융아이콘_PNG_JP모건체이스.png", name: name),
+          BudgetIconAndName(imgAddr: imgAddr, name: name),
           
           //: budget 주기 
           Expanded(
@@ -41,8 +44,8 @@ class WalletCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  period,
+                if(period != null)Text(
+                  period!,
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 12.0,
@@ -50,7 +53,7 @@ class WalletCard extends StatelessWidget {
                   textAlign: TextAlign.end,
                 ),
                 //: budget 금액
-                Text(
+                if(amount != null)Text(
                   amount.toString(),
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       fontSize: 16.0,

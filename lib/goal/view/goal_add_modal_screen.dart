@@ -98,9 +98,6 @@ class _GoalAddModalScreenState extends ConsumerState<GoalAddModalScreen> {
               icon: Icon(Icons.arrow_back_ios)),
           TextButton(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Navigator.pop(context);
-              }
               //: 오류가 없다면 실행하는 부분
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();

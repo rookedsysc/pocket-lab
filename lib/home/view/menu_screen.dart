@@ -13,9 +13,8 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wallets = ref.watch(walletProvider).wallets;
-
-    return Scaffold(
+    return ref.watch(walletProvider).maybeWhen(data: (walletRepository) {
+      return Scaffold(
       body: SafeArea(
         top: true,
         child: Column(
@@ -29,22 +28,42 @@ class MenuScreen extends ConsumerWidget {
                   onPressed: () {
                     // 랜덤 숫자 생성
                     final randomInt = Random().nextInt(100);
-                    ref.read(walletProvider.notifier).addWallet(Wallet(name: "BudgetNumber $randomInt",budget: BudgetModel()));
+                    // ref.read().addWallet(Wallet(name: "BudgetNumber $randomInt",budget: BudgetModel()));
+                    walletRepository.addWallet(Wallet(name: "BudgetNumber $randomInt",budget: BudgetModel()));
                   },
                   icon: Icon(
                     Icons.add,
                   ),
                 )
-
               ],
             ),
-            Expanded(child: ListView.builder(itemBuilder: ((context, index) => _menuBudget(wallet: wallets[index], theme: Theme.of(context))), itemCount: wallets.length))
-          ],
+            StreamBuilder<List<Wallet>>(
+                  stream: walletRepository.getAllWallets(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final wallets = snapshot.data!;
+                    return Expanded(
+                        child: ListView.builder(
+                            itemBuilder: ((context, index) => _menuBudget(
+                                wallet: wallets[index],
+                                theme: Theme.of(context))),
+                            itemCount: wallets.length));
+                  })
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }, orElse: () {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    });
   }
-  
+
   Container _menuBudget({required Wallet wallet, required ThemeData theme}) {
     return Container(
         height: 50,
@@ -53,7 +72,11 @@ class MenuScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 4.0),
-              child: Image.asset(wallet.imgAddr,height: 30,width: 30,),
+              child: Image.asset(
+                wallet.imgAddr,
+                height: 30,
+                width: 30,
+              ),
             ),
             Text(
               wallet.name,

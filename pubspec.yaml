@@ -31,7 +31,17 @@ environment:
 dependencies:
   flutter_riverpod: ^2.1.3
   go_router: ^6.0.0
-  modal_bottom_sheet: ^2.1.2
+  modal_bottom_sheet: #^2.1.2
+      #    path: /Users/dmitrydyachenko/Desktop/modal_bottom_sheet/modal_bottom_sheet
+      git:
+        url: https://github.com/followthemoney1/modal_bottom_sheet.git
+        ref: main
+        path: modal_bottom_sheet
+  sheet: # ^0.0.4+1
+    git:
+      url: https://github.com/duythien0912/modal_bottom_sheet.git
+      ref: main
+      path: sheet
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   uuid: ^3.0.7
@@ -39,10 +49,8 @@ dependencies:
   calendar_date_picker2: ^0.3.6
   intl: ^0.18.0
   table_calendar: ^3.0.7
-  syncfusion_flutter_datepicker: ^20.4.43
   google_fonts: ^3.0.1
   flutter_zoom_drawer: ^3.0.3
-  sheet: ^0.0.4+1
   flutter:
     sdk: flutter
 

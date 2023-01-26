@@ -10,13 +10,13 @@ import 'package:pocket_lab/home/component/wallet_card_slider.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends StatelessWidget {
   final ZoomDrawerController zoomDrawerController;
   static const routeName = 'home_screen';
   const HomeScreen({required this.zoomDrawerController, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Material(

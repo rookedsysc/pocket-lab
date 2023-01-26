@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:pocket_lab/common/layout/two_row_layout.dart';
-import 'package:pocket_lab/home/component/transaction_button.dart';
+import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey(debugLabel: 'formState');
 

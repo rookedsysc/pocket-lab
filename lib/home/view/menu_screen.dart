@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
+import 'package:pocket_lab/home/component/menu_screen/menu_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
@@ -48,9 +49,8 @@ class MenuScreen extends ConsumerWidget {
                     final wallets = snapshot.data!;
                     return Expanded(
                         child: ListView.builder(
-                            itemBuilder: ((context, index) => _menuBudget(
-                                wallet: wallets[index],
-                                theme: Theme.of(context))),
+                            itemBuilder: ((context, index) =>
+                                MenuTile(wallet: wallets[index])),
                             itemCount: wallets.length));
                   })
             ],
@@ -62,31 +62,5 @@ class MenuScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     });
-  }
-
-  Container _menuBudget({required Wallet wallet, required ThemeData theme}) {
-    return Container(
-        height: 50,
-        color: theme.cardColor,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: Image.asset(
-                wallet.imgAddr,
-                height: 30,
-                width: 30,
-              ),
-            ),
-            Text(
-              wallet.name,
-              style: theme.textTheme.bodyMedium,
-            ),
-            Text(
-              wallet.budget.amount.toString(),
-              style: theme.textTheme.bodyMedium,
-            ),
-          ],
-        ));
   }
 }

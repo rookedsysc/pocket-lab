@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:pocket_lab/home/component/wallet_card.dart';
+import 'package:pocket_lab/home/component/home_screen/wallet_card.dart';
 
 part 'wallet_model.g.dart';
 

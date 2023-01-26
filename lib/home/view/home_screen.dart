@@ -5,18 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
-import 'package:pocket_lab/home/component/transaction_button.dart';
-import 'package:pocket_lab/home/component/wallet_card_slider.dart';
+import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
+import 'package:pocket_lab/home/component/home_screen/wallet_card_slider.dart';
+import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
+<<<<<<< HEAD
 class HomeScreen extends StatelessWidget {
+=======
+class HomeScreen extends ConsumerWidget {
   final ZoomDrawerController zoomDrawerController;
+>>>>>>> parent of 9eee06a (test : stream builder나 listner에서 setState 안하면 modal 정상적으로 열림(#11))
   static const routeName = 'home_screen';
-  const HomeScreen({required this.zoomDrawerController, super.key});
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Material(
@@ -52,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                     //# 목표 Section
                     _padding(child: Center(child: GoalSection())),
                     //# 예산 목록 Section
-                    _walletSection(Theme.of(context).iconTheme),
+                    WalletSection(iconTheme: Theme.of(context).iconTheme),
                     SizedBox(
                       height: 8.0,
                     ),
@@ -74,21 +79,5 @@ class HomeScreen extends StatelessWidget {
       child: child,
     );
   }
-
-  Padding _walletSection(IconThemeData iconTheme) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-        children: [
-          IconButton(
-            onPressed: () => zoomDrawerController.toggle!(),
-            icon: Icon(Icons.wallet_outlined, color: iconTheme.color),
-          ),
-          HeaderCollection(
-            headerType: HeaderType.wallet,
-          ),
-        ],
-      ),
-    );
-  }
 }
+

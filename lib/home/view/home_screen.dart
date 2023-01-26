@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
 import 'package:pocket_lab/home/component/transaction_button.dart';
 import 'package:pocket_lab/home/component/wallet_card_slider.dart';
+import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   final ZoomDrawerController zoomDrawerController;
   static const routeName = 'home_screen';
   const HomeScreen({required this.zoomDrawerController, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-    final TextTheme _textTheme = Theme.of(context).textTheme;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Material(
       color: Theme.of(context).backgroundColor,
@@ -38,8 +40,8 @@ class HomeScreen extends StatelessWidget {
                           SizedBox(
                             height: 8.0,),
                           Text(
-                            "\$ 500,000",
-                            style: _textTheme.bodyText1
+                            "50,000",
+                            style: textTheme.bodyText1
                                 ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
                             textAlign: TextAlign.start,
                           ),

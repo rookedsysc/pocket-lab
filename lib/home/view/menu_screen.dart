@@ -1,46 +1,99 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
+import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
-class MenuScreen extends StatelessWidget {
-  const MenuScreen ({super.key});
-
+class MenuScreen extends ConsumerWidget {
+  const MenuScreen({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        top: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            HeaderCollection(headerType: HeaderType.wallet,),
-            _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 1", budgetAmount: 2000),
-            _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 2", budgetAmount: 3000),
-            _menuBudget(assetImg: "asset/img/bank/금융아이콘_PNG_한화.png",theme: Theme.of(context), color: Colors.green, budgetName: "budget 3", budgetAmount: 10000)
-          ],
-        ),
-      ),
+  Widget build(BuildContext context, ref) {
+    final walletsFuture = ref.watch(walletProvider);
+    return walletsFuture.maybeWhen(
+      data: (walletRepository) {
+        final walletsStream = walletRepository.getWalletsStream();
+
+        return Scaffold(
+          body: SafeArea(
+            top: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    HeaderCollection(
+                      headerType: HeaderType.wallet,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // 랜덤 숫자 생성
+                        final randomInt = Random().nextInt(100);
+                        walletRepository.addWallet(Wallet(
+                            name: "BudgetNumber $randomInt",
+                            budget: BudgetModel()));
+                      },
+                      icon: Icon(
+                        Icons.add,
+                      ),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: walletsStream,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        final wallets = snapshot.data!;
+                        return ListView.builder(
+                          itemBuilder: (context, index) => _menuBudget(
+                            wallet: wallets[index],
+                            theme: Theme.of(context),
+                          ),
+                          itemCount: wallets.length,
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+      orElse: () {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
-  
-  Container _menuBudget({required String assetImg,required ThemeData theme, required Color color, required String budgetName, required int budgetAmount}) {
+
+  Container _menuBudget({required Wallet wallet, required ThemeData theme}) {
     return Container(
         height: 50,
-        color: color,
+        color: theme.cardColor,
         child: Row(
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 4.0),
-              child: Image.asset(assetImg,height: 30,width: 30,),
+              child: Image.asset(
+                wallet.imgAddr,
+                height: 30,
+                width: 30,
+              ),
             ),
             Text(
-              budgetName,
-              style: theme.textTheme.bodyText1,
+              wallet.name,
+              style: theme.textTheme.bodyLarge,
             ),
             Text(
-              budgetAmount.toString(),
-              style: theme.textTheme.bodyText1,
+              wallet.budget.amount.toString(),
+              style: theme.textTheme.bodyLarge,
             ),
           ],
         ));

@@ -63,12 +63,7 @@ int _goalEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.firstDate;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.firstDate.length * 3;
   {
     final value = object.lastDate;
     if (value != null) {
@@ -100,12 +95,12 @@ Goal _goalDeserialize(
 ) {
   final object = Goal(
     amount: reader.readLong(offsets[0]),
-    firstDate: reader.readStringOrNull(offsets[1]),
+    isDone: reader.readBoolOrNull(offsets[2]) ?? false,
     lastDate: reader.readStringOrNull(offsets[3]),
     name: reader.readString(offsets[4]),
   );
+  object.firstDate = reader.readString(offsets[1]);
   object.id = id;
-  object.isDone = reader.readBool(offsets[2]);
   return object;
 }
 
@@ -119,9 +114,9 @@ P _goalDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
@@ -271,24 +266,8 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'firstDate',
-      ));
-    });
-  }
-
-  QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'firstDate',
-      ));
-    });
-  }
-
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -301,7 +280,7 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -316,7 +295,7 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -331,8 +310,8 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> firstDateBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -940,7 +919,7 @@ extension GoalQueryProperty on QueryBuilder<Goal, Goal, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Goal, String?, QQueryOperations> firstDateProperty() {
+  QueryBuilder<Goal, String, QQueryOperations> firstDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'firstDate');
     });

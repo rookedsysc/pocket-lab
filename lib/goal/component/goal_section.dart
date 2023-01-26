@@ -24,46 +24,51 @@ class GoalSection extends ConsumerStatefulWidget {
 }
 
 class _GoalHeaderState extends ConsumerState<GoalSection> {
-  final List<Goal> goals = [];
-
-  @override
-  void initState() {
-    //# 목표가 변경될 때 마다 setState 실행
-    GoalRepository(ref).getAllGoals().listen((event) {
-      setState(() {
-        goals.clear();
-        goals.addAll(event);
-      });
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const HeaderCollection(headerType: HeaderType.goal),
-        const SizedBox(
-          height: 8.0,
-        ),
-        //# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
-        _goalContainer(goals.isEmpty)
-      ],
-    );
+    final goalsFuture = ref.watch(goalProvider);
+    return goalsFuture.maybeWhen(
+      data: (goalRepository) {
+
+
+      return StreamBuilder<List<Goal>>(
+          stream: goalRepository.getAllGoals(),
+          builder: (context, snapshot) {
+
+            if(snapshot.data == null) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const HeaderCollection(headerType: HeaderType.goal),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                //# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
+                _goalContainer(goals: snapshot.data!)
+              ],
+            );
+          });
+    }, orElse: () {
+      return Center(child: CircularProgressIndicator());
+    });
   }
 
   //# 있을 때나 없을 때나 같은 디자인
-  Widget _goalContainer(bool isEmpty) {
+  Widget _goalContainer({required List<Goal> goals}) {
     debugPrint("goalSection : $goals");
+
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-          CupertinoSheetRoute<void>(
-            initialStop: 0.6,
-            stops: <double>[0,0.6,1],
+        CupertinoSheetRoute<void>(
+          initialStop: 0.6,
+          stops: <double>[0,0.6,1],
             // Screen은 이동할 스크린
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            builder: (context) => GoalScreen(goals: goals,),
+            builder: (context) => GoalScreen(),
           ),
         ),
       child: Container(
@@ -71,7 +76,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).cardColor),
-        child: isEmpty ? _isEmptyContainer() : _isNotEmptyContainer(
+        child: goals.isEmpty ? _isEmptyContainer() : _isNotEmptyContainer(
           goal: goals[0],
           count: goals.length,
         ),
@@ -83,7 +88,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     return () => Navigator.of(context).push(
           CupertinoSheetRoute<void>(
             initialStop: 0.6,
-            stops: <double>[0,0.6,1],
+            stops: <double>[0, 0.6, 1],
             // Screen은 이동할 스크린
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             builder: (BuildContext context) => GoalScreen(),
@@ -97,7 +102,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
         "목표를 설정해주세요.",
         style: Theme.of(context)
             .textTheme
-            .bodyText1
+            .bodyMedium
             ?.copyWith(fontWeight: FontWeight.w500),
         textAlign: TextAlign.center,
       ),
@@ -114,14 +119,14 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
             goal.name,
             style: Theme.of(context)
                 .textTheme
-                .bodyText1
+                .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.w500),
           ),
           Text(
             count.toString(),
             style: Theme.of(context)
                 .textTheme
-                .bodyText1
+                .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.w500),
           ),
         ],

@@ -62,7 +62,7 @@ class MyApp extends ConsumerWidget {
     //# 텍스트 색상
     textTheme: const TextTheme(
       //: 보통 글귀
-      bodyText1: TextStyle(color: Colors.black),
+      bodyMedium: TextStyle(color: Colors.black),
     ),
 
     cardColor: Colors.white
@@ -82,7 +82,7 @@ class MyApp extends ConsumerWidget {
     //# 텍스트 색상
     textTheme: const TextTheme(
       //: 보통 글귀
-      bodyText1: TextStyle(color: Colors.white, ),
+      bodyMedium: TextStyle(color: Colors.white, ),
     ),
 
     cardColor: Colors.black,

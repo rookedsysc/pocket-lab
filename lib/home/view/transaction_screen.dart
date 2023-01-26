@@ -82,7 +82,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       child: TwoRowLayout(
           firstWidget: Text(
             'Transaction Title',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           secondWidget: SizedBox(
               width: MediaQuery.of(context).size.width * (9 / 20),
@@ -111,7 +111,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       child: TwoRowLayout(
           firstWidget:Text(
             'Amount',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           secondWidget:SizedBox(
               width: MediaQuery.of(context).size.width * (9 / 20),
@@ -131,7 +131,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
                 cursorColor: Colors.purple,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(hintText: 'Input Number',hintStyle: Theme.of(context).textTheme.bodyText1),
+                decoration: InputDecoration(hintText: 'Input Number',hintStyle: Theme.of(context).textTheme.bodyMedium),
               ),
         )),
     );
@@ -144,7 +144,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       child: TwoRowLayout(
         firstWidget:Text(
           'Category',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         secondWidget:DropdownButton<String>(
             value: "Category 1",
@@ -189,7 +189,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               "Content",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           SizedBox(

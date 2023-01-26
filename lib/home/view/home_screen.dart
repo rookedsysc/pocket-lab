@@ -41,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
                             height: 8.0,),
                           Text(
                             "50,000",
-                            style: textTheme.bodyText1
+                            style: textTheme.bodyMedium
                                 ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
                             textAlign: TextAlign.start,
                           ),

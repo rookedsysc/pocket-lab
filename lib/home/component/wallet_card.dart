@@ -55,7 +55,7 @@ class WalletCard extends StatelessWidget {
                 //: budget 금액
                 if(amount != null)Text(
                   amount.toString(),
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500
                   ),

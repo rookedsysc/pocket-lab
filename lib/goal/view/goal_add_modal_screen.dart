@@ -97,14 +97,13 @@ class _GoalAddModalScreenState extends ConsumerState<GoalAddModalScreen> {
               },
               icon: Icon(Icons.arrow_back_ios)),
           TextButton(
-            onPressed: () {
+            onPressed: () async{
               //: 오류가 없다면 실행하는 부분
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
+                await ref.read(goalProvider.future).then((value) => value.addGoal(goal));
                 Navigator.of(context).pop();
               }
-
-              GoalRepository(ref).addGoal(goal);
             },
             child: Text(
               'Add',

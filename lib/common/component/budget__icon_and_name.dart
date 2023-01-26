@@ -20,7 +20,7 @@ class BudgetIconAndName extends StatelessWidget {
         const SizedBox(width: 4.0),
         Text(
           name,
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontSize: 20.0,
               fontWeight: FontWeight.w900
           ),

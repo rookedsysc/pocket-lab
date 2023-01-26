@@ -57,11 +57,11 @@ class MenuScreen extends ConsumerWidget {
             ),
             Text(
               wallet.name,
-              style: theme.textTheme.bodyText1,
+              style: theme.textTheme.bodyMedium,
             ),
             Text(
               wallet.budget.amount.toString(),
-              style: theme.textTheme.bodyText1,
+              style: theme.textTheme.bodyMedium,
             ),
           ],
         ));

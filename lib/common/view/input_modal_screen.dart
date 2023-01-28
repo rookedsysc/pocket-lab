@@ -36,7 +36,6 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
   @override
   Widget build(BuildContext context) {
     final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-    debugPrint('bottomInsets: $bottomInsets');
     return Material(
       child: SingleChildScrollView(
         controller: widget.scrollController,

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,6 +11,7 @@ import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
+import 'package:pocket_lab/home/view/menu_screen/wallet_config_screen.dart';
 import 'package:sheet/route.dart';
 
 class MenuScreen extends ConsumerWidget {
@@ -24,7 +26,7 @@ class MenuScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _walletHeader(walletRepository),
+            _walletHeader(walletRepository, context),
             _walletListStreamBuilder(walletRepository)
             ],
           ),
@@ -55,25 +57,28 @@ class MenuScreen extends ConsumerWidget {
                 });
   }
 
-  Row _walletHeader(WalletRepository walletRepository) {
+  Row _walletHeader(WalletRepository walletRepository, BuildContext context) {
     return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              HeaderCollection(headerType: HeaderType.wallet,),
-              IconButton(
-                onPressed: () {
-                  // 랜덤 숫자 생성
-                  final randomInt = Random().nextInt(100);
-                  // ref.read().addWallet(Wallet(name: "BudgetNumber $randomInt",budget: BudgetModel()));
-                  walletRepository.configWallet(Wallet(name: "BudgetNumber $randomInt",budget: BudgetModel()));
-                },
-                icon: Icon(
-                  Icons.add,
-                ),
-              )
-            ],
-          );
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        HeaderCollection(
+          headerType: HeaderType.wallet,
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(CupertinoSheetRoute<void>(
+              initialStop: 0.7,
+              stops: <double>[0, 0.7, 1],
+              //: Screen은 이동할 스크린
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              builder: (BuildContext context) => WalletConfigScreen(),
+            ));
+          },
+          icon: Icon(
+            Icons.add,
+          ),
+        )
+      ],
+    );
   }
-
-  
 }

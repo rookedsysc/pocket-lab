@@ -32,6 +32,7 @@ class WalletConfigScreen extends ConsumerStatefulWidget {
 }
 
 class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
+  Wallet _wallet = Wallet(budget: BudgetModel(), name: '');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -42,7 +43,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
         formKey: _formKey,
         inputTile: _inputTileList(context),
         onSavePressed: () async {
-          debugPrint("${widget.wallet?.name}");
+          debugPrint("widget wallet name : ${widget.wallet?.name}");
 
           //: 오류가 없다면 실행하는 부분
           //: 여기서 오류가 없다는 것은 값이 모두 들어 갔다는 것임.
@@ -50,13 +51,17 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             _formKey.currentState!.save();
 
             //: 선택된 wallet 확인
-            debugPrint(widget.wallet.toString());
-            widget.wallet!.budget.budgetPeriod = getBudgetPeriod();
+            widget.wallet?.budget.budgetPeriod = getBudgetPeriod();
+            _wallet.budget.budgetPeriod = getBudgetPeriod();
 
             //: 추가 / 수정
             final walletRepository =
                 await ref.read(walletRepositoryProvider.future);
-            walletRepository.configWallet(widget.wallet!);
+            if (widget.wallet != null) {
+              await walletRepository.configWallet(widget.wallet!);
+            } else {
+              await walletRepository.configWallet(_wallet);
+            }
             Navigator.of(context).pop();
           }
         });
@@ -124,6 +129,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _amountInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
+    if (widget.wallet == null) {
+      _wallet.budget.amount = int.parse(newValue);
+    }
     widget.wallet?.budget.amount = int.parse(newValue);
   }
 
@@ -136,7 +144,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
         // null인지 check
         //: edit mode일 경우 wallet의 결과가 null이 아니어서
         //: 값을 입력하지 않아도 해당 validator를 통과함
-        if (val == null || val.isEmpty || widget.wallet == null) {
+        if (val == null || val.isEmpty) {
           return ('Input Value');
         }
 
@@ -165,6 +173,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   builder: (context) => Material(
                         child: CalendarDatePicker2(
                           onValueChanged: (value) {
+                            if(widget.wallet == null) {
+                              _wallet.budget.budgetDate = value[0].toString();
+                            }
                             widget.wallet?.budget.budgetDate =
                                 value[0].toString();
                             debugPrint(
@@ -218,6 +229,10 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   ))
               .toList(),
           onChanged: (BudgetType? val) {
+            if(widget.wallet == null) {
+              _wallet.budgetType = val!;
+              return;
+            }
             widget.wallet?.budgetType = val!;
             ref.read(budgetTypeProvider.notifier).setBudgetType(val!);
           }),
@@ -274,12 +289,16 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _walletNameInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
+    if(widget.wallet == null) {
+      _wallet.name = newValue;
+      return;
+    }
     widget.wallet?.name = newValue;
   }
 
   FormFieldValidator<String?> _walletNameInputTileValidator() => (String? val) {
         // null인지 check
-        if (val == null || val.isEmpty || widget.wallet == null) {
+        if (val == null || val.isEmpty) {
           return ('Input Value');
         }
 
@@ -311,6 +330,10 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _balanceInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
+    if(widget.wallet == null) {
+      _wallet.balance = int.parse(newValue);
+      return;
+    }
     widget.wallet?.balance = int.parse(newValue);
   }
 }

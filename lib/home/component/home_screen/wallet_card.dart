@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:pocket_lab/common/component/budget__icon_and_name.dart';
+import 'package:pocket_lab/common/component/budget_icon_and_name.dart';
 
 class WalletCard extends StatelessWidget {
   //: 예산 이름

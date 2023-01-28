@@ -51,6 +51,7 @@ dependencies:
   table_calendar: ^3.0.7
   google_fonts: ^3.0.1
   flutter_zoom_drawer: ^3.0.3
+  flutter_slidable: ^2.0.0
   flutter:
     sdk: flutter
 

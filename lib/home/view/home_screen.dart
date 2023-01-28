@@ -11,21 +11,16 @@ import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
-<<<<<<< HEAD
 class HomeScreen extends StatelessWidget {
-=======
-class HomeScreen extends ConsumerWidget {
-  final ZoomDrawerController zoomDrawerController;
->>>>>>> parent of 9eee06a (test : stream builder나 listner에서 setState 안하면 modal 정상적으로 열림(#11))
   static const routeName = 'home_screen';
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Material(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Scaffold(
         body: CupertinoPageScaffold(
 
@@ -36,27 +31,17 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    //# Total Balance
-                    _padding(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          HeaderCollection(headerType: HeaderType.total,),
-                          SizedBox(
-                            height: 8.0,),
-                          Text(
-                            "50,000",
-                            style: textTheme.bodyMedium
-                                ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
-                            textAlign: TextAlign.start,
-                          ),
-                        ],
-                      ),
+                    ///# Total Balance
+                    _totalBalance(textTheme, context),
+
+                    ///# 목표 Section
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 16.0, left: 16.0, bottom: 16.0),
+                      child: Center(child: GoalSection()),
                     ),
 
-                    //# 목표 Section
-                    _padding(child: Center(child: GoalSection())),
-                    //# 예산 목록 Section
+                    ///# 예산 목록 Section
                     WalletSection(iconTheme: Theme.of(context).iconTheme),
                     SizedBox(
                       height: 8.0,
@@ -71,6 +56,26 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Padding _totalBalance(TextTheme textTheme, BuildContext context) {
+    return Padding(
+    padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
+    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        HeaderCollection(headerType: HeaderType.total,),
+                        SizedBox(
+                          height: 8.0,),
+                        Text(
+                          "50,000",
+                          style: textTheme.bodyMedium
+                              ?.copyWith(fontSize: 36.0, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
+  );
   }
 
   Padding _padding({required Widget child}) {

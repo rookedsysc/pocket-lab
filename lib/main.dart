@@ -8,11 +8,10 @@ import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
-import 'package:pocket_lab/home/view/transaction_screen.dart';
+import 'package:pocket_lab/home/view/home_screen/transaction_screen.dart';
 import 'package:pocket_lab/utils/app_init.dart';
 import 'package:sheet/route.dart';
 
-import 'goal/view/goal_add_modal_screen.dart';
 
 void main() async {
   runApp(ProviderScope(child: MyApp()));

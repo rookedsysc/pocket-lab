@@ -16,7 +16,7 @@ class WalletCardSlider extends ConsumerWidget {
     int initialIndex = 0;
 
     //? 모든 지갑을 가져와서 watch 해줌 > 지갑 list에 변경이 있으면 getWallet 실행
-    return ref.watch(walletProvider).when(data: (walletRepository) {
+    return ref.watch(walletRepositoryProvider).when(data: (walletRepository) {
       return StreamBuilder(
           stream: walletRepository.getAllWallets(),
           builder: ((context, snapshot) {

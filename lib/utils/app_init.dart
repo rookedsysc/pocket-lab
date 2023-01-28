@@ -7,10 +7,10 @@ import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
 class AppInit {
   static Future<void> init(WidgetRef ref) async {
-    final walletRepository = await ref.read(walletProvider.future);
+    final walletRepository = await ref.read(walletRepositoryProvider.future);
 
     if(await walletRepository.isEmty()) {
-      await walletRepository.addWallet(Wallet(name: "Default",budget: BudgetModel()));
+      await walletRepository.configWallet(Wallet(name: "Default",budget: BudgetModel()));
     }
   }
 }

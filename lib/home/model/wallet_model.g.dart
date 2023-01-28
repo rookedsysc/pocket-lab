@@ -28,13 +28,19 @@ const WalletSchema = CollectionSchema(
       type: IsarType.object,
       target: r'BudgetModel',
     ),
-    r'imgAddr': PropertySchema(
+    r'budgetType': PropertySchema(
       id: 2,
+      name: r'budgetType',
+      type: IsarType.string,
+      enumMap: _WalletbudgetTypeEnumValueMap,
+    ),
+    r'imgAddr': PropertySchema(
+      id: 3,
       name: r'imgAddr',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -62,6 +68,7 @@ int _walletEstimateSize(
   bytesCount += 3 +
       BudgetModelSchema.estimateSize(
           object.budget, allOffsets[BudgetModel]!, allOffsets);
+  bytesCount += 3 + object.budgetType.name.length * 3;
   bytesCount += 3 + object.imgAddr.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
@@ -80,8 +87,9 @@ void _walletSerialize(
     BudgetModelSchema.serialize,
     object.budget,
   );
-  writer.writeString(offsets[2], object.imgAddr);
-  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[2], object.budgetType.name);
+  writer.writeString(offsets[3], object.imgAddr);
+  writer.writeString(offsets[4], object.name);
 }
 
 Wallet _walletDeserialize(
@@ -98,9 +106,12 @@ Wallet _walletDeserialize(
           allOffsets,
         ) ??
         BudgetModel(),
-    imgAddr: reader.readStringOrNull(offsets[2]) ??
+    budgetType:
+        _WalletbudgetTypeValueEnumMap[reader.readStringOrNull(offsets[2])] ??
+            BudgetType.dontSet,
+    imgAddr: reader.readStringOrNull(offsets[3]) ??
         "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
-    name: reader.readString(offsets[3]),
+    name: reader.readString(offsets[4]),
   );
   object.id = id;
   return object;
@@ -123,14 +134,30 @@ P _walletDeserializeProp<P>(
           ) ??
           BudgetModel()) as P;
     case 2:
+      return (_WalletbudgetTypeValueEnumMap[reader.readStringOrNull(offset)] ??
+          BudgetType.dontSet) as P;
+    case 3:
       return (reader.readStringOrNull(offset) ??
           "asset/img/bank/금융아이콘_PNG_카카오뱅크.png") as P;
-    case 3:
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _WalletbudgetTypeEnumValueMap = {
+  r'dontSet': r'dontSet',
+  r'perWeek': r'perWeek',
+  r'perMonth': r'perMonth',
+  r'perSpecificDate': r'perSpecificDate',
+};
+const _WalletbudgetTypeValueEnumMap = {
+  r'dontSet': BudgetType.dontSet,
+  r'perWeek': BudgetType.perWeek,
+  r'perMonth': BudgetType.perMonth,
+  r'perSpecificDate': BudgetType.perSpecificDate,
+};
 
 Id _walletGetId(Wallet object) {
   return object.id;
@@ -269,6 +296,136 @@ extension WalletQueryFilter on QueryBuilder<Wallet, Wallet, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeEqualTo(
+    BudgetType value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeGreaterThan(
+    BudgetType value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeLessThan(
+    BudgetType value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeBetween(
+    BudgetType lower,
+    BudgetType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'budgetType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'budgetType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'budgetType',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'budgetType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> budgetTypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'budgetType',
+        value: '',
       ));
     });
   }
@@ -609,6 +766,18 @@ extension WalletQuerySortBy on QueryBuilder<Wallet, Wallet, QSortBy> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByBudgetType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'budgetType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByBudgetTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'budgetType', Sort.desc);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByImgAddr() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'imgAddr', Sort.asc);
@@ -644,6 +813,18 @@ extension WalletQuerySortThenBy on QueryBuilder<Wallet, Wallet, QSortThenBy> {
   QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByBalanceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'balance', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByBudgetType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'budgetType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByBudgetTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'budgetType', Sort.desc);
     });
   }
 
@@ -691,6 +872,13 @@ extension WalletQueryWhereDistinct on QueryBuilder<Wallet, Wallet, QDistinct> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QDistinct> distinctByBudgetType(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'budgetType', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QDistinct> distinctByImgAddr(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -722,6 +910,12 @@ extension WalletQueryProperty on QueryBuilder<Wallet, Wallet, QQueryProperty> {
   QueryBuilder<Wallet, BudgetModel, QQueryOperations> budgetProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'budget');
+    });
+  }
+
+  QueryBuilder<Wallet, BudgetType, QQueryOperations> budgetTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'budgetType');
     });
   }
 
@@ -763,12 +957,6 @@ const BudgetModelSchema = Schema(
       id: 2,
       name: r'budgetPeriod',
       type: IsarType.long,
-    ),
-    r'budgetType': PropertySchema(
-      id: 3,
-      name: r'budgetType',
-      type: IsarType.string,
-      enumMap: _BudgetModelbudgetTypeEnumValueMap,
     )
   },
   estimateSize: _budgetModelEstimateSize,
@@ -789,12 +977,6 @@ int _budgetModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final value = object.budgetType;
-    if (value != null) {
-      bytesCount += 3 + value.name.length * 3;
-    }
-  }
   return bytesCount;
 }
 
@@ -807,7 +989,6 @@ void _budgetModelSerialize(
   writer.writeLong(offsets[0], object.amount);
   writer.writeString(offsets[1], object.budgetDate);
   writer.writeLong(offsets[2], object.budgetPeriod);
-  writer.writeString(offsets[3], object.budgetType?.name);
 }
 
 BudgetModel _budgetModelDeserialize(
@@ -820,8 +1001,6 @@ BudgetModel _budgetModelDeserialize(
     amount: reader.readLongOrNull(offsets[0]),
     budgetDate: reader.readStringOrNull(offsets[1]),
     budgetPeriod: reader.readLongOrNull(offsets[2]),
-    budgetType:
-        _BudgetModelbudgetTypeValueEnumMap[reader.readStringOrNull(offsets[3])],
   );
   return object;
 }
@@ -839,26 +1018,10 @@ P _budgetModelDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 2:
       return (reader.readLongOrNull(offset)) as P;
-    case 3:
-      return (_BudgetModelbudgetTypeValueEnumMap[
-          reader.readStringOrNull(offset)]) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
-
-const _BudgetModelbudgetTypeEnumValueMap = {
-  r'perWeek': r'perWeek',
-  r'perMonth': r'perMonth',
-  r'perSpecificDate': r'perSpecificDate',
-  r'dontSet': r'dontSet',
-};
-const _BudgetModelbudgetTypeValueEnumMap = {
-  r'perWeek': BudgetType.perWeek,
-  r'perMonth': BudgetType.perMonth,
-  r'perSpecificDate': BudgetType.perSpecificDate,
-  r'dontSet': BudgetType.dontSet,
-};
 
 extension BudgetModelQueryFilter
     on QueryBuilder<BudgetModel, BudgetModel, QFilterCondition> {
@@ -1157,160 +1320,6 @@ extension BudgetModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'budgetType',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'budgetType',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeEqualTo(
-    BudgetType? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeGreaterThan(
-    BudgetType? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeLessThan(
-    BudgetType? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeBetween(
-    BudgetType? lower,
-    BudgetType? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'budgetType',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'budgetType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'budgetType',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'budgetType',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetTypeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'budgetType',
-        value: '',
       ));
     });
   }

@@ -229,12 +229,13 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   ))
               .toList(),
           onChanged: (BudgetType? val) {
-            if(widget.wallet == null) {
-              _wallet.budgetType = val!;
+            ref.read(budgetTypeProvider.notifier).setBudgetType(val!);
+            if (widget.wallet == null) {
+              _wallet.budgetType = val;
+              ref.read(budgetTypeProvider.notifier).setBudgetType(val);
               return;
             }
-            widget.wallet?.budgetType = val!;
-            ref.read(budgetTypeProvider.notifier).setBudgetType(val!);
+            widget.wallet?.budgetType = val;
           }),
     );
   }

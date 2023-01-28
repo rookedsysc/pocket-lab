@@ -44,8 +44,8 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
         drawerShadowsBackgroundColor: Colors.grey,
         //# slide 사이즈
         slideWidth: _slideWidth,
-        //# 옆으로 드래그 했을 때 drawer 열리지 않음
-        disableDragGesture: true,
+        // //# 옆으로 드래그 했을 때 drawer 열리지 않음
+        // disableDragGesture: true,
       ),
     );
   }

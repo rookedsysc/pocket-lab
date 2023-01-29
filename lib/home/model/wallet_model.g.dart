@@ -39,8 +39,13 @@ const WalletSchema = CollectionSchema(
       name: r'imgAddr',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'isSelected': PropertySchema(
       id: 4,
+      name: r'isSelected',
+      type: IsarType.bool,
+    ),
+    r'name': PropertySchema(
+      id: 5,
       name: r'name',
       type: IsarType.string,
     )
@@ -89,7 +94,8 @@ void _walletSerialize(
   );
   writer.writeString(offsets[2], object.budgetType.name);
   writer.writeString(offsets[3], object.imgAddr);
-  writer.writeString(offsets[4], object.name);
+  writer.writeBool(offsets[4], object.isSelected);
+  writer.writeString(offsets[5], object.name);
 }
 
 Wallet _walletDeserialize(
@@ -111,7 +117,8 @@ Wallet _walletDeserialize(
             BudgetType.dontSet,
     imgAddr: reader.readStringOrNull(offsets[3]) ??
         "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
-    name: reader.readString(offsets[4]),
+    isSelected: reader.readBoolOrNull(offsets[4]) ?? false,
+    name: reader.readString(offsets[5]),
   );
   object.id = id;
   return object;
@@ -140,6 +147,8 @@ P _walletDeserializeProp<P>(
       return (reader.readStringOrNull(offset) ??
           "asset/img/bank/금융아이콘_PNG_카카오뱅크.png") as P;
     case 4:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -612,6 +621,16 @@ extension WalletQueryFilter on QueryBuilder<Wallet, Wallet, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterFilterCondition> isSelectedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isSelected',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -790,6 +809,18 @@ extension WalletQuerySortBy on QueryBuilder<Wallet, Wallet, QSortBy> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByIsSelected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSelected', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByIsSelectedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSelected', Sort.desc);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -852,6 +883,18 @@ extension WalletQuerySortThenBy on QueryBuilder<Wallet, Wallet, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByIsSelected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSelected', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByIsSelectedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSelected', Sort.desc);
+    });
+  }
+
   QueryBuilder<Wallet, Wallet, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -883,6 +926,12 @@ extension WalletQueryWhereDistinct on QueryBuilder<Wallet, Wallet, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'imgAddr', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Wallet, Wallet, QDistinct> distinctByIsSelected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isSelected');
     });
   }
 
@@ -922,6 +971,12 @@ extension WalletQueryProperty on QueryBuilder<Wallet, Wallet, QQueryProperty> {
   QueryBuilder<Wallet, String, QQueryOperations> imgAddrProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'imgAddr');
+    });
+  }
+
+  QueryBuilder<Wallet, bool, QQueryOperations> isSelectedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isSelected');
     });
   }
 

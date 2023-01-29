@@ -8,14 +8,19 @@ import 'package:pocket_lab/home/component/home_screen/wallet_card.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 
-class WalletCardSlider extends ConsumerWidget {
+class WalletCardSlider extends ConsumerStatefulWidget {
   const WalletCardSlider({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    int initialIndex = 0;
+  ConsumerState<WalletCardSlider> createState() => _WalletCardSliderState();
+}
 
-    //? 모든 지갑을 가져와서 watch 해줌 > 지갑 list에 변경이 있으면 getWallet 실행
+class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
+  @override
+  Widget build(BuildContext context) {
+    late int _initialIndex;
+    
+
     return ref.watch(walletRepositoryProvider).when(data: (walletRepository) {
       return StreamBuilder(
           stream: walletRepository.getAllWallets(),
@@ -27,13 +32,10 @@ class WalletCardSlider extends ConsumerWidget {
             }
 
             final wallets = snapshot.data!;
+            _initialIndex = wallets.indexWhere((element) => element.isSelected);
 
             return CarouselSlider.builder(
-              options: CarouselOptions(
-                  aspectRatio: 2.0,
-                  disableCenter: true,
-                  enlargeCenterPage: true,
-                  initialPage: initialIndex),
+              options: _carouselOptions(_initialIndex, wallets: wallets),
               itemCount: wallets.length,
               itemBuilder: (context, index, realIndex) {
                 return wallets[index].walletToWalletCard();
@@ -49,5 +51,16 @@ class WalletCardSlider extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     });
+  }
+
+  CarouselOptions _carouselOptions(int _initialIndex, {required List<Wallet> wallets}) {
+    return CarouselOptions(
+        aspectRatio: 2.0,
+        disableCenter: true,
+        enlargeCenterPage: true,
+        initialPage: _initialIndex,
+        onPageChanged: (index, reason) async {
+          await (await ref.read(walletRepositoryProvider.future)).setIsSelectedWallet(wallets[index].id);
+        });
   }
 }

@@ -25,12 +25,14 @@ class WalletTile extends ConsumerStatefulWidget {
 }
 
 class _MenuTileState extends ConsumerState<WalletTile> {
-
   @override
   Widget build(BuildContext context) {
     final zoomDrawerController = ref.watch(zoomDrawerControllerProvider);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await (await ref.read(walletRepositoryProvider.future))
+            .setIsSelectedWallet(widget.wallet.id);
+
         zoomDrawerController.toggle!();
       },
       child: Slidable(
@@ -50,7 +52,10 @@ class _MenuTileState extends ConsumerState<WalletTile> {
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).cardColor,
+              //: isSelected인 타일 색상 primaryColor로
+              color: widget.wallet.isSelected
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).cardColor,
             ),
             height: 60,
             child: Column(
@@ -106,6 +111,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         Text(
           widget.wallet.name,
           style: Theme.of(context).textTheme.bodyMedium,
+          overflow: TextOverflow.fade,
         ),
       ],
     );
@@ -128,8 +134,22 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           return;
         }
 
-        (await ref.read(walletRepositoryProvider.future))
+        await (await ref.read(walletRepositoryProvider.future))
             .deleteWallet(widget.wallet);
+
+        //: 선택된 지갑이 삭제된 경우
+        //: 다른 지갑 중 하나를 선택된 지갑으로 설정
+        if (widget.wallet.isSelected == true) {
+          final _walletRepository =
+              await ref.read(walletRepositoryProvider.future);
+          final Wallet? _wallet =
+              await _walletRepository.getSpecificWallet(null);
+          if (_wallet != null) {
+            debugPrint(_wallet.toString());
+            _wallet.isSelected = true;
+            await _walletRepository.configWallet(_wallet);
+          }
+        }
       },
       //TODO: 삭제시 데이터가 한 개 뿐이라면 삭제 불가능하게 dialog 띄우기
       backgroundColor: Colors.red,

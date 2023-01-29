@@ -21,10 +21,50 @@ class WalletRepository {
   Stream<List<Wallet>> getAllWallets() {
     return isar.wallets.where().watch(fireImmediately: true).asBroadcastStream();
   }
-  
+
+  ///# 선택한 지갑 가져오기
+  Future<Wallet?> getSpecificWallet(int? id) async {
+    if(id == null) {
+      return await isar.wallets.where().findFirst();
+    }
+    return await isar.wallets.get(id);
+  }
+ 
   ///# 지갑 갯수 가져오기 
   Future<int> getWalletCount() async {
     return await isar.wallets.count();
+  }
+
+  ///# 선택된 지갑 인덱스 가져오기
+  int getSelectedWalletIndex(List<Wallet> wallets) {
+    int index = 0;
+    index = wallets.indexWhere((element) => element.isSelected);
+    return index;
+  }
+
+  ///# 선택된 지갑 변경
+  Future setIsSelectedWallet(int newWalletId) async {
+    //: 이전에 선택된 지갑의 isSelected를 false로 변경 
+    isar.wallets.where().filter().isSelectedEqualTo(true).findFirst().then((value) async {
+      await isar.writeTxn(() async {
+        if(value != null) {
+          value.isSelected = false;
+          await isar.wallets.put(value);
+        }
+      });
+    });
+
+    //: 선택된 지갑의 isSelected를 true로 변경
+    getSpecificWallet(newWalletId).then((value) async {
+      await isar.writeTxn(() async {
+        if(value != null) {
+          value.isSelected = true;
+          await isar.wallets.put(value);
+        }
+      });
+    });
+
+    
   }
 
   ///# 지갑 추가 / 수정

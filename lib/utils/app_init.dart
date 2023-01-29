@@ -10,7 +10,7 @@ class AppInit {
     final walletRepository = await ref.read(walletRepositoryProvider.future);
 
     if(await walletRepository.isEmty()) {
-      await walletRepository.configWallet(Wallet(name: "Default",budget: BudgetModel()));
+      await walletRepository.configWallet(Wallet(name: "Default",isSelected: true,budget: BudgetModel()));
     }
   }
 }

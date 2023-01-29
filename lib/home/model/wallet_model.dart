@@ -13,10 +13,13 @@ class Wallet {
   int balance;
   @Enumerated(EnumType.name)
   BudgetType budgetType;
+  ///: 선택되었는지 여부  
+  bool isSelected;
 
   Wallet({
     this.imgAddr = "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
     this.budgetType = BudgetType.dontSet,
+    this.isSelected = false,
     required this.name,
     required this.budget,
     this.balance = 0,

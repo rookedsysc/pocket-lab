@@ -8,9 +8,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/goal/component/goal_list_view.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
+import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:sheet/route.dart';
+import 'package:sheet/sheet.dart';
 
 final goalScrollControllerProvider = Provider<ScrollController>((ref) {
   final ScrollController _scrollController = ScrollController();
@@ -27,49 +29,31 @@ class GoalScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Goal> goals = [];
-    final scrollController = ref.watch(goalScrollControllerProvider);
     return Scaffold(
-      appBar: _appBar(context, ref),
-      body: SafeArea(
-          child: Padding(
+      body: Padding(
         padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        child: goals == null || goals.isEmpty
-            ? Text("설정된 목표가 없습니다.")
-            : ListView.builder(
-                itemBuilder: (context, index) => Container(
-                  ///: container 둥글게
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-
-                  child: ListTile(
-                    title: Text(goals[index].name),
-                    subtitle: Text(goals[index].firstDate.toString()),
-                    trailing: Text(goals[index].amount.toString()),
-                  ),
-                ),
-                itemCount: goals.length,
-              ),
-      )),
+        child: Column(
+          children: [
+            _topButton(context, ref),
+            Expanded(child: GoalListView()),
+          ],
+        ),
+      ),
     );
   }
 
-  AppBar _appBar(BuildContext context, WidgetRef ref) {
-    return AppBar(
-      iconTheme: Theme.of(context).iconTheme,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ///: 그림자 제거
-      elevation: 0,
-
-      title: Text(
-        "목표 설정",
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-      actions: [
-        ///# 추가 버튼
-        IconButton(
+  Widget _topButton(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      height: 50.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios)),
+          IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
             showMaterialModalBottomSheet(
@@ -86,7 +70,8 @@ class GoalScreen extends ConsumerWidget {
             );
           },
         ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -96,14 +81,15 @@ class GoalScreen extends ConsumerWidget {
       //: 오류가 없다면 실행하는 부분
       //: 여기서 오류가 없다는 것은 값이 모두 들어 갔다는 것임.
       if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
         goal = Goal(
           name: goalName,
           amount: amount,
         );
-        _formKey.currentState!.save();
         await ref
-            .read(goalProvider.future)
+            .read(goalRepositoryProvider.future)
             .then((value) => value.addGoal(goal));
+        ref.read(goalListProvider.notifier).addGoal(goal);
         Navigator.of(context).pop();
       }
     };
@@ -136,9 +122,9 @@ class GoalScreen extends ConsumerWidget {
             return null;
           },
           //: 입력한 값 저장
-          onSaved: ((newValue) {
+          onSaved: (newValue) {
             goalName = newValue!;
-          }),
+          },
         ),
       ),
       //# 가격 입력
@@ -165,60 +151,11 @@ class GoalScreen extends ConsumerWidget {
             return null;
           },
           //: 입력한 값 저장
-          onSaved: ((newValue) {
+          onSaved: (newValue) {
             amount = int.parse(newValue!);
-          }),
+          },
         ),
       )
     ];
   }
 }
-
-///! 동작안함
-///! 왜 그런지 모르겠음
-// class GoalScreen extends ConsumerWidget {
-//   const GoalScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         iconTheme: Theme.of(context).iconTheme,
-//         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//         ///: 그림자 제거
-//         elevation: 0,
-
-//         title: Text(
-//           "목표 설정",
-//           style: Theme.of(context).textTheme.bodyMedium,
-//         ),
-//         actions: [
-//           ///# 추가 버튼
-//           IconButton(
-//             icon: Icon(Icons.add),
-//             onPressed: () {
-//               showMaterialModalBottomSheet(
-//                 expand: false,
-//                 context: context,
-//                 builder: ((context) {
-//                   return GoalAddModalScreen(
-//                     height: MediaQuery.of(context).size.height * 0.49,
-//                     width: MediaQuery.of(context).size.width,
-//                     textStyle: Theme.of(context).textTheme.bodyMedium,
-//                     cardColor: Theme.of(context).cardColor,
-//                   );
-//                 }),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//       body: SafeArea(
-//         child: Padding(
-//           padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-//           child: GoalListView(),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -16,12 +16,12 @@ class MonthHeader extends StatelessWidget {
               Text(
                 '지출 : 50000',
                 textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
                 '수입 : 40000',
                 textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

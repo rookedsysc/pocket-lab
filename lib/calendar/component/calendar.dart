@@ -148,9 +148,9 @@ class _CalendarState extends ConsumerState<Calendar> {
         children: [
           Text(
             date.day.toString(),
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontWeight: FontWeight.w700,
-              color: textColor ?? Theme.of(context).textTheme.bodyText1!.color,
+              color: textColor ?? Theme.of(context).textTheme.bodyMedium!.color,
             ),
             textAlign: TextAlign.center,
           ),

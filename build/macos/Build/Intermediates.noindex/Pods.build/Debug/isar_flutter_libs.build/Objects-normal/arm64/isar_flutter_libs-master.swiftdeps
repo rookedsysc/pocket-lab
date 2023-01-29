@@ -1,7 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "999e141eaa75de1fe376ce0a16c5002452b249a45fd4eb1b4033991f0e694867"
-build_start_time: [1674263283, 705707073]
-build_end_time: [1674263290, 354503154]
-inputs:
-  ? "/Users/rookedsysc/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/isar_flutter_libs-3.0.5/macos/Classes/IsarFlutterLibsPlugin.swift"
-  : [1673562852, 525634050]

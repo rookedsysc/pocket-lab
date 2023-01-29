@@ -8,21 +8,21 @@ part 'goal_model.g.dart';
 @Collection()
 class Goal {
   Id id = Isar.autoIncrement;
-  //: 목표 이름 
+  //: 목표 이름
   final String name;
   //: 목표 금액
   final int amount;
-  //: 목표 설정한 날짜
-  String? firstDate = DateTime.now().toUtc().toString();
+  //: 목표 완료 되었는지 안되었는지
+  bool isDone;
+//: 목표 설정한 날짜
+  String firstDate = DateTime.now().toUtc().toString();
   //: 목표 달성한 날짜
   String? lastDate;
-  //: 목표 완료 되었는지 안되었는지
-  bool isDone = false;
 
   Goal({
     required this.name,
     required this.amount,
-    this.firstDate,
     this.lastDate,
+    this.isDone = false,
   });
 }

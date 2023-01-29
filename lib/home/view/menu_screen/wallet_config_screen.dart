@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pocket_lab/common/component/custom_text_from_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -113,26 +114,16 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   InputTile _budgetAmountInputTile(bool isDontSetType) {
     return InputTile(
-        fieldName: "Budget Amount",
-        inputField: TextFormField(
-            //: 숫자만 입력
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            //: 키보드가 숫자만 표시됨
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.right,
-            //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
-            validator: !isDontSetType ? _amountInputTileValidator() : null,
-            //: 입력한 값 저장
-            onSaved: (_amountInputTileOnSaved),
-            onTap: _onTap,
-            decoration: InputDecoration(
-              hintText: widget.wallet?.budget.amount != null
-                  ? widget.wallet?.budget.amount.toString()
-                  : "0",
-              border: InputBorder.none,
-            )));
+      fieldName: "Budget Amount",
+      inputField: NumberTypeTextFormField(
+        onTap: _onTap,
+        onSaved: _amountInputTileOnSaved,
+        validator: !isDontSetType ? _amountInputTileValidator() : null,
+        hintText: widget.wallet?.budget.amount != null
+            ? widget.wallet?.budget.amount.toString()
+            : "0",
+      ),
+    );
   }
 
   void _amountInputTileOnSaved(String? newValue) {
@@ -280,18 +271,12 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   InputTile _walletNameInputTile() {
     return InputTile(
         fieldName: "Wallet Name",
-        inputField: TextFormField(
-            keyboardType: TextInputType.text,
-            textAlign: TextAlign.right,
-            //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
+        inputField: TextTypeTextFormField(
             validator:
                 widget.wallet == null ? _walletNameInputTileValidator() : null,
-            //: 입력한 값 저장
-            onSaved: (_walletNameInputTileOnSaved),
             onTap: _onTap,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: widget.wallet?.name ?? null)));
+            onSaved: (_walletNameInputTileOnSaved),
+            hintText: widget.wallet?.name ?? null));
   }
 
   void _onTap() {
@@ -325,22 +310,11 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   InputTile _balanceInputTile() {
     return InputTile(
       fieldName: "Balance",
-      inputField: TextFormField(
-          //: 키보드가 숫자만 표시됨
-          keyboardType: TextInputType.number,
-          //: 숫자만 입력되게 함
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly
-          ],
-          textAlign: TextAlign.right,
-          //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
-          onTap: _onTap,
-          //: 입력한 값 저장
-          onSaved: _balanceInputTileOnSaved,
-          decoration: InputDecoration(
-            hintText: widget.wallet?.balance.toString() ?? null,
-            border: InputBorder.none,
-          )),
+      inputField: NumberTypeTextFormField(
+        onTap: _onTap,
+        onSaved: (_balanceInputTileOnSaved),
+        hintText: widget.wallet?.balance.toString() ?? null,
+      ),
     );
   }
 

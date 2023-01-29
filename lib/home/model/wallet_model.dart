@@ -17,7 +17,7 @@ class Wallet {
   bool isSelected;
 
   Wallet({
-    this.imgAddr = "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
+    this.imgAddr = "asset/img/bank/금융아이콘_PNG_토스.png",
     this.budgetType = BudgetType.dontSet,
     this.isSelected = false,
     required this.name,

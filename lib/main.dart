@@ -60,8 +60,10 @@ class MyApp extends ConsumerWidget {
 
     //# 텍스트 색상
     textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
       //: 보통 글귀
-      bodyMedium: TextStyle(color: Colors.black),
+      bodyMedium: TextStyle(color: Colors.black, fontSize: 12),
+      bodySmall: TextStyle(color: Colors.black, fontSize: 10),
     ),
 
     cardColor: Colors.white
@@ -80,8 +82,10 @@ class MyApp extends ConsumerWidget {
 
     //# 텍스트 색상
     textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 16),
       //: 보통 글귀
-      bodyMedium: TextStyle(color: Colors.white, ),
+      bodyMedium: TextStyle(color: Colors.white, fontSize: 12),
+      bodySmall: TextStyle(color: Colors.white, fontSize: 10),
     ),
 
     cardColor: Colors.black,

@@ -50,9 +50,14 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
 
-            //: 선택된 wallet 확인
+            //: 선택된 주기 확인
             widget.wallet?.budget.budgetPeriod = getBudgetPeriod();
             _wallet.budget.budgetPeriod = getBudgetPeriod();
+
+            //: 선택된 아이콘 저장
+            widget.wallet?.imgAddr =
+                ref.read(selectedIconProvider.notifier).state;
+            _wallet.imgAddr = ref.read(selectedIconProvider.notifier).state;
 
             //: 추가 / 수정
             final walletRepository =
@@ -60,6 +65,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             if (widget.wallet != null) {
               await walletRepository.configWallet(widget.wallet!);
             } else {
+              //: 선택된 아이콘 저장
               await walletRepository.configWallet(_wallet);
             }
             Navigator.of(context).pop();
@@ -122,7 +128,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             onSaved: (_amountInputTileOnSaved),
             onTap: _onTap,
             decoration: InputDecoration(
-              hintText: widget.wallet?.budget.amount != null ? widget.wallet?.budget.amount.toString() : "0",
+              hintText: widget.wallet?.budget.amount != null
+                  ? widget.wallet?.budget.amount.toString()
+                  : "0",
               border: InputBorder.none,
             )));
   }
@@ -173,7 +181,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   builder: (context) => Material(
                         child: CalendarDatePicker2(
                           onValueChanged: (value) {
-                            if(widget.wallet == null) {
+                            if (widget.wallet == null) {
                               _wallet.budget.budgetDate = value[0].toString();
                             }
                             widget.wallet?.budget.budgetDate =
@@ -243,22 +251,29 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   //# icon 선택
   InputTile _selectIconInputTile(BuildContext context) {
     return InputTile(
-      fieldName: "Icon",
-      inputField: TextButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            CupertinoSheetRoute<void>(
-              initialStop: 0.6,
-              stops: <double>[0, 0.6, 1],
-              // Screen은 이동할 스크린
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              builder: (context) => IconSelectScreen(),
+        fieldName: "Icon",
+        inputField: GestureDetector(
+          onTap: () {
+            //: Icon Select Screen으로 이동
+            Navigator.of(context).push(
+              CupertinoSheetRoute<void>(
+                initialStop: 0.6,
+                stops: <double>[0, 0.6, 1],
+                // Screen은 이동할 스크린
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                builder: (context) => IconSelectScreen(),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            //: 선태된 이미지
+            child: Image.asset(
+              ref.watch(selectedIconProvider),
+              fit: BoxFit.fill,
             ),
-          );
-        },
-        child: Text("SelectIcon"),
-      ),
-    );
+          ),
+        ));
   }
 
   //# 지갑 이름
@@ -290,7 +305,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _walletNameInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
-    if(widget.wallet == null) {
+    if (widget.wallet == null) {
       _wallet.name = newValue;
       return;
     }
@@ -331,7 +346,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _balanceInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
-    if(widget.wallet == null) {
+    if (widget.wallet == null) {
       _wallet.balance = int.parse(newValue);
       return;
     }

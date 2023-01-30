@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -36,13 +37,14 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         zoomDrawerController.toggle!();
       },
       child: Slidable(
+        //: 오른쪽에서 왼쪽으로 슬라이드시 발생하는 액션 
         endActionPane: ActionPane(
           motion: const ScrollMotion(),
           children: [
             //# 지갑 수정
-            _walletEdit(context),
+            SlidableEdit(onPressed: _onEditPressed()),
             //# 지갑 삭제
-            _walletDelete()
+            SlidableDelete(onPressed: _onDeletePressed()),
           ],
         ),
         child: Container(
@@ -117,9 +119,8 @@ class _MenuTileState extends ConsumerState<WalletTile> {
     );
   }
 
-  SlidableAction _walletDelete() {
-    return SlidableAction(
-      onPressed: (_) async {
+  SlidableActionCallback _onDeletePressed() {
+    return (_) async {
         final int _walletCount =
             await (await ref.read(walletRepositoryProvider.future))
                 .getWalletCount();
@@ -150,18 +151,10 @@ class _MenuTileState extends ConsumerState<WalletTile> {
             await _walletRepository.configWallet(_wallet);
           }
         }
-      },
-      //TODO: 삭제시 데이터가 한 개 뿐이라면 삭제 불가능하게 dialog 띄우기
-      backgroundColor: Colors.red,
-      foregroundColor: Colors.black,
-      icon: Icons.delete,
-      label: "Del",
-    );
+      };
   }
-
-  SlidableAction _walletEdit(BuildContext context) {
-    return SlidableAction(
-      onPressed: (_) {
+  SlidableActionCallback _onEditPressed() {
+    return (_) {
         Navigator.of(context).push(CupertinoSheetRoute<void>(
           initialStop: 0.7,
           stops: <double>[0, 0.7, 1],
@@ -171,11 +164,6 @@ class _MenuTileState extends ConsumerState<WalletTile> {
             wallet: widget.wallet,
           ),
         ));
-      },
-      backgroundColor: Colors.grey,
-      foregroundColor: Colors.black,
-      icon: Icons.edit,
-      label: "Edit",
-    );
+      };
   }
 }

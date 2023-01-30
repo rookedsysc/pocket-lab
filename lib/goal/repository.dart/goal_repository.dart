@@ -35,7 +35,9 @@ class GoalRepository {
 
   //# 목표 삭제
   Future<void> deleteGoal(Goal goal) async {
-    await isar.goals.delete(goal.id);
+    isar.writeTxn(() async {
+      await isar.goals.delete(goal.id);
+    });
   }
 }
 

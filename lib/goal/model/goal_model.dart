@@ -9,9 +9,9 @@ part 'goal_model.g.dart';
 class Goal {
   Id id = Isar.autoIncrement;
   //: 목표 이름
-  final String name;
+  String name;
   //: 목표 금액
-  final int amount;
+  int amount;
   //: 목표 완료 되었는지 안되었는지
   bool isDone = false;
   //: 목표 설정한 날짜

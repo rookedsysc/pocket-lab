@@ -17,7 +17,7 @@ class BudgetIconAndName extends StatelessWidget {
     return Row(
       children: [
         Image.asset(imgAddr, height: 30, width: 30),
-        const SizedBox(width: 4.0),
+        const SizedBox(width: 8.0),
         Text(
           name,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(

@@ -71,7 +71,7 @@ class MenuScreen extends ConsumerWidget {
               stops: <double>[0, 0.7, 1],
               //: Screen은 이동할 스크린
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              builder: (BuildContext context) => WalletConfigScreen(),
+              builder: (BuildContext context) => WalletConfigScreen(isEdit: false,),
             ));
           },
           icon: Icon(

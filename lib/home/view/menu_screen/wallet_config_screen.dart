@@ -26,7 +26,8 @@ final walletConfigScrollProvider = Provider<ScrollController>((ref) {
 
 class WalletConfigScreen extends ConsumerStatefulWidget {
   Wallet? wallet = Wallet(budget: BudgetModel(), name: '');
-  WalletConfigScreen({this.wallet, super.key});
+  bool isEdit;
+  WalletConfigScreen({required this.isEdit,this.wallet, super.key});
 
   @override
   ConsumerState<WalletConfigScreen> createState() => _WalletConfigScreenState();
@@ -40,7 +41,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   Widget build(BuildContext context) {
     return InputModalScreen(
         scrollController: ref.watch(walletConfigScrollProvider),
-        isSave: false,
+        isEdit: widget.isEdit,
         formKey: _formKey,
         inputTile: _inputTileList(context),
         onSavePressed: () async {
@@ -213,7 +214,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
       // hint: "none / perWeek / perMonth / perSpecificDate",
       inputField: DropdownButton<BudgetType>(
           underline: Container(
-            height: 2,
+            height: 0,
             color: Theme.of(context).primaryColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -244,18 +245,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
     return InputTile(
         fieldName: "Icon",
         inputField: GestureDetector(
-          onTap: () {
-            //: Icon Select Screen으로 이동
-            Navigator.of(context).push(
-              CupertinoSheetRoute<void>(
-                initialStop: 0.6,
-                stops: <double>[0, 0.6, 1],
-                // Screen은 이동할 스크린
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                builder: (context) => IconSelectScreen(),
-              ),
-            );
-          },
+          onTap: () => showCupertinoModalPopup(context: context, builder: (context) => IconSelectScreen()),
           child: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             //: 선태된 이미지

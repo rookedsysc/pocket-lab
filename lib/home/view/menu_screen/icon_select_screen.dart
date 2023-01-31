@@ -21,14 +21,18 @@ class IconSelectScreen extends ConsumerWidget {
         foregroundColor: _theme.textTheme.bodyLarge?.color,
         elevation: 0,
         backgroundColor: _theme.scaffoldBackgroundColor,
-        title: Text("Icon Select Screen", style: _theme.textTheme.bodyLarge,),),
+        title: Text(
+          "Select Icon",
+          style: _theme.textTheme.bodyLarge,
+        ),
+      ),
       body: GridView(
         //# 행 갯수, 패딩, 가로 세로 비율
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             //: 1개의 Row에 보여줄 Column 갯수
             crossAxisCount: 5,
             //: 가로 세로 비율
-            childAspectRatio: 1/1.3,
+            childAspectRatio: 1 / 1.3,
             //: 세로 패딩
             mainAxisSpacing: 12,
             //: 가로 패딩
@@ -39,12 +43,14 @@ class IconSelectScreen extends ConsumerWidget {
                   onTap: () {
                     try {
                       ref.read(selectedIconProvider.notifier).state =
-                        bankIcon[bankIconKeys[index]]!;
-                    } catch(e) {
-                      ref.read(selectedIconProvider.notifier).state = "asset/img/bank/금융아이콘_PNG_토스.png";
-                      debugPrint("[Icon Select Screen] Error Alert : e.toString()");
+                          bankIcon[bankIconKeys[index]]!;
+                    } catch (e) {
+                      ref.read(selectedIconProvider.notifier).state =
+                          "asset/img/bank/금융아이콘_PNG_토스.png";
+                      debugPrint(
+                          "[Icon Select Screen] Error Alert : e.toString()");
                     }
-                    
+
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -55,8 +61,8 @@ class IconSelectScreen extends ConsumerWidget {
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.all(12),
-                          child: Image.asset(bankIcon[bankIconKeys[index]]!)),
+                            padding: EdgeInsets.all(12),
+                            child: Image.asset(bankIcon[bankIconKeys[index]]!)),
                         Text(
                           bankIconKeys[index],
                           style: _theme.textTheme.bodySmall,

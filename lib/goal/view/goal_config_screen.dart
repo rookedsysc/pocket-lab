@@ -22,7 +22,7 @@ class GoalConfigScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InputModalScreen(
         scrollController: ref.watch(goalScrollControllerProvider),
-        isSave: false,
+        isEdit: false,
         formKey: _formKey,
         onSavePressed: _onSavePressed(context: context, ref: ref),
         inputTile: _inputTileList(ref));

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/home/view/home_screen/transaction_screen.dart';
+import 'package:pocket_lab/transaction/view/transaction_config_screen.dart';
 import 'package:sheet/route.dart';
 
 enum TransactionType { remittance, income, expenditure }
@@ -79,16 +79,17 @@ class TransactionButton extends StatelessWidget {
 
     return CardButton(
       icon: _icon,
-      onPressed: () {
-        Navigator.of(context).push(
-          CupertinoSheetRoute<void>(
-            // Screen은 이동할 스크린
-            builder: (BuildContext context) => TransactionScreen(
-              transactionType: transactionType,
-            ),
+      onPressed: () => Navigator.of(context).push(CupertinoSheetRoute(
+          initialStop: 0.6,
+          stops: <double>[0, 0.6, 1],
+          // Screen은 이동할 스크린
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          builder: (context) => TransactionConfigScreen(
+            isEdit: false,
+            transactionType: TransactionType.expenditure,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

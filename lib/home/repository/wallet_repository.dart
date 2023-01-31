@@ -63,8 +63,6 @@ class WalletRepository {
         }
       });
     });
-
-    
   }
 
   ///# 지갑 추가 / 수정

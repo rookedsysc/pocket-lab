@@ -25,7 +25,7 @@ class InputTile extends StatelessWidget {
               children: [
                 //# field Name
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   child: Text(
                     fieldName,
                     style: Theme.of(context)

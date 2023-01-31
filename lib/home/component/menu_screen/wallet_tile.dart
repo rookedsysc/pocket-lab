@@ -162,6 +162,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           builder: (BuildContext context) => WalletConfigScreen(
             wallet: widget.wallet,
+            isEdit: true,
           ),
         ));
       };

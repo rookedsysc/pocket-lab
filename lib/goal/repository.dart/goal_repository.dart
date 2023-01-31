@@ -5,7 +5,7 @@ import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 
-final goalProvider = FutureProvider<GoalRepository>((ref) async {
+final goalRepositoryProvider = FutureProvider<GoalRepository>((ref) async {
   final isar = ref.watch(isarProvieder.future);
   return GoalRepository(await isar);
 });
@@ -35,6 +35,9 @@ class GoalRepository {
 
   //# 목표 삭제
   Future<void> deleteGoal(Goal goal) async {
-    await isar.goals.delete(goal.id);
+    isar.writeTxn(() async {
+      await isar.goals.delete(goal.id);
+    });
   }
 }
+

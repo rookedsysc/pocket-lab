@@ -28,12 +28,15 @@ class InputTile extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.25,
                   child: Text(
                     fieldName,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontSize: 14),
                   ),
                 ),
                 //# field
                 Container(
-                  height: 50.0,
+                  height: 35.0,
                   //: 입력하면 글자가 옆에 딱 달라붙어 있어서 보기 싫음
                   padding: EdgeInsets.only(right: 4),
                     decoration: BoxDecoration(

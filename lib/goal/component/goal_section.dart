@@ -27,10 +27,9 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
 
   @override
   Widget build(BuildContext context) {
-    final goalsFuture = ref.watch(goalProvider);
+    final goalsFuture = ref.watch(goalRepositoryProvider);
     return goalsFuture.maybeWhen(
       data: (goalRepository) {
-
 
       return StreamBuilder<List<Goal>>(
           stream: goalRepository.getAllGoals(),
@@ -63,9 +62,9 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        CupertinoSheetRoute<void>(
+        CupertinoSheetRoute(
           initialStop: 0.6,
-          stops: <double>[0,0.6,1],
+          stops: <double>[0, 0.6, 1],
             // Screen은 이동할 스크린
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             builder: (context) => GoalScreen(),

@@ -116,7 +116,7 @@ Wallet _walletDeserialize(
         _WalletbudgetTypeValueEnumMap[reader.readStringOrNull(offsets[2])] ??
             BudgetType.dontSet,
     imgAddr: reader.readStringOrNull(offsets[3]) ??
-        "asset/img/bank/금융아이콘_PNG_카카오뱅크.png",
+        "asset/img/bank/금융아이콘_PNG_토스.png",
     isSelected: reader.readBoolOrNull(offsets[4]) ?? false,
     name: reader.readString(offsets[5]),
   );
@@ -145,7 +145,7 @@ P _walletDeserializeProp<P>(
           BudgetType.dontSet) as P;
     case 3:
       return (reader.readStringOrNull(offset) ??
-          "asset/img/bank/금융아이콘_PNG_카카오뱅크.png") as P;
+          "asset/img/bank/금융아이콘_PNG_토스.png") as P;
     case 4:
       return (reader.readBoolOrNull(offset) ?? false) as P;
     case 5:

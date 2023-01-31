@@ -23,7 +23,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //! 어플리케이션 초기화 작업
-    AppInit.init(ref);
+    AppInit(ref);
     
     return MaterialApp(
       theme: _theme,

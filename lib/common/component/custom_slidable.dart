@@ -11,6 +11,7 @@ class SlidableEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlidableAction(
       onPressed: onPressed,
+      borderRadius: BorderRadius.circular(10),
       backgroundColor: Colors.grey,
       foregroundColor: Colors.black,
       icon: Icons.edit,
@@ -27,7 +28,7 @@ const SlidableDelete ({required this.onPressed,super.key});
   Widget build(BuildContext context) {
     return SlidableAction(
       onPressed: onPressed,
-      //TODO: 삭제시 데이터가 한 개 뿐이라면 삭제 불가능하게 dialog 띄우기
+      borderRadius: BorderRadius.circular(10),
       backgroundColor: Colors.red,
       foregroundColor: Colors.black,
       icon: Icons.delete,

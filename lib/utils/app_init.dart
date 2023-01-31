@@ -18,24 +18,29 @@ class AppInit {
   }
 
   Future<void> walletInit() async {
-    final walletRepository = await ref.read(walletRepositoryProvider.future);
+    final walletCount =
+        await ref.read(walletRepositoryProvider.notifier).getWalletCount();
 
-    if(await walletRepository.isEmty()) {
-      await walletRepository.configWallet(Wallet(name: "Default",isSelected: true,budget: BudgetModel()));
+    if (walletCount == 0) {
+      await ref.read(walletRepositoryProvider.notifier).configWallet(
+          Wallet(name: "Default", isSelected: true, budget: BudgetModel()));
     }
   }
 
   Future<void> categoryInit() async {
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
     categoryRepository.getAllCategories().listen((event) {
-      if(event.isEmpty) {
-        categoryRepository.configCategory(TransactionCategory(name: "Default", color: "0067A3"));
+      if (event.isEmpty) {
+        categoryRepository.configCategory(
+            TransactionCategory(name: "Default", color: "0067A3"));
       }
     });
   }
-  //: 처음에 시작할 때 db에 있는 목표 목록 불러오기 
+
+  //: 처음에 시작할 때 db에 있는 목표 목록 불러오기
   Future<void> syncIsarWithLocalGoalList() async {
-    final _goalRepositoryProvider = await ref.watch(goalRepositoryProvider.future);
+    final _goalRepositoryProvider =
+        await ref.watch(goalRepositoryProvider.future);
     List<Goal> goals = [];
     _goalRepositoryProvider.getAllGoals().listen((event) {
       goals = event;

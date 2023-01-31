@@ -63,7 +63,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
             //: 추가 / 수정
             final walletRepository =
-                await ref.read(walletRepositoryProvider.future);
+                ref.read(walletRepositoryProvider.notifier);
             if (widget.wallet != null) {
               await walletRepository.configWallet(widget.wallet!);
             } else {

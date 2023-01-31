@@ -21,9 +21,8 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
     late int _initialIndex;
     
 
-    return ref.watch(walletRepositoryProvider).when(data: (walletRepository) {
-      return StreamBuilder(
-          stream: walletRepository.getAllWallets(),
+    return StreamBuilder(
+          stream: ref.watch(walletRepositoryProvider.notifier).getAllWallets(),
           builder: ((context, snapshot) {
             if (snapshot.data == null) {
               return const Center(
@@ -42,25 +41,19 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
               },
             );
           }));
-    }, error: (err, StackTrace) {
-      return Center(
-        child: Text(err.toString()),
-      );
-    }, loading: () {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    });
   }
 
-  CarouselOptions _carouselOptions(int _initialIndex, {required List<Wallet> wallets}) {
+  CarouselOptions _carouselOptions(int _initialIndex,
+      {required List<Wallet> wallets}) {
     return CarouselOptions(
         aspectRatio: 2.0,
         disableCenter: true,
         enlargeCenterPage: true,
         initialPage: _initialIndex,
         onPageChanged: (index, reason) async {
-          await (await ref.read(walletRepositoryProvider.future)).setIsSelectedWallet(wallets[index].id);
+          await ref
+              .read(walletRepositoryProvider.notifier)
+              .setIsSelectedWallet(wallets[index].id);
         });
   }
 }

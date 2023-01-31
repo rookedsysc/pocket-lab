@@ -31,7 +31,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
     final zoomDrawerController = ref.watch(zoomDrawerControllerProvider);
     return GestureDetector(
       onTap: () async {
-        await (await ref.read(walletRepositoryProvider.future))
+        await ref.read(walletRepositoryProvider.notifier)
             .setIsSelectedWallet(widget.wallet.id);
 
         zoomDrawerController.toggle!();
@@ -122,7 +122,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
   SlidableActionCallback _onDeletePressed() {
     return (_) async {
         final int _walletCount =
-            await (await ref.read(walletRepositoryProvider.future))
+            await ref.read(walletRepositoryProvider.notifier)
                 .getWalletCount();
 
         if (_walletCount == 1) {
@@ -135,14 +135,14 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           return;
         }
 
-        await (await ref.read(walletRepositoryProvider.future))
+        await ref.read(walletRepositoryProvider.notifier)
             .deleteWallet(widget.wallet);
 
         //: 선택된 지갑이 삭제된 경우
         //: 다른 지갑 중 하나를 선택된 지갑으로 설정
         if (widget.wallet.isSelected == true) {
           final _walletRepository =
-              await ref.read(walletRepositoryProvider.future);
+              ref.read(walletRepositoryProvider.notifier);
           final Wallet? _wallet =
               await _walletRepository.getSpecificWallet(null);
           if (_wallet != null) {

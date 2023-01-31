@@ -19,29 +19,24 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(walletRepositoryProvider).maybeWhen(data: (walletRepository) {
-      return Scaffold(
+    return  Scaffold(
       body: SafeArea(
         top: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _walletHeader(walletRepository, context),
-            _walletListStreamBuilder(walletRepository)
+            _walletHeader(context),
+            _walletListStreamBuilder(ref)
             ],
           ),
         ),
       );
-    }, orElse: () {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    });
+    
   }
 
-  StreamBuilder<List<Wallet>> _walletListStreamBuilder(WalletRepository walletRepository) {
+  StreamBuilder<List<Wallet>> _walletListStreamBuilder(WidgetRef ref) {
     return StreamBuilder<List<Wallet>>(
-                stream: walletRepository.getAllWallets(),
+                stream: ref.watch(walletRepositoryProvider.notifier).getAllWallets(),
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
                     return const Center(
@@ -57,7 +52,7 @@ class MenuScreen extends ConsumerWidget {
                 });
   }
 
-  Row _walletHeader(WalletRepository walletRepository, BuildContext context) {
+  Row _walletHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

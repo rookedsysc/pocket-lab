@@ -10,9 +10,9 @@ import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 class GoalConfigScreen extends ConsumerWidget {
-  //: formkey
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String goalName = "";
   int amount = 0;
   Goal? goal;

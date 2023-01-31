@@ -22,8 +22,6 @@ final goalScrollControllerProvider = Provider<ScrollController>((ref) {
 });
 
 class GoalScreen extends ConsumerWidget {
-  // formkey
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String goalName = "";
   int amount = 0;
   Goal goal = Goal(name: "", amount: 0);

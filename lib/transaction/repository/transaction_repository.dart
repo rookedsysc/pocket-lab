@@ -15,7 +15,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   TransactionRepositoryNotifier(this.ref): super(Transaction(transactionType: TransactionType.expenditure, category: 0, amount: 0, date: DateTime.now().toString(), title: "", walletId: 0));
 
   //# Transaction 추가
-  Future<void> addTransaction(Transaction transaction) async {
+  Future<void> configTransaction(Transaction transaction) async {
     state = transaction; 
     final Isar isar = await ref.read(isarProvieder.future);
 

@@ -130,17 +130,51 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         }
 
         if (widget.transaction == null) {
+          changeWalletBalance(_transaction);
           await ref
               .read(transactionRepositoryProvider.notifier)
-              .addTransaction(_transaction);
+              .configTransaction(_transaction);
         } else {
+          changeWalletBalance(widget.transaction!);
           await ref
               .read(transactionRepositoryProvider.notifier)
-              .addTransaction(widget.transaction!);
+              .configTransaction(widget.transaction!);
         }
       }
       Navigator.of(context).pop();
     };
+  }
+
+  //# Transaction Type에 따라서 기존 wallet의 잔고에 + - 
+  void changeWalletBalance(Transaction transaction) async {
+    final Wallet? _wallet = await ref.read(walletRepositoryProvider.notifier).getSpecificWallet(transaction.walletId);
+    final Wallet? _toWallet = await ref.read(walletRepositoryProvider.notifier).getSpecificWallet(transaction.toWallet);
+
+    if(_wallet == null) {
+      return ;
+    }
+
+    switch(widget.transactionType) {
+      case TransactionType.expenditure:
+        _wallet.balance -= transaction.amount;
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+        break;
+        case TransactionType.income:
+        _wallet.balance += transaction.amount;
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+        break;
+
+        case TransactionType.remittance:
+        if(_toWallet == null) {
+          return;
+        }
+        _wallet.balance -= transaction.amount;
+        _toWallet.balance += transaction.amount;
+        ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+        ref.read(walletRepositoryProvider.notifier).configWallet(_toWallet);
+        break;
+    }
+
   }
 
   bool _getCustomValidatorCheck() {

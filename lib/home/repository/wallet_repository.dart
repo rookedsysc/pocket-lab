@@ -14,7 +14,9 @@ final walletRepositoryProvider =
 class WalletRepository extends StateNotifier<Wallet> {
   final Ref ref;
   WalletRepository({required this.ref})
-      : super(Wallet(name: "", budget: BudgetModel()));
+      : super(Wallet(name: "", budget: BudgetModel())) {
+        getIsSelectedWallet();
+  }
 
   ///# 모든 지갑 stream으로 가져오기
   Stream<List<Wallet>> getAllWallets() async* {
@@ -46,6 +48,23 @@ class WalletRepository extends StateNotifier<Wallet> {
     index = wallets.indexWhere((element) => element.isSelected);
     return index;
   }
+  
+  ///# isSelected == true인 지갑 가져오기
+  Future<Wallet> getIsSelectedWallet() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+    isar.wallets.where().filter().isSelectedEqualTo(true).findFirst().then((value) {
+      if (value != null) {
+        state = value;
+      }
+    });
+    return state;
+  }
+
+  ///# 첫 번째 지갑 가져오기
+  Future<Wallet?> getFirstWallet() async {
+    final isar = await ref.read(isarProvieder.future);
+    return await isar.wallets.where().findFirst();
+  }
 
   ///# 선택된 지갑 변경
   Future setIsSelectedWallet(int newWalletId) async {
@@ -70,6 +89,7 @@ class WalletRepository extends StateNotifier<Wallet> {
       await isar.writeTxn(() async {
         if (value != null) {
           value.isSelected = true;
+          state = value;
           await isar.wallets.put(value);
         }
       });

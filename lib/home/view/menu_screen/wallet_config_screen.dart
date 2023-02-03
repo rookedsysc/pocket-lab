@@ -43,6 +43,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
         scrollController: ref.watch(walletConfigScrollProvider),
         isEdit: widget.isEdit,
         formKey: _formKey,
+        //# Input Tile List
         inputTile: _inputTileList(context),
         onSavePressed: () async {
           debugPrint("widget wallet name : ${widget.wallet?.name}");
@@ -159,7 +160,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   InputTile _isSpecificDateInputTile(bool isSpecificDateType) {
     late String _selectedDate;
     if (widget.wallet?.budget.budgetDate != null) {
-      _selectedDate = CustomDateUtils.dateToFyyyyMMdd(
+      _selectedDate = DateTimeDateUtils().dateToFyyyyMMdd(
           DateTime.parse(widget.wallet!.budget.budgetDate!));
     } else {
       _selectedDate = "SelectDate";

@@ -19,7 +19,6 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
   @override
   Widget build(BuildContext context) {
     late int _initialIndex;
-    
 
     return StreamBuilder(
           stream: ref.watch(walletRepositoryProvider.notifier).getAllWallets(),

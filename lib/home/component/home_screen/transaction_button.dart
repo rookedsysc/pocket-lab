@@ -77,7 +77,7 @@ class TransactionButton extends StatelessWidget {
         break;
     }
 
-    return CardButton(
+    return cardButton(
       icon: _icon,
       onPressed: () => Navigator.of(context).push(CupertinoSheetRoute(
           initialStop: 0.6,
@@ -86,7 +86,7 @@ class TransactionButton extends StatelessWidget {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           builder: (context) => TransactionConfigScreen(
             isEdit: false,
-            transactionType: TransactionType.expenditure,
+            transactionType: transactionType,
           ),
         ),
       ),
@@ -94,7 +94,7 @@ class TransactionButton extends StatelessWidget {
   }
 
 
-  Widget CardButton({required Icon icon, required VoidCallback onPressed}) {
+  Widget cardButton({required Icon icon, required VoidCallback onPressed}) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 4.0),

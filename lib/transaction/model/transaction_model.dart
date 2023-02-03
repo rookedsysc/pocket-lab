@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
+import 'package:pocket_lab/transaction/model/category_model.dart';
 
 part 'transaction_model.g.dart';
 
@@ -9,8 +11,9 @@ class Transaction {
   //: 지출/수입/송금
   @Enumerated(EnumType.name)
   TransactionType transactionType;
-  //: 지출/수입/송금 카테고리
-  String category;
+  //: 지출 카테고리 
+  //: category ID
+  int? category;
   //: 지출/수입/송금 금액
   int amount;
   //: 지출/수입/송금 날짜

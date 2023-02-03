@@ -19,8 +19,8 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return  Scaffold(
-      body: SafeArea(
+    return  Material(
+      child: SafeArea(
         top: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -36,7 +36,7 @@ class InputTile extends StatelessWidget {
                 ),
                 //# field
                 Container(
-                  height: 35.0,
+                  height: 38.0,
                   //: 입력하면 글자가 옆에 딱 달라붙어 있어서 보기 싫음
                   padding: EdgeInsets.only(right: 4),
                     decoration: BoxDecoration(
@@ -54,7 +54,7 @@ class InputTile extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
-                    ?.copyWith(fontSize: 10, color: Colors.grey),
+                    ?.copyWith(fontSize: 10, color: Colors.red),
                 textAlign: TextAlign.start,
               )
           ],

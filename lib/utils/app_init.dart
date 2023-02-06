@@ -39,9 +39,9 @@ class AppInit {
         categoryRepository.configCategory(
             TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
         categoryRepository.configCategory(
-            TransactionCategory(name: "Food Expense", color: "ff0000")); //: 빨간색
+            TransactionCategory(name: "Hobby", color: "ff0000")); //: 빨간색
         categoryRepository.configCategory(
-            TransactionCategory(name: "Food Expense", color: "808080")); //: 빨간색
+            TransactionCategory(name: "Etc", color: "808080")); //: 빨간색
       }
     });
   }

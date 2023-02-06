@@ -285,6 +285,14 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             }
 
             final List<TransactionCategory> categories = snapshot.data!;
+            String _initialValue;
+            try {
+              _initialValue = categories
+                  .firstWhere((element) => element.id == _transaction.category)
+                  .name;
+            } catch (e) {
+              _initialValue = categories.first.name;
+            }
 
             return DropdownButton(
                 underline: Container(
@@ -292,9 +300,11 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   color: Theme.of(context).primaryColor,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                value: _initialValue,
                 items: categories
                     .map(
                       (e) => DropdownMenuItem<String>(
+                        value: e.name,
                           child: Row(
                         children: [
                           Icon(Icons.circle,
@@ -311,6 +321,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   widget.transaction?.category = categories
                       .firstWhere((element) => element.name == val)
                       .id;
+                      setState(() {});
                 });
           }),
     );

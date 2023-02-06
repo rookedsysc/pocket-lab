@@ -20,7 +20,7 @@ const TransactionSchema = CollectionSchema(
     r'amount': PropertySchema(
       id: 0,
       name: r'amount',
-      type: IsarType.long,
+      type: IsarType.double,
     ),
     r'category': PropertySchema(
       id: 1,
@@ -30,7 +30,7 @@ const TransactionSchema = CollectionSchema(
     r'date': PropertySchema(
       id: 2,
       name: r'date',
-      type: IsarType.string,
+      type: IsarType.dateTime,
     ),
     r'title': PropertySchema(
       id: 3,
@@ -74,7 +74,6 @@ int _transactionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.date.length * 3;
   bytesCount += 3 + object.title.length * 3;
   bytesCount += 3 + object.transactionType.name.length * 3;
   return bytesCount;
@@ -86,9 +85,9 @@ void _transactionSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.amount);
+  writer.writeDouble(offsets[0], object.amount);
   writer.writeLong(offsets[1], object.category);
-  writer.writeString(offsets[2], object.date);
+  writer.writeDateTime(offsets[2], object.date);
   writer.writeString(offsets[3], object.title);
   writer.writeLong(offsets[4], object.toWallet);
   writer.writeString(offsets[5], object.transactionType.name);
@@ -102,9 +101,9 @@ Transaction _transactionDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Transaction(
-    amount: reader.readLong(offsets[0]),
+    amount: reader.readDouble(offsets[0]),
     category: reader.readLongOrNull(offsets[1]),
-    date: reader.readString(offsets[2]),
+    date: reader.readDateTime(offsets[2]),
     title: reader.readString(offsets[3]),
     toWallet: reader.readLongOrNull(offsets[4]),
     transactionType: _TransactiontransactionTypeValueEnumMap[
@@ -124,11 +123,11 @@ P _transactionDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
@@ -249,47 +248,55 @@ extension TransactionQueryWhere
 extension TransactionQueryFilter
     on QueryBuilder<Transaction, Transaction, QFilterCondition> {
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> amountEqualTo(
-      int value) {
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
       amountGreaterThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> amountLessThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> amountBetween(
-    int lower,
-    int upper, {
+    double lower,
+    double upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -298,6 +305,7 @@ extension TransactionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -376,54 +384,46 @@ extension TransactionQueryFilter
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'date',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateGreaterThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'date',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateLessThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'date',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateBetween(
-    String lower,
-    String upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -432,76 +432,6 @@ extension TransactionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'date',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'date',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'date',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'date',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> dateIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'date',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
-      dateIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'date',
-        value: '',
       ));
     });
   }
@@ -1164,10 +1094,9 @@ extension TransactionQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QDistinct> distinctByDate(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Transaction, Transaction, QDistinct> distinctByDate() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'date', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'date');
     });
   }
 
@@ -1207,7 +1136,7 @@ extension TransactionQueryProperty
     });
   }
 
-  QueryBuilder<Transaction, int, QQueryOperations> amountProperty() {
+  QueryBuilder<Transaction, double, QQueryOperations> amountProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'amount');
     });
@@ -1219,7 +1148,7 @@ extension TransactionQueryProperty
     });
   }
 
-  QueryBuilder<Transaction, String, QQueryOperations> dateProperty() {
+  QueryBuilder<Transaction, DateTime, QQueryOperations> dateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'date');
     });

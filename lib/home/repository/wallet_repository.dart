@@ -19,12 +19,18 @@ class WalletRepository extends StateNotifier<Wallet> {
   }
 
   ///# 모든 지갑 stream으로 가져오기
-  Stream<List<Wallet>> getAllWallets() async* {
+  Stream<List<Wallet>> getAllWalletsStream() async* {
     final isar = await ref.read(isarProvieder.future);
     yield* isar.wallets
         .where()
         .watch(fireImmediately: true)
         .asBroadcastStream();
+  }
+
+  ///# 모든 지갑 Future로 가져오기
+  Future<List<Wallet>> getAllWalletsFuture() async {
+    final isar = await ref.read(isarProvieder.future);
+    return isar.wallets.where().findAll();
   }
 
   ///# 선택한 지갑 가져오기

@@ -20,7 +20,7 @@ const WalletSchema = CollectionSchema(
     r'balance': PropertySchema(
       id: 0,
       name: r'balance',
-      type: IsarType.long,
+      type: IsarType.double,
     ),
     r'budget': PropertySchema(
       id: 1,
@@ -85,7 +85,7 @@ void _walletSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.balance);
+  writer.writeDouble(offsets[0], object.balance);
   writer.writeObject<BudgetModel>(
     offsets[1],
     allOffsets,
@@ -105,7 +105,7 @@ Wallet _walletDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Wallet(
-    balance: reader.readLongOrNull(offsets[0]) ?? 0,
+    balance: reader.readDoubleOrNull(offsets[0]) ?? 0,
     budget: reader.readObjectOrNull<BudgetModel>(
           offsets[1],
           BudgetModelSchema.deserialize,
@@ -132,7 +132,7 @@ P _walletDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset) ?? 0) as P;
+      return (reader.readDoubleOrNull(offset) ?? 0) as P;
     case 1:
       return (reader.readObjectOrNull<BudgetModel>(
             offset,
@@ -257,46 +257,54 @@ extension WalletQueryWhere on QueryBuilder<Wallet, Wallet, QWhereClause> {
 
 extension WalletQueryFilter on QueryBuilder<Wallet, Wallet, QFilterCondition> {
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> balanceEqualTo(
-      int value) {
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'balance',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> balanceGreaterThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'balance',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> balanceLessThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'balance',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Wallet, Wallet, QAfterFilterCondition> balanceBetween(
-    int lower,
-    int upper, {
+    double lower,
+    double upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -305,6 +313,7 @@ extension WalletQueryFilter on QueryBuilder<Wallet, Wallet, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -950,7 +959,7 @@ extension WalletQueryProperty on QueryBuilder<Wallet, Wallet, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Wallet, int, QQueryOperations> balanceProperty() {
+  QueryBuilder<Wallet, double, QQueryOperations> balanceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'balance');
     });
@@ -1001,16 +1010,26 @@ const BudgetModelSchema = Schema(
     r'amount': PropertySchema(
       id: 0,
       name: r'amount',
-      type: IsarType.long,
+      type: IsarType.double,
+    ),
+    r'balance': PropertySchema(
+      id: 1,
+      name: r'balance',
+      type: IsarType.double,
     ),
     r'budgetDate': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'budgetDate',
-      type: IsarType.string,
+      type: IsarType.dateTime,
     ),
     r'budgetPeriod': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'budgetPeriod',
+      type: IsarType.long,
+    ),
+    r'originDay': PropertySchema(
+      id: 4,
+      name: r'originDay',
       type: IsarType.long,
     )
   },
@@ -1026,12 +1045,6 @@ int _budgetModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.budgetDate;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   return bytesCount;
 }
 
@@ -1041,9 +1054,11 @@ void _budgetModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.amount);
-  writer.writeString(offsets[1], object.budgetDate);
-  writer.writeLong(offsets[2], object.budgetPeriod);
+  writer.writeDouble(offsets[0], object.originBalance);
+  writer.writeDouble(offsets[1], object.balance);
+  writer.writeDateTime(offsets[2], object.budgetDate);
+  writer.writeLong(offsets[3], object.budgetPeriod);
+  writer.writeLong(offsets[4], object.originDay);
 }
 
 BudgetModel _budgetModelDeserialize(
@@ -1053,10 +1068,12 @@ BudgetModel _budgetModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = BudgetModel(
-    amount: reader.readLongOrNull(offsets[0]),
-    budgetDate: reader.readStringOrNull(offsets[1]),
-    budgetPeriod: reader.readLongOrNull(offsets[2]),
+    balance: reader.readDoubleOrNull(offsets[1]),
+    budgetDate: reader.readDateTimeOrNull(offsets[2]),
+    budgetPeriod: reader.readLongOrNull(offsets[3]),
   );
+  object.originBalance = reader.readDoubleOrNull(offsets[0]);
+  object.originDay = reader.readLongOrNull(offsets[4]);
   return object;
 }
 
@@ -1068,10 +1085,14 @@ P _budgetModelDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 2:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
+    case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1098,47 +1119,55 @@ extension BudgetModelQueryFilter
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountEqualTo(
-      int? value) {
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
       amountGreaterThan(
-    int? value, {
+    double? value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountLessThan(
-    int? value, {
+    double? value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountBetween(
-    int? lower,
-    int? upper, {
+    double? lower,
+    double? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1147,6 +1176,88 @@ extension BudgetModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      balanceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'balance',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      balanceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'balance',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> balanceEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'balance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      balanceGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'balance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> balanceLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'balance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> balanceBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'balance',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -1170,58 +1281,49 @@ extension BudgetModelQueryFilter
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+      budgetDateEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'budgetDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
       budgetDateGreaterThan(
-    String? value, {
+    DateTime? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'budgetDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
       budgetDateLessThan(
-    String? value, {
+    DateTime? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'budgetDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
       budgetDateBetween(
-    String? lower,
-    String? upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1230,77 +1332,6 @@ extension BudgetModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'budgetDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'budgetDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'budgetDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'budgetDate',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'budgetDate',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      budgetDateIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'budgetDate',
-        value: '',
       ));
     });
   }
@@ -1371,6 +1402,80 @@ extension BudgetModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'budgetPeriod',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'originDay',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'originDay',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'originDay',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'originDay',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'originDay',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originDayBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'originDay',
         lower: lower,
         includeLower: includeLower,
         upper: upper,

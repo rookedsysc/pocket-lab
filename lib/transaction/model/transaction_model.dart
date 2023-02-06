@@ -15,9 +15,9 @@ class Transaction {
   //: category ID
   int? category;
   //: 지출/수입/송금 금액
-  int amount;
+  double amount;
   //: 지출/수입/송금 날짜
-  String date;
+  DateTime date;
   //: 지출/수입/송금 제목
   String title;
   //: 지출/수입/송금 지갑

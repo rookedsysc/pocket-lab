@@ -21,13 +21,14 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
     late int _initialIndex;
 
     return StreamBuilder(
-          stream: ref.watch(walletRepositoryProvider.notifier).getAllWallets(),
+          stream: ref.watch(walletRepositoryProvider.notifier).getAllWalletsStream(),
           builder: ((context, snapshot) {
-            if (snapshot.data == null) {
+            if (snapshot.data == null || snapshot.data!.length == 0) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
+
 
             final wallets = snapshot.data!;
             _initialIndex = wallets.indexWhere((element) => element.isSelected);

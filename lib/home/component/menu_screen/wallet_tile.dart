@@ -86,7 +86,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
       return SizedBox();
     }
     return Text(
-      "${widget.wallet.budget.amount} / ${widget.wallet.budget.budgetPeriod}",
+      "${widget.wallet.budget.balance} / ${widget.wallet.budget.budgetPeriod}",
       style: Theme.of(context)
           .textTheme
           .bodyMedium

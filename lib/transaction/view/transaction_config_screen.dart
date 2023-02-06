@@ -59,7 +59,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   Transaction _transaction = Transaction(
     amount: 0,
     title: "",
-    date: DateTime.now().toString(),
+    date: DateTime.now(),
     category: 1,
     transactionType: TransactionType.expenditure,
     walletId: 0,
@@ -140,8 +140,8 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
               .read(transactionRepositoryProvider.notifier)
               .configTransaction(widget.transaction!);
         }
+        Navigator.of(context).pop();
       }
-      Navigator.of(context).pop();
     };
   }
 
@@ -328,7 +328,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   FormFieldValidator _transactionTiltleValidator() {
     return (value) {
-      if (value == null) {
+      if (value == null || value.isEmpty) {
         return "Input Value";
       }
       return null;
@@ -365,7 +365,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   FormFieldValidator _amountValidator() {
     return (value) {
-      if (value == null) {
+      if (value == null || value.isEmpty) {
         return "Input Value";
       }
       return null;
@@ -374,17 +374,17 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   FormFieldSetter _amountOnSaved() {
     return (value) {
-      _transaction.amount = int.parse(value);
-      widget.transaction?.amount = int.parse(value);
+      _transaction.amount = double.parse(value);
+      widget.transaction?.amount = double.parse(value);
     };
   }
 
   InputTile _selectDateInputTile() {
     String _buttonText = "";
     if (widget.isEdit) {
-      _buttonText = StringDateUtils().dateToFyyyyMMdd(widget.transaction!.date);
+      _buttonText = CustomDateUtils().dateToFyyyyMMdd(widget.transaction!.date);
     } else {
-      _buttonText = StringDateUtils().dateToFyyyyMMdd(_transaction.date);
+      _buttonText = CustomDateUtils().dateToFyyyyMMdd(_transaction.date);
     }
 
     return InputTile(
@@ -402,11 +402,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
               onValueChanged: (value) {
                 if (value[0] != null) {
                   setState(() {
-                    widget.transaction?.date = value[0]!.toUtc().toString();
-                    _transaction.date = value[0].toString();
+                    widget.transaction?.date = value[0]!;
+                    _transaction.date = value[0]!;
                   });
                 }
-
                 Navigator.of(context).pop();
               },
               config: CalendarDatePicker2Config(

@@ -31,7 +31,7 @@ class WalletSelectScreen extends ConsumerWidget {
               child: StreamBuilder<List<Wallet>>(
                   stream: ref
                       .watch(walletRepositoryProvider.notifier)
-                      .getAllWallets(),
+                      .getAllWalletsStream(),
                   builder: (context, snapshot) {
                     if (snapshot.data == null) {
                       return Center(

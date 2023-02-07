@@ -9,7 +9,7 @@ class WalletCard extends StatelessWidget {
   //: 예산 주기
   String? period;
   //: 계좌 잔액
-  final int balance;
+  final double balance;
   //: 예산 금액
   int? amount;
   //: 예산 아이콘 image 주소

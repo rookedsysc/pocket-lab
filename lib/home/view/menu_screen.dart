@@ -19,29 +19,24 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(walletRepositoryProvider).maybeWhen(data: (walletRepository) {
-      return Scaffold(
-      body: SafeArea(
+    return  Material(
+      child: SafeArea(
         top: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _walletHeader(walletRepository, context),
-            _walletListStreamBuilder(walletRepository)
+            _walletHeader(context),
+            _walletListStreamBuilder(ref)
             ],
           ),
         ),
       );
-    }, orElse: () {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    });
+    
   }
 
-  StreamBuilder<List<Wallet>> _walletListStreamBuilder(WalletRepository walletRepository) {
+  StreamBuilder<List<Wallet>> _walletListStreamBuilder(WidgetRef ref) {
     return StreamBuilder<List<Wallet>>(
-                stream: walletRepository.getAllWallets(),
+                stream: ref.watch(walletRepositoryProvider.notifier).getAllWalletsStream(),
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
                     return const Center(
@@ -57,7 +52,7 @@ class MenuScreen extends ConsumerWidget {
                 });
   }
 
-  Row _walletHeader(WalletRepository walletRepository, BuildContext context) {
+  Row _walletHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -71,7 +66,7 @@ class MenuScreen extends ConsumerWidget {
               stops: <double>[0, 0.7, 1],
               //: Screen은 이동할 스크린
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              builder: (BuildContext context) => WalletConfigScreen(),
+              builder: (BuildContext context) => WalletConfigScreen(isEdit: false,),
             ));
           },
           icon: Icon(

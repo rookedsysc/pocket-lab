@@ -8,13 +8,14 @@ import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
-import 'package:pocket_lab/home/view/home_screen/transaction_screen.dart';
+import 'package:pocket_lab/transaction/view/transaction_config_screen.dart';
 import 'package:pocket_lab/utils/app_init.dart';
 import 'package:sheet/route.dart';
 
-
-void main() async {
-  runApp(ProviderScope(child: MyApp()));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(ProviderScope(
+  child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -23,7 +24,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //! 어플리케이션 초기화 작업
-    AppInit(ref);
+    AppInit(ref).main();
     
     return MaterialApp(
       theme: _theme,

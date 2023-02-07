@@ -18,6 +18,11 @@ class GoalRepository {
   Stream<List<Goal>> getAllGoals() {
     return isar.goals.where().watch(fireImmediately: true).asBroadcastStream();
   }
+  
+  //# 모든 목표 Future로 가져오기
+  Future<List<Goal>> getAllGoalsFuture() async {
+    return isar.goals.where().findAll();
+  }
 
   //# 목표 추가
   Future<void> addGoal(Goal goal) async {

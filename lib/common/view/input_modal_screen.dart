@@ -16,13 +16,13 @@ class InputModalScreen extends ConsumerStatefulWidget {
   ///: 저장 / ADD 버튼 눌렀을 경우 실행할 함수
   final VoidCallback onSavePressed;
   ///: 저장 버튼인지 ADD 버튼인지 구분
-  ///: 수정창이면 ADD가 아니라 저장 버튼
-  final bool isSave;
+  ///: false면 Edit 버튼
+  final bool isEdit;
   ///: 스크롤 컨트롤러
   final ScrollController scrollController;
 
   const InputModalScreen(
-      {required this.scrollController,required this.isSave,
+      {required this.scrollController,required this.isEdit,
       required this.formKey,
       required this.inputTile,
       required this.onSavePressed,
@@ -84,7 +84,7 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
           TextButton(
             onPressed: widget.onSavePressed,
             child: Text(
-              'Add',
+              widget.isEdit ? 'EDIT' : 'ADD',
               // style: widget.textStyle
               //     ?.copyWith(color: Theme.of(context).iconTheme.color),
             ),

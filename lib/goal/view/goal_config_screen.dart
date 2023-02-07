@@ -22,7 +22,7 @@ class GoalConfigScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InputModalScreen(
         scrollController: ref.watch(goalScrollControllerProvider),
-        isSave: false,
+        isEdit: false,
         formKey: _formKey,
         onSavePressed: _onSavePressed(context: context, ref: ref),
         inputTile: _inputTileList(ref));
@@ -56,14 +56,16 @@ class GoalConfigScreen extends ConsumerWidget {
 
   void _goalInputTileOnSaved(newValue) {
     //: newValue가 null인 경우 save 하지 않음
-    if(newValue == null || newValue == "") return;
+    if (newValue == null || newValue == "") return;
+    goal?.name = newValue;
     goalName = newValue!;
   }
 
   void _amountInputTileOnSaved(newValue) {
     //: newValue가 null인 경우 save 하지 않음
-    if(newValue == null || newValue == "") return; 
+    if (newValue == null || newValue == "") return;
     debugPrint(newValue);
+    goal?.amount = int.parse(newValue);
     amount = int.parse(newValue!);
   }
 
@@ -104,22 +106,25 @@ class GoalConfigScreen extends ConsumerWidget {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
 
-        //# edit인 경우 goal이 애초에 있으며 
+        //# edit인 경우 goal이 애초에 있으며
         //# name과 amount만 변경해줌
-        if(goal != null) {
-          goal!.name = goalName;
-          goal!.amount = amount;
-        } 
-        //# goal이 null인 경우 애초에 값이 없는 경우 이므로  
+        if (goal != null) {
+          await ref
+              .read(goalRepositoryProvider.future)
+              .then((value) => value.addGoal(goal!));
+          ref.read(goalListProvider.notifier).addGoal(goal!);
+          Navigator.of(context).pop();
+          return;
+        }
+        //# goal이 null인 경우 애초에 값이 없는 경우 이므로
         //# 새로운 Goal Instance를 생성해줌
         else {
           goal = Goal(
-          name: goalName,
-          amount: amount,
-        );
-
+            name: goalName,
+            amount: amount,
+          );
         }
-        
+
         //: goal이 null이 될 경우는 없겠지만 혹시나 해서 넣어둠
         if (goal == null) {
           return;

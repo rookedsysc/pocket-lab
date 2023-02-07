@@ -1,0 +1,1 @@
+const String dailyBudget = "#DAILY_BUDGET";

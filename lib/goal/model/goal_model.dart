@@ -15,7 +15,7 @@ class Goal {
   //: 목표 완료 되었는지 안되었는지
   bool isDone = false;
   //: 목표 설정한 날짜
-  String firstDate = DateTime.now().toUtc().toString();
+  String firstDate = DateTime.now().toString();
   //: 목표 달성한 날짜
   String? lastDate;
 

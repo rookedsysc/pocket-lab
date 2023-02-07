@@ -20,6 +20,9 @@ class TextTypeTextFormField extends StatelessWidget {
           validator: validator,
           //: 입력한 값 저장
           onSaved: onSaved,
+          //: 유저가 다시 선택하거나 텍스트를 변경할 때 유효성 검사 기능이 트리거 됨
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofocus: true,
           onTap: onTap,
           decoration: InputDecoration(
               border: InputBorder.none,

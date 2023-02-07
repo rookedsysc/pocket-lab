@@ -60,8 +60,8 @@ class HomeScreen extends StatelessWidget {
 
   Padding _totalBalance(TextTheme textTheme, BuildContext context) {
     return Padding(
-    padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
-    child: Column(
+      padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
+      child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         HeaderCollection(headerType: HeaderType.total,),
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-  );
+    );
   }
 
   Padding _padding({required Widget child}) {

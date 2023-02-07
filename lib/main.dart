@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,10 +13,23 @@ import 'package:pocket_lab/transaction/view/transaction_config_screen.dart';
 import 'package:pocket_lab/utils/app_init.dart';
 import 'package:sheet/route.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  ///#* easy localization init
+  final supportedLocales = [
+    const Locale('en', 'US'),
+    const Locale('ko', 'KR'),
+  ];
+
   runApp(ProviderScope(
-  child: MyApp()));
+    ///* easy localization init
+  child: EasyLocalization(
+    supportedLocales: supportedLocales,
+    path: 'asset/translations',
+    fallbackLocale: const Locale('en', 'US'), 
+    child: MyApp())));
 }
 
 class MyApp extends ConsumerWidget {
@@ -27,6 +41,11 @@ class MyApp extends ConsumerWidget {
     AppInit(ref).main();
     
     return MaterialApp(
+      ///* easy locaization init
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      localizationsDelegates: context.localizationDelegates,
+
       theme: _theme,
       darkTheme: _darkTheme,
       themeMode: ThemeMode.system,

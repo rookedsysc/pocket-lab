@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/common/component/custom_text_from_field.dart';
+import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
+import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
@@ -14,7 +15,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class GoalConfigScreen extends ConsumerWidget {
   String goalName = "";
-  int amount = 0;
+  double amount = 0;
   Goal? goal;
   GoalConfigScreen({this.goal, super.key});
 
@@ -65,8 +66,12 @@ class GoalConfigScreen extends ConsumerWidget {
     //: newValue가 null인 경우 save 하지 않음
     if (newValue == null || newValue == "") return;
     debugPrint(newValue);
-    goal?.amount = int.parse(newValue);
-    amount = int.parse(newValue!);
+
+    /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
+    /// 숫자만 추출하여 double로 변환
+    String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(newValue);
+    goal?.amount = double.parse(_amountOnlyDigit);
+    amount = double.parse(_amountOnlyDigit);
   }
 
   String? _goalInputTileValidator(String? val) {

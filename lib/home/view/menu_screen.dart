@@ -31,7 +31,6 @@ class MenuScreen extends ConsumerWidget {
           ),
         ),
       );
-    
   }
 
   StreamBuilder<List<Wallet>> _walletListStreamBuilder(WidgetRef ref) {

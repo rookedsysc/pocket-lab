@@ -1007,25 +1007,25 @@ const BudgetModelSchema = Schema(
   name: r'BudgetModel',
   id: 7247118153370490723,
   properties: {
-    r'amount': PropertySchema(
-      id: 0,
-      name: r'amount',
-      type: IsarType.double,
-    ),
     r'balance': PropertySchema(
-      id: 1,
+      id: 0,
       name: r'balance',
       type: IsarType.double,
     ),
     r'budgetDate': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'budgetDate',
       type: IsarType.dateTime,
     ),
     r'budgetPeriod': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'budgetPeriod',
       type: IsarType.long,
+    ),
+    r'originBalance': PropertySchema(
+      id: 3,
+      name: r'originBalance',
+      type: IsarType.double,
     ),
     r'originDay': PropertySchema(
       id: 4,
@@ -1054,10 +1054,10 @@ void _budgetModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDouble(offsets[0], object.originBalance);
-  writer.writeDouble(offsets[1], object.balance);
-  writer.writeDateTime(offsets[2], object.budgetDate);
-  writer.writeLong(offsets[3], object.budgetPeriod);
+  writer.writeDouble(offsets[0], object.balance);
+  writer.writeDateTime(offsets[1], object.budgetDate);
+  writer.writeLong(offsets[2], object.budgetPeriod);
+  writer.writeDouble(offsets[3], object.originBalance);
   writer.writeLong(offsets[4], object.originDay);
 }
 
@@ -1068,11 +1068,11 @@ BudgetModel _budgetModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = BudgetModel(
-    balance: reader.readDoubleOrNull(offsets[1]),
-    budgetDate: reader.readDateTimeOrNull(offsets[2]),
-    budgetPeriod: reader.readLongOrNull(offsets[3]),
+    balance: reader.readDoubleOrNull(offsets[0]),
+    budgetDate: reader.readDateTimeOrNull(offsets[1]),
+    budgetPeriod: reader.readLongOrNull(offsets[2]),
   );
-  object.originBalance = reader.readDoubleOrNull(offsets[0]);
+  object.originBalance = reader.readDoubleOrNull(offsets[3]);
   object.originDay = reader.readLongOrNull(offsets[4]);
   return object;
 }
@@ -1087,11 +1087,11 @@ P _budgetModelDeserializeProp<P>(
     case 0:
       return (reader.readDoubleOrNull(offset)) as P;
     case 1:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
-    case 3:
+    case 2:
       return (reader.readLongOrNull(offset)) as P;
+    case 3:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
@@ -1101,86 +1101,6 @@ P _budgetModelDeserializeProp<P>(
 
 extension BudgetModelQueryFilter
     on QueryBuilder<BudgetModel, BudgetModel, QFilterCondition> {
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'amount',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      amountIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'amount',
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'amount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
-      amountGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'amount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'amount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> amountBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'amount',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
   QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
       balanceIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -1406,6 +1326,90 @@ extension BudgetModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'originBalance',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'originBalance',
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'originBalance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'originBalance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'originBalance',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition>
+      originBalanceBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'originBalance',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }

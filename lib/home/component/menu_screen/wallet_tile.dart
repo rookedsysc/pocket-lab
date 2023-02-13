@@ -7,6 +7,8 @@ import 'package:flutter_zoom_drawer/config.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
+import 'package:pocket_lab/common/util/custom_number_utils.dart';
+import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -85,8 +87,30 @@ class _MenuTileState extends ConsumerState<WalletTile> {
     if (widget.wallet.budgetType == BudgetType.dontSet) {
       return SizedBox();
     }
+
+    //# BudgetType 별로 표시할 금액을 다르게 설정
+    String _amountPerPeriod = "";
+    //# Budget Type이 perSpecificDate일 경우
+    if(widget.wallet.budgetType == BudgetType.perSpecificDate) {
+      if(widget.wallet.budget.balance == null || widget.wallet.budget.budgetDate == null) {
+        return SizedBox();
+      }
+      else {
+        _amountPerPeriod = "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${CustomDateUtils().diffDays(widget.wallet.budget.budgetDate!, DateTime.now())}";
+      }
+    }
+
+    //# Budget Type이 7일 이나 30일 주기 일 경우
+    else{
+      if(widget.wallet.budget.balance == null || widget.wallet.budget.budgetPeriod == null) {
+        return SizedBox();
+      }
+      else {
+        _amountPerPeriod = "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${widget.wallet.budget.budgetPeriod}";
+      }
+    }
     return Text(
-      "${widget.wallet.budget.balance} / ${widget.wallet.budget.budgetPeriod}",
+      _amountPerPeriod,
       style: Theme.of(context)
           .textTheme
           .bodyMedium
@@ -96,7 +120,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
 
   Text _walletBalnce(BuildContext context) {
     return Text(
-      widget.wallet.balance.toString(),
+      CustomNumberUtils.formatCurrency(widget.wallet.balance),
       style: Theme.of(context).textTheme.bodyMedium,
     );
   }

@@ -7,9 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/common/component/custom_text_from_field.dart';
+import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
+import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/util/get_daily_budget.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -28,7 +29,7 @@ final walletConfigScrollProvider = Provider<ScrollController>((ref) {
 class WalletConfigScreen extends ConsumerStatefulWidget {
   Wallet? wallet = Wallet(budget: BudgetModel(), name: '');
   bool isEdit;
-  WalletConfigScreen({required this.isEdit,this.wallet, super.key});
+  WalletConfigScreen({required this.isEdit, this.wallet, super.key});
 
   @override
   ConsumerState<WalletConfigScreen> createState() => _WalletConfigScreenState();
@@ -64,12 +65,12 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             //: 추가 / 수정
             final walletRepository =
                 ref.read(walletRepositoryProvider.notifier);
-                //: widget.wallet != null일 경우는 edit mode
+            //: widget.wallet != null일 경우는 edit mode
             if (widget.wallet != null) {
               await walletRepository.configWallet(widget.wallet!);
             } else {
               //: 선택된 아이콘 저장
-              //: add mode 
+              //: add mode
               await walletRepository.configWallet(_wallet);
             }
             await GetDailyBudget(ref).main();
@@ -94,7 +95,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   List<InputTile> _inputTileList(BuildContext context) {
     BudgetType budgetType = ref.watch(budgetTypeProvider);
-    if(widget.wallet != null) {
+    if (widget.wallet != null) {
       budgetType = widget.wallet!.budgetType;
     }
 
@@ -107,6 +108,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
       _selectIconInputTile(context),
       _balanceInputTile(),
       _selectBudgetTypeInputTile(),
+
       ///# : budget type에 따라 다른 input tile을 보여줌
       if (!_isDontSetType && _isSpecificDateType)
         _isSpecificDateInputTile(_isSpecificDateType),
@@ -130,8 +132,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _amountInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
-      _wallet.budget.balance = double.parse(newValue);
-      _wallet.budget.originBalance = double.parse(newValue);
+    _wallet.budget.balance = double.parse(newValue);
+    _wallet.budget.originBalance = double.parse(newValue);
     widget.wallet?.budget.originBalance = double.parse(newValue);
     widget.wallet?.budget.balance = double.parse(newValue);
   }
@@ -142,15 +144,19 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
           return null;
         }
 
+        /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
+        /// 숫자만 추출하여 double로 변환
+        String _amount = CustomNumberUtils.getNumberFromString(val!);
+
         // null인지 check
         //: edit mode일 경우 wallet의 결과가 null이 아니어서
         //: 값을 입력하지 않아도 해당 validator를 통과함
-        if (val == null || val.isEmpty) {
-          return ('Input Value');
+        if (_amount == null || _amount.isEmpty) {
+          return ('Input _amountue');
         }
 
         //: 예산 금액이 1보다 작을 경우
-        if (int.parse(val) < 1) {
+        if (int.parse(_amount) < 1) {
           return "The budget amount must be greater than zero.";
         }
 
@@ -160,10 +166,12 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   InputTile _isSpecificDateInputTile(bool isSpecificDateType) {
     late String _selectedDate;
     if (widget.wallet?.budget.budgetDate != null) {
-      _selectedDate = DateTimeDateUtils().dateToFyyyyMMdd(
-          widget.wallet!.budget.budgetDate!);
+      _selectedDate = DateTimeDateUtils()
+          .dateToFyyyyMMdd(widget.wallet!.budget.budgetDate!);
     } else {
-      _selectedDate = _wallet.budget.budgetDate == null ? "Select Date" : CustomDateUtils().dateToFyyyyMMdd(_wallet.budget.budgetDate!);
+      _selectedDate = _wallet.budget.budgetDate == null
+          ? "Select Date"
+          : CustomDateUtils().dateToFyyyyMMdd(_wallet.budget.budgetDate!);
     }
     return InputTile(
         fieldName: "Date",
@@ -178,8 +186,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                               _wallet.budget.budgetDate = value[0];
                               _wallet.budget.originDay = value[0]!.day;
                             }
-                            widget.wallet?.budget.budgetDate =
-                                value[0];
+                            widget.wallet?.budget.budgetDate = value[0];
                             widget.wallet?.budget.originDay = value[0]!.day;
                             debugPrint(
                                 "[WalletConfigScreen]\n widget.wallet?.budget.budgetDate = ${widget.wallet?.budget.budgetDate}");
@@ -188,7 +195,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                           },
                           config: CalendarDatePicker2Config(
                             firstDate: DateTime.now(),
-                            lastDate: CustomDateUtils().getNextBugdetDate(DateTime.now(), DateTime.now().day),
+                            lastDate: CustomDateUtils().getNextBugdetDate(
+                                DateTime.now(), DateTime.now().day),
                             calendarType: CalendarDatePicker2Type.single,
                           ),
                           initialValue: [DateTime.now()],
@@ -251,7 +259,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
     return InputTile(
         fieldName: "Icon",
         inputField: GestureDetector(
-          onTap: () => showCupertinoModalPopup(context: context, builder: (context) => IconSelectScreen()),
+          onTap: () => showCupertinoModalPopup(
+              context: context, builder: (context) => IconSelectScreen()),
           child: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             //: 선태된 이미지
@@ -316,10 +325,13 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _balanceInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
+    /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
+    /// 숫자만 추출하여 double로 변환
+    String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(newValue);
     if (widget.wallet == null) {
-      _wallet.balance = double.parse(newValue);
+      _wallet.balance = double.parse(_amountOnlyDigit);
       return;
     }
-    widget.wallet?.balance = double.parse(newValue);
+    widget.wallet?.balance = double.parse(_amountOnlyDigit);
   }
 }

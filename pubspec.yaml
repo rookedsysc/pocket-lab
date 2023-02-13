@@ -47,11 +47,12 @@ dependencies:
   uuid: ^3.0.7
   carousel_slider: ^4.2.1
   calendar_date_picker2: ^0.3.6
-  intl: ^0.18.0
+  intl: 0.17.0
   table_calendar: ^3.0.7
   google_fonts: ^3.0.1
   flutter_zoom_drawer: ^3.0.3
   flutter_slidable: ^2.0.0
+  easy_localization: ^3.0.1
   flutter:
     sdk: flutter
 
@@ -86,6 +87,7 @@ flutter:
 
   assets:
     - asset/img/bank/
+    - asset/translations/
 
   fonts:
     - family: Dongle 

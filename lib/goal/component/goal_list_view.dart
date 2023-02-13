@@ -15,7 +15,7 @@ class GoalListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Goal> goals = ref.watch(goalListProvider);
+    List<Goal> goals = ref.watch(goalLocalListProvider);
     return goals.length == 0
         ? Container(
             child: _emtyGoalsView(context),
@@ -74,7 +74,7 @@ class GoalListView extends ConsumerWidget {
         SlidableDelete(onPressed: (context) async {
           await (await ref.read(goalRepositoryProvider.future))
               .deleteGoal(goals[index]);
-          ref.refresh(goalListProvider.notifier).dleteGoal(goals[index]);
+          ref.refresh(goalLocalListProvider.notifier).deleteGoal(goals[index]);
         }),
       ]),
 

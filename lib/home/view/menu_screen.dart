@@ -70,6 +70,7 @@ class MenuScreen extends ConsumerWidget {
           },
           icon: Icon(
             Icons.add,
+            color: Theme.of(context).iconTheme.color,
           ),
         )
       ],

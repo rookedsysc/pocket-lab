@@ -35,6 +35,7 @@ class Wallet {
       imgAddr: imgAddr,
       name: name,
       balance: balance,
+
     );
   }
 }

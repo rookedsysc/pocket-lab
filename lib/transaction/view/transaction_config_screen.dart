@@ -1,4 +1,5 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +8,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/budget_icon_and_name.dart';
-import 'package:pocket_lab/common/component/custom_text_from_field.dart';
+import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/layout/two_row_layout.dart';
+import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -34,6 +36,7 @@ final transactionScrollControllerProvider = Provider<ScrollController>((ref) {
 
 class TransactionConfigScreen extends ConsumerStatefulWidget {
   static const routeName = 'transaction_screen';
+
   ///: true면 EDIT / false면 ADD
   final isEdit;
   final TransactionType transactionType;
@@ -83,7 +86,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     widget.transaction?.toWallet =
         ref.watch(toWalletProvider.notifier).state?.id;
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -104,14 +106,13 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       //: Wallet Select Screen에서 riverpod으로 전달
       _selectWalletInputTile(ref),
       if (widget.transactionType == TransactionType.remittance)
-      //: Wallet Select Screen에서 riverpod으로 전달
-        _toWalletInputTile(ref), 
-        //: validator로 체크
-      _transactionTitleInputTile(), 
+        //: Wallet Select Screen에서 riverpod으로 전달
+        _toWalletInputTile(ref),
       //: validator로 체크
-      _amountInputTile(), 
+      _transactionTitleInputTile(),
+      //: validator로 체크
+      _amountInputTile(),
       if (widget.transactionType == TransactionType.expenditure)
-
         _categoryInputTile(), //: check
       _selectDateInputTile(), //: check
     ];
@@ -145,27 +146,31 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     };
   }
 
-  //# Transaction Type에 따라서 기존 wallet의 잔고에 + - 
+  //# Transaction Type에 따라서 기존 wallet의 잔고에 + -
   void changeWalletBalance(Transaction transaction) async {
-    final Wallet? _wallet = await ref.read(walletRepositoryProvider.notifier).getSpecificWallet(transaction.walletId);
-    final Wallet? _toWallet = await ref.read(walletRepositoryProvider.notifier).getSpecificWallet(transaction.toWallet);
+    final Wallet? _wallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.walletId);
+    final Wallet? _toWallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.toWallet);
 
-    if(_wallet == null) {
-      return ;
+    if (_wallet == null) {
+      return;
     }
 
-    switch(widget.transactionType) {
+    switch (widget.transactionType) {
       case TransactionType.expenditure:
         _wallet.balance -= transaction.amount;
         await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
         break;
-        case TransactionType.income:
+      case TransactionType.income:
         _wallet.balance += transaction.amount;
         await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
         break;
 
-        case TransactionType.remittance:
-        if(_toWallet == null) {
+      case TransactionType.remittance:
+        if (_toWallet == null) {
           return;
         }
         _wallet.balance -= transaction.amount;
@@ -174,7 +179,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         ref.read(walletRepositoryProvider.notifier).configWallet(_toWallet);
         break;
     }
-
   }
 
   bool _getCustomValidatorCheck() {
@@ -191,15 +195,16 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     //: 송금이면서 선택한 지갑이 없다면 snackBar 호출 후 함수 종료
     if (widget.transactionType == TransactionType.remittance &&
         _toWallet == null) {
-                debugPrint("Check2");
+      debugPrint("Check2");
       _toWalletInputTileHint = "Select To Wallet";
       _check = false;
     }
 
     //: 거래타입이 지출이고 widget.category가 존재하지 않으면 category 선택하라는 알림창 나옴
     if (widget.transactionType == TransactionType.expenditure &&
-        widget.transaction?.category == null && widget.isEdit) {
-                debugPrint("Check3");
+        widget.transaction?.category == null &&
+        widget.isEdit) {
+      debugPrint("Check3");
       _categoryInputTileHint = "Select Category";
       _check = false;
     }
@@ -304,24 +309,26 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                 items: categories
                     .map(
                       (e) => DropdownMenuItem<String>(
-                        value: e.name,
+                          value: e.name,
                           child: Row(
-                        children: [
-                          Icon(Icons.circle,
-                              color:
-                                  Color(int.parse('FF${e.color}', radix: 16))),
-                          SizedBox(width: 8),
-                          Text(e.name),
-                        ],
-                      )),
+                            children: [
+                              Icon(Icons.circle,
+                                  color: Color(
+                                      int.parse('FF${e.color}', radix: 16))),
+                              SizedBox(width: 8),
+                              Text(e.name),
+                            ],
+                          )),
                     )
                     .toList(),
                 onChanged: (val) {
-                  _transaction.category = categories.firstWhere((element) => element.name == val).id;
+                  _transaction.category = categories
+                      .firstWhere((element) => element.name == val)
+                      .id;
                   widget.transaction?.category = categories
                       .firstWhere((element) => element.name == val)
                       .id;
-                      setState(() {});
+                  setState(() {});
                 });
           }),
     );
@@ -340,7 +347,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   FormFieldValidator _transactionTiltleValidator() {
     return (value) {
       if (value == null || value.isEmpty) {
-        return "Input Value";
+        return "Input Value".tr();
       }
       return null;
     };
@@ -377,7 +384,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   FormFieldValidator _amountValidator() {
     return (value) {
       if (value == null || value.isEmpty) {
-        return "Input Value";
+        return "Input Value".tr();
       }
       return null;
     };
@@ -385,8 +392,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   FormFieldSetter _amountOnSaved() {
     return (value) {
-      _transaction.amount = double.parse(value);
-      widget.transaction?.amount = double.parse(value);
+      /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
+      /// 숫자만 추출하여 double로 변환
+      String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(value);
+      widget.transaction?.amount = double.parse(_amountOnlyDigit);
     };
   }
 

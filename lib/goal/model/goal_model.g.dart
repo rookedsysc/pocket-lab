@@ -20,7 +20,7 @@ const GoalSchema = CollectionSchema(
     r'amount': PropertySchema(
       id: 0,
       name: r'amount',
-      type: IsarType.long,
+      type: IsarType.double,
     ),
     r'firstDate': PropertySchema(
       id: 1,
@@ -80,7 +80,7 @@ void _goalSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.amount);
+  writer.writeDouble(offsets[0], object.amount);
   writer.writeString(offsets[1], object.firstDate);
   writer.writeBool(offsets[2], object.isDone);
   writer.writeString(offsets[3], object.lastDate);
@@ -94,7 +94,7 @@ Goal _goalDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Goal(
-    amount: reader.readLong(offsets[0]),
+    amount: reader.readDouble(offsets[0]),
     isDone: reader.readBoolOrNull(offsets[2]) ?? false,
     lastDate: reader.readStringOrNull(offsets[3]),
     name: reader.readString(offsets[4]),
@@ -112,7 +112,7 @@ P _goalDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
@@ -214,46 +214,55 @@ extension GoalQueryWhere on QueryBuilder<Goal, Goal, QWhereClause> {
 }
 
 extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
-  QueryBuilder<Goal, Goal, QAfterFilterCondition> amountEqualTo(int value) {
+  QueryBuilder<Goal, Goal, QAfterFilterCondition> amountEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> amountGreaterThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> amountLessThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'amount',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Goal, Goal, QAfterFilterCondition> amountBetween(
-    int lower,
-    int upper, {
+    double lower,
+    double upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -262,6 +271,7 @@ extension GoalQueryFilter on QueryBuilder<Goal, Goal, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -913,7 +923,7 @@ extension GoalQueryProperty on QueryBuilder<Goal, Goal, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Goal, int, QQueryOperations> amountProperty() {
+  QueryBuilder<Goal, double, QQueryOperations> amountProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'amount');
     });

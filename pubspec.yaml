@@ -87,6 +87,7 @@ flutter:
 
   assets:
     - asset/img/bank/
+    - asset/translations/
 
   fonts:
     - family: Dongle 

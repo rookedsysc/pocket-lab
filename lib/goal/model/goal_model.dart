@@ -11,7 +11,7 @@ class Goal {
   //: 목표 이름
   String name;
   //: 목표 금액
-  int amount;
+  double amount;
   //: 목표 완료 되었는지 안되었는지
   bool isDone = false;
   //: 목표 설정한 날짜

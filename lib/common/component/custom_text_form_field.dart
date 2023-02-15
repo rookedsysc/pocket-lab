@@ -91,11 +91,12 @@ class CurrencyInputFormatter extends TextInputFormatter {
     try {
       value = double.parse(newValue.text);
     } catch (e) {
-      print("Error Message : $e \n newValue : ${newValue.text}}");
+      print("Error Message : $e \n newValue : ${newValue.text}");
+      value = 0;
     }
 
     if (value == 0) {
-      return newValue.copyWith(text: "0");
+      return newValue.copyWith(text: "");
     }
 
     final formatter = NumberFormat.simpleCurrency();

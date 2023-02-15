@@ -160,10 +160,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   //# Transaction Type에 따라서 기존 wallet의 잔고에 + -
   void changeWalletBalance(Transaction transaction) async {
-    final Wallet? _wallet = await ref
+    Wallet? _wallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.walletId);
-    final Wallet? _toWallet = await ref
+    Wallet? _toWallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.toWallet);
 
@@ -408,6 +408,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       /// 숫자만 추출하여 double로 변환
       String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(value);
       widget.transaction?.amount = double.parse(_amountOnlyDigit);
+      _transaction.amount = double.parse(_amountOnlyDigit);
     };
   }
 

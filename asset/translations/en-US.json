@@ -2,5 +2,6 @@
   "Set a goal" : "Set a goal",
   "Input Value" : "Input Value",
   "Loading data" : "Loading data...",
-  "total balance" : "Total {}"
+  "total balance" : "Total {}",
+  "no expend data" : "There is no spending history for the past month."
 }

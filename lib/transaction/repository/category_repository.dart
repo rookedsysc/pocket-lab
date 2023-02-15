@@ -37,6 +37,12 @@ class CategoryRepository extends StateNotifier<TransactionCategory>{
     });
   }
 
+  ///# category id로 카테고리 가져오기
+  Future<TransactionCategory?> getCategoryById(int id) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+    return isar.transactionCategorys.get(id);
+  }
+
   //# 카테고리 삭제
   Future<void> deleteCategory(TransactionCategory category) async {
     final Isar isar = await ref.read(isarProvieder.future);

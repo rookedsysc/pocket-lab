@@ -2,5 +2,6 @@
   "Set a goal" : "목표를 설정해주세요",
   "Input Value" : "값을 입력하세요",
   "Loading data" : "데이터를 불러오는 중입니다...",
-  "total balance" : "총 합계 {}"
+  "total balance" : "총 합계 {}",
+  "no expend data" : "최근 한 달간 지출 내역이 없습니다."
 }

@@ -26,6 +26,42 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
       await isar.transactions.put(transaction);
     });
   }
+  
+  ///# 이번달 지출만 Stream으로 가져오기 
+  Stream<List<Transaction>> getLast30DaysExpenditure(int? walletId) async* {
+
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    //: 특정 wallet을 지정해주면 해당 id의 지출만 가져오기
+    if(walletId != null) {
+      yield* isar.transactions
+        .filter()
+        .walletIdEqualTo(walletId)
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .dateGreaterThan(DateTime.now().subtract(Duration(days: 31)))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+    }
+
+    yield* isar.transactions
+        .filter()
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .dateGreaterThan(DateTime.now().subtract(Duration(days: 31)))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
+
+  Stream<List<Transaction>> getThisMonthExpenditure(DateTime date) async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    yield* isar.transactions
+        .filter()
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .dateGreaterThan(DateTime(date.year, date.month, 1))
+        .dateLessThan(DateTime(date.year, date.month + 1, 1))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
 
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
   Future<Transaction?> getLastDailyBudgetByWalletId(Wallet wallet) async {

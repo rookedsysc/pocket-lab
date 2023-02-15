@@ -11,6 +11,7 @@ import 'package:pocket_lab/common/component/budget_icon_and_name.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/layout/two_row_layout.dart';
+import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -325,8 +326,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                           child: Row(
                             children: [
                               Icon(Icons.circle,
-                                  color: Color(
-                                      int.parse('FF${e.color}', radix: 16))),
+                                  color: ColorUtils.stringToColor(e.color)),
                               SizedBox(width: 8),
                               Text(e.name),
                             ],

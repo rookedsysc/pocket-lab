@@ -31,7 +31,8 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
                 //: minimum 0으로 설정
                 onActualRangeChanged: (ActualRangeChangedArgs args) {
                   if (args.axisName == 'primaryYAxis') {
-                    args.visibleMin = 0;
+                    //: chartData의 가장 최소값
+                    args.visibleMin = chartData.fold<HomeCardChartData>(HomeCardChartData(DateTime.now(), 0), (prev, next) => prev.y < next.y ? prev : next).y;
                   }
                 },
                 //: x축 안보이게 설정

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
+import 'package:pocket_lab/common/component/category_chart.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
 import 'package:pocket_lab/home/component/home_screen/home_card_chart.dart';
@@ -48,6 +49,13 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     WalletCardSlider(),
                     TransactionButtons(),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: CategoryChart(isHome: true,)),
                   ],
                 ),
               ),

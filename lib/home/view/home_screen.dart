@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
+import 'package:pocket_lab/home/component/home_screen/home_card_chart.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/component/home_screen/wallet_card_slider.dart';
 import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
@@ -19,14 +20,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<ChartData> chartData = <ChartData>[
-            ChartData(DateTime(2022,10,13), 37.6),
-            ChartData(DateTime(2022,9,13), 40.1),
-            ChartData(DateTime(2022,8,13), 42.6),
-            ChartData(DateTime(2022,7,13), 43.1),
-            ChartData(DateTime(2022,6,13), 42.6),
-            ChartData(DateTime(2022,5,13), 30.96),
-            ];
+    
 
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -54,19 +48,6 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     WalletCardSlider(),
                     TransactionButtons(),
-                    Container(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      child: SfCartesianChart(series: <ChartSeries>[
-                        SplineAreaSeries<ChartData, int>(
-                          animationDuration: 0,
-                          opacity: 0.75,
-                          color: Theme.of(context).primaryColor,
-                            dataSource: chartData,
-                            xValueMapper: (ChartData data, _) => data.x.month,
-                            yValueMapper: (ChartData data, _) => data.y),
-                      ]),
-                    )
                   ],
                 ),
               ),
@@ -95,11 +76,7 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class ChartData {
-      ChartData(this.x, this.y);
-      final DateTime x;
-      final double y;
-}
+
 
 
 

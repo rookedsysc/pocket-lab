@@ -4,6 +4,7 @@ import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
@@ -17,6 +18,7 @@ class GetDailyBudget {
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
     //# 모든 wallets을 반복
     for (int index = 0; index < wallets.length; index++) {
+      await ref.read(trendRepositoryProvider.notifier).syncTrend(wallets[index].id);
       if (wallets[index].budgetType == BudgetType.dontSet) {
         continue;
       } else if (wallets[index].budgetType == BudgetType.perSpecificDate) {

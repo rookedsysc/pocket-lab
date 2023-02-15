@@ -30,11 +30,15 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
 
   @override
   void didChangeDependencies() {
+    //: home이면 지난 31일 기준으로 데이터 가져옴
     if(widget.isHome) {
           expenditureStream = ref
         .watch(transactionRepositoryProvider.notifier)
         .getLast30DaysExpenditure(null);
-    } else {
+    } 
+    //: home이 아닌 calendar screen에서 호출되면
+    //: focusedDay의 month를 기준으로 데이터 가져옴
+    else {
       DateTime date = ref.watch(calendarProvider).focusedDay;
       expenditureStream = ref
         .watch(transactionRepositoryProvider.notifier)

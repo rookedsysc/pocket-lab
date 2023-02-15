@@ -40,18 +40,18 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       child: ListView(
         children: [
           MonthPicker(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: MonthHeader(),
-          ),
+          MonthHeader(),
           SizedBox(
             height: 75.0,
             child: ListView(
               //: 가로로 스크롤
               scrollDirection: Axis.horizontal,
               children: List.generate(
-                  CalendarUtils().getWeeksInMonth(_focusedDay),
-                  (index) => WeekHeader(index: index,),),
+                CalendarUtils().getWeeksInMonth(_focusedDay),
+                (index) => WeekHeader(
+                  index: index,
+                ),
+              ),
             ),
           ),
           Calendar()

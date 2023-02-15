@@ -11,6 +11,7 @@ import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const routeName = 'home_screen';
@@ -18,15 +19,20 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final List<ChartData> chartData = <ChartData>[
+            ChartData(DateTime(2022,10,13), 37.6),
+            ChartData(DateTime(2022,9,13), 40.1),
+            ChartData(DateTime(2022,8,13), 42.6),
+            ChartData(DateTime(2022,7,13), 43.1),
+            ChartData(DateTime(2022,6,13), 42.6),
+            ChartData(DateTime(2022,5,13), 30.96),
+            ];
 
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Scaffold(
-        appBar: _appBar(Theme.of(context),ref),
-        
+        appBar: _appBar(Theme.of(context), ref),
         body: CupertinoPageScaffold(
-
           child: SafeArea(
             top: true,
             child: SizedBox(
@@ -48,6 +54,19 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     WalletCardSlider(),
                     TransactionButtons(),
+                    Container(
+                      height: 300,
+                      width: MediaQuery.of(context).size.width,
+                      child: SfCartesianChart(series: <ChartSeries>[
+                        SplineAreaSeries<ChartData, int>(
+                          animationDuration: 0,
+                          opacity: 0.75,
+                          color: Theme.of(context).primaryColor,
+                            dataSource: chartData,
+                            xValueMapper: (ChartData data, _) => data.x.month,
+                            yValueMapper: (ChartData data, _) => data.y),
+                      ]),
+                    )
                   ],
                 ),
               ),
@@ -58,25 +77,29 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  AppBar _appBar(ThemeData theme,WidgetRef ref) {
+  AppBar _appBar(ThemeData theme, WidgetRef ref) {
     final zoomDrawerController = ref.read(zoomDrawerControllerProvider);
     return AppBar(
       leading: IconButton(
-            onPressed: () => zoomDrawerController.toggle!(),
-            icon: Icon(Icons.wallet_outlined, color: theme.iconTheme.color),
-          ),
-        title: Text(
-          'Pocket Lab',
-          style: theme.textTheme.bodyLarge,
-        ),
-        centerTitle: true,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0.0,
-      );
+        onPressed: () => zoomDrawerController.toggle!(),
+        icon: Icon(Icons.wallet_outlined, color: theme.iconTheme.color),
+      ),
+      title: Text(
+        'Pocket Lab',
+        style: theme.textTheme.bodyLarge,
+      ),
+      centerTitle: true,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      elevation: 0.0,
+    );
   }
 }
 
-
+class ChartData {
+      ChartData(this.x, this.y);
+      final DateTime x;
+      final double y;
+}
 
 
 

@@ -35,7 +35,7 @@ class CustomDateUtils implements AbstaractCustomDateUtils<DateTime> {
     return _nextMonth;
   }
 
-  ///* 이전 날자인지(시간에 상관없이) 구해줌
+  ///* 이전 날짜인지(시간에 상관없이) 구해줌
   bool isBeforeDay(DateTime dateA, DateTime dateB) {
     dateA = DateTime(dateA.year, dateA.month, dateA.day);
     dateB = DateTime(dateB.year, dateB.month, dateB.day);
@@ -54,6 +54,16 @@ class CustomDateUtils implements AbstaractCustomDateUtils<DateTime> {
     return dateA.difference(dateB).inDays;
   }
 
+  ///* 시간에 상관없이 날짜만 비교해서 같은 날인지 비교해줌
+  bool isSameDay(DateTime dateA, DateTime dateB) {
+    if(dateA.isUtc || dateB.isUtc) {
+      dateA = dateA.toLocal();
+      dateB = dateB.toLocal();
+    }
+    dateA = DateTime(dateA.year, dateA.month, dateA.day);
+    dateB = DateTime(dateB.year, dateB.month, dateB.day);
+    return dateA == dateB;
+  }
 }
 
 class DateTimeDateUtils implements AbstaractCustomDateUtils<DateTime> {

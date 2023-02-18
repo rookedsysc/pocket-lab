@@ -70,10 +70,10 @@ class MyApp extends ConsumerWidget {
 
       //# 텍스트 색상
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w900),
+        bodyLarge: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w900),
         //: 보통 글귀
-        bodyMedium: TextStyle(color: Colors.black, fontSize: 12),
-        bodySmall: TextStyle(color: Colors.black, fontSize: 10),
+        bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
+        bodySmall: TextStyle(color: Colors.black, fontSize: 12),
       ),
       cardColor: Colors.white);
 

@@ -59,6 +59,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
 
   @override
   Widget build(BuildContext context) {
+    //: Chart Data가 없을 때 
     if(chartDataIsCantVisible()) {
       return Container(
         child: Center(

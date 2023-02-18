@@ -56,6 +56,7 @@ dependencies:
   fl_chart: ^0.60.0
   # TODO: Need SyncFusion License
   syncfusion_flutter_charts: ^20.4.50
+  skeletons: ^0.0.3
   flutter:
     sdk: flutter
 

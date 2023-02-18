@@ -5,10 +5,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
+import 'package:pocket_lab/goal/component/goal_chart.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_config_screen.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GoalListView extends ConsumerWidget {
   const GoalListView({super.key});
@@ -17,10 +19,15 @@ class GoalListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Goal> goals = ref.watch(goalLocalListProvider);
     return goals.length == 0
-        ? Container(
+        ?
+
+        ///# 목표 없을 경우
+        Container(
             child: _emtyGoalsView(context),
           )
-        : ListView.builder(
+        :
+        ///# 목표 있을 경우
+        ListView.builder(
             itemBuilder: (context, index) {
               return Container(
                 margin: EdgeInsets.only(bottom: 4.0),
@@ -29,11 +36,18 @@ class GoalListView extends ConsumerWidget {
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: _slidable(
-                    goals: goals,
-                    index: index,
-                    ref: ref,
-                    child: _listTile(goals, index)),
+                child: Column(
+                  children: [
+                    _slidable(
+                        goals: goals,
+                        index: index,
+                        ref: ref,
+                        child: _listTile(goals, index)),
+                    GoalChart(
+                      goalAmount: goals[index].amount,
+                    )
+                  ],
+                ),
               );
             },
             itemCount: goals.length,

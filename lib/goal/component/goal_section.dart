@@ -44,7 +44,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
                 const SizedBox(
                   height: 8.0,
                 ),
-                //# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
+                ///# 목표가 있을 때 / 목표가 없을 때 => _goalContainer
                 _goalGestureDetector(goals: snapshot.data!)
               ],
             );
@@ -56,8 +56,6 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
 
   //# 있을 때나 없을 때나 같은 디자인
   Widget _goalGestureDetector({required List<Goal> goals}) {
-    debugPrint("goalSection : $goals");
-
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         CupertinoSheetRoute(

@@ -8,13 +8,15 @@ import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:riverpod/riverpod.dart';
 
-final trendRepositoryProvider = StateNotifierProvider<TrendRepositoryNotifier, Trend>((ref) {
+final trendRepositoryProvider =
+    StateNotifierProvider<TrendRepositoryNotifier, Trend>((ref) {
   return TrendRepositoryNotifier(ref);
 });
 
 class TrendRepositoryNotifier extends StateNotifier<Trend> {
   final Ref ref;
-  TrendRepositoryNotifier(this.ref): super(Trend(walletId: 0, amount: 0, date: DateTime.now()));
+  TrendRepositoryNotifier(this.ref)
+      : super(Trend(walletId: 0, amount: 0, date: DateTime.now()));
 
   ///* Home Card Chart Data 가지고 오기
   Stream<List<Trend>> getTrendStream(int walletId) async* {
@@ -26,32 +28,60 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
         .watch(fireImmediately: true)
         .asBroadcastStream();
   }
-  
 
   Future<Trend?> getTodayTrend(int walletId) async {
     final isar = await ref.read(isarProvieder.future);
     DateTime now = DateTime.now();
 
-    final trends = await isar.trends.filter().walletIdEqualTo(walletId).findAll();
+    final trends =
+        await isar.trends.filter().walletIdEqualTo(walletId).findAll();
     Trend? todayTrend;
     try {
       todayTrend = trends.firstWhere((element) =>
-          CustomDateUtils().isSameDay(element.date, DateTime.now()));
+          CustomDateUtils().isSameDay(element.date, now));
     } catch (e) {}
 
     return todayTrend;
   }
 
+  ///* 전체 Trend 데이터 가지고 오기
+  Future<List<Trend>> getTotalTrends() async {
+    List<Trend> trends = [];
+    ///: 같은 날짜의 값을 하나로 합친 데이터들
+    List<Trend> totalTrends = [];
+    final isar = await ref.read(isarProvieder.future);
+    final wallets =
+        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+    for (Wallet wallet in wallets) {
+      trends.addAll(
+          await isar.trends.filter().walletIdEqualTo(wallet.id).findAll());
+    }
+    ///: results 안에 있는 같은 날짜인 데이터들의 amount를 합친 데이터를 만들어서 totalResults에 넣기
+    trends.forEach((element) {
+      try {
+        Trend? totalTrend = totalTrends.firstWhere((totalElement) =>
+            CustomDateUtils().isSameDay(element.date, totalElement.date));
+        totalTrend.amount += element.amount;
+      } catch (e) {
+        totalTrends.add(element);
+      }
+    });
+
+    return totalTrends;
+  }
+
   ///* Wallet의 잔액을 Trend에 저장
   Future<void> syncTrend(int walletId) async {
     final isar = await ref.read(isarProvieder.future);
+
     ///: 같은 날짜인 데이터에 새로운 데이터 덮어쓰기
     final Trend? trend = await getTodayTrend(walletId);
 
     ///: trend가 null이면 새로운 데이터 쓰기
     if (trend == null) {
       await isar.writeTxn(() async {
-        await isar.trends.put(Trend(walletId: walletId, amount: 0, date: DateTime.now()));
+        await isar.trends
+            .put(Trend(walletId: walletId, amount: 0, date: DateTime.now()));
       });
 
       debugPrint("새로운 Trend 생성");
@@ -59,9 +89,12 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
       return;
     }
 
-    final Wallet? wallet = await ref.read(walletRepositoryProvider.notifier).getSpecificWallet(walletId);
+    final Wallet? wallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(walletId);
+
     ///: 선택한 지갑이 없다면 종료
-    if(wallet == null) {
+    if (wallet == null) {
       return;
     }
 

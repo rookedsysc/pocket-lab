@@ -3,5 +3,7 @@
   "Input Value" : "Input Value",
   "Loading data" : "Loading data...",
   "total balance" : "Total {}",
-  "no expend data" : "There is no spending history for the past month."
+  "no expend data" : "There is no spending history for the past month.",
+  "asset grownth nagative mention" : "The target date cannot be predicted because the average asset growth is negative.",
+  "remain day" : "Remain {} days"
 }

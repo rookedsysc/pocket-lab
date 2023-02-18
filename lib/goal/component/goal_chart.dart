@@ -40,6 +40,11 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       return _loading();
     }
 
+    ///# 지금 당장 구매가 가능한 경우 
+    if (totalBalance >= widget.goalAmount) {
+      return Text('can buy'.tr());
+    }
+
     ///# 목표 예상 달성일이 예측 불가능할 경우
     if (futureDays < 1) {
       return unpredictability();
@@ -49,7 +54,6 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
           ///: 남을 일 수
           children: [
             Text(
@@ -81,7 +85,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
             LineSeries<TrendChartDataModel, DateTime>(
                 dashArray: <double>[5, 5],
                 dataSource: futureChartData,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
                 xValueMapper: (data, _) => data.date,
                 yValueMapper: (data, _) => data.amount)
           ],

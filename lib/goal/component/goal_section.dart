@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,15 +59,16 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
   //# 있을 때나 없을 때나 같은 디자인
   Widget _goalGestureDetector({required List<Goal> goals}) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        CupertinoSheetRoute(
-          initialStop: 0.6,
-          stops: <double>[0, 0.6, 1],
-          // Screen은 이동할 스크린
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          builder: (context) => GoalScreen(),
-        ),
-      ),
+      onTap: () => CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => GoalScreen()),
+      // Navigator.of(context).push(
+      //   CupertinoSheetRoute(
+      //     initialStop: 0.6,
+      //     stops: <double>[0, 0.6, 1],
+      //     // Screen은 이동할 스크린
+      //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //     builder: (context) => GoalScreen(),
+      //   ),
+      // ),
       child: goals.isEmpty
           ? _isEmptyContainer()
           : Badge(
@@ -84,15 +87,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
   }
 
   GestureTapCallback _onTap() {
-    return () => Navigator.of(context).push(
-          CupertinoSheetRoute<void>(
-            initialStop: 0.6,
-            stops: <double>[0, 0.6, 1],
-            // Screen은 이동할 스크린
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            builder: (BuildContext context) => GoalScreen(),
-          ),
-        );
+    return () => CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => GoalScreen());
   }
 
   Widget _isEmptyContainer() {

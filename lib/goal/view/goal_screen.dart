@@ -22,21 +22,20 @@ final goalScrollControllerProvider = Provider<ScrollController>((ref) {
 });
 
 class GoalScreen extends ConsumerWidget {
-  String goalName = "";
-  int amount = 0;
-  Goal goal = Goal(name: "", amount: 0);
   GoalScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        child: Column(
-          children: [
-            _topButton(context, ref),
-            Expanded(child: GoalListView()),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          child: Column(
+            children: [
+              _topButton(context, ref),
+              Expanded(child: GoalListView()),
+            ],
+          ),
         ),
       ),
     );
@@ -56,8 +55,7 @@ class GoalScreen extends ConsumerWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              showMaterialModalBottomSheet(
-                expand: false,
+              showModalBottomSheet(
                 context: context,
                 builder: ((context) {
                   return GoalConfigScreen();

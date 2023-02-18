@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,15 +14,43 @@ import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_config_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class GoalListView extends ConsumerWidget {
+class GoalListView extends ConsumerStatefulWidget {
   const GoalListView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    List<Goal> goals = ref.watch(goalLocalListProvider);
+  ConsumerState<GoalListView> createState() => _GoalListViewState();
+}
+
+class _GoalListViewState extends ConsumerState<GoalListView> {
+  List<Goal> goals = [];
+  late StreamSubscription goalStreamSubscription;
+
+  @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    getGoalList();
+  }
+
+  @override
+  void dispose() {
+    goalStreamSubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> getGoalList() async {
+    final goalStream = await ref.read(goalRepositoryProvider.future);
+    goalStreamSubscription = goalStream.getAllGoals().listen((event) {
+      if (mounted) {
+        goals = event;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return goals.length == 0
         ?
-
         ///# 목표 없을 경우
         Container(
             child: _emtyGoalsView(context),
@@ -32,26 +62,26 @@ class GoalListView extends ConsumerWidget {
               return Container(
                 margin: EdgeInsets.only(bottom: 4.0),
                 //: container 둥글게
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    _slidable(
-                        goals: goals,
-                        index: index,
-                        ref: ref,
-                        child: _listTile(goals, index)),
-                    GoalChart(
-                      goalAmount: goals[index].amount,
-                    )
-                  ],
+                decoration: _boxDecoration(context),
+                child: ExpansionTile(
+                  title: _slidable(
+                      goals: goals,
+                      index: index,
+                      ref: ref,
+                      child: _listTile(goals, index)),
+                  children: [GoalChart(goalAmount: goals[index].amount)],
                 ),
               );
             },
             itemCount: goals.length,
           );
+  }
+
+  BoxDecoration _boxDecoration(BuildContext context) {
+    return BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+              );
   }
 
   Text _emtyGoalsView(BuildContext context) {
@@ -75,8 +105,7 @@ class GoalListView extends ConsumerWidget {
       endActionPane: ActionPane(motion: const ScrollMotion(), children: [
         //# 지갑 수정
         SlidableEdit(onPressed: (context) {
-          showMaterialModalBottomSheet(
-            expand: false,
+          showModalBottomSheet(
             context: context,
             builder: ((context) {
               return GoalConfigScreen(
@@ -91,7 +120,6 @@ class GoalListView extends ConsumerWidget {
           ref.refresh(goalLocalListProvider.notifier).deleteGoal(goals[index]);
         }),
       ]),
-
       child: child,
     );
   }

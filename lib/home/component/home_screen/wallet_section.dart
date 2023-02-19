@@ -27,23 +27,25 @@ class WalletSection extends ConsumerWidget {
         }
 
         //# 총 wallet 금액 구하기
-        double total = _getTotalWalletAmount(snapshot.data!);
+          double total = _getTotalWalletAmount(snapshot.data!);
 
-        return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderCollection(
-                    headerType: HeaderType.wallet,
-                  ),
-                  Text(
-                    "total balance".tr(args: [CustomNumberUtils.formatCurrency(total)]),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  )
-                ],
-              ),
-            );
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HeaderCollection(
+                  headerType: HeaderType.wallet,
+                ),
+                Text(
+                  "total balance"
+                      .tr(args: [CustomNumberUtils.formatCurrency(total)]),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: 24, color: Theme.of(context).primaryColor),
+                )
+              ],
+            ),
+          );
       }
     );
     

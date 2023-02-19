@@ -59,19 +59,11 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
   //# 있을 때나 없을 때나 같은 디자인
   Widget _goalGestureDetector({required List<Goal> goals}) {
     return GestureDetector(
-      onTap: () => CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => GoalScreen()),
-      // Navigator.of(context).push(
-      //   CupertinoSheetRoute(
-      //     initialStop: 0.6,
-      //     stops: <double>[0, 0.6, 1],
-      //     // Screen은 이동할 스크린
-      //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //     builder: (context) => GoalScreen(),
-      //   ),
-      // ),
+      onTap: _onTap(),
       child: goals.isEmpty
           ? _isEmptyContainer()
           : Badge(
+            backgroundColor: Theme.of(context).primaryColor,
               label: Text(goals.length.toString()),
               child: _isNotEmptyContainer(
                 goal: goals[0],
@@ -88,6 +80,15 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
 
   GestureTapCallback _onTap() {
     return () => CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => GoalScreen());
+      // Navigator.of(context).push(
+      //   CupertinoSheetRoute(
+      //     initialStop: 0.6,
+      //     stops: <double>[0, 0.6, 1],
+      //     // Screen은 이동할 스크린
+      //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //     builder: (context) => GoalScreen(),
+      //   ),
+      // );
   }
 
   Widget _isEmptyContainer() {

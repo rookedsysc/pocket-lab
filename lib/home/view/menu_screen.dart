@@ -25,7 +25,10 @@ class MenuScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _walletHeader(context),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _walletHeader(context),
+            ),
             _walletListStreamBuilder(ref)
             ],
           ),
@@ -35,11 +38,12 @@ class MenuScreen extends ConsumerWidget {
 
   StreamBuilder<List<Wallet>> _walletListStreamBuilder(WidgetRef ref) {
     return StreamBuilder<List<Wallet>>(
-                stream: ref.watch(walletRepositoryProvider.notifier).getAllWalletsStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.data == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+        stream:
+            ref.watch(walletRepositoryProvider.notifier).getAllWalletsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
                     );
                   }
                   final wallets = snapshot.data!;

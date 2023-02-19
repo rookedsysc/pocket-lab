@@ -7,6 +7,4 @@ class TrendUtils {
   fetchTrend() {
     ref.read(trendRepositoryProvider.notifier).fetchTrend();
   }
-
-
 }

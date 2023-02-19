@@ -37,52 +37,51 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
   @override
   void dispose() {
     trendStreamSubscription.cancel();
-    debugPrint("dispose");
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SfCartesianChart(
-                //# 그래프 가시 범위
-                onActualRangeChanged: (ActualRangeChangedArgs args) {
-                  if (args.axisName == 'primaryYAxis') {
-                    // : chartData의 가장 최소값
-                    args.visibleMin = _getMinimumValue();
+      borderRadius: BorderRadius.circular(10),
+      child: SfCartesianChart(
+          //# 그래프 가시 범위
+          onActualRangeChanged: (ActualRangeChangedArgs args) {
+            if (args.axisName == 'primaryYAxis') {
+              // : chartData의 가장 최소값
+              args.visibleMin = _getMinimumValue();
 
-                    ///# 최대값 구함
-                    double max;
-                    try {
-                      max = chartData[0].amount;
-                    } catch (e) {
-                      max = 0;
-                    }
-                    //: chartData의 가장 최대값
-                    for (TrendChartDataModel data in chartData) {
-                      if(data.amount < 0) {
-                        max = data.amount.abs() > max ? data.amount.abs() : max;
-                      } else {
-                      max = data.amount > max ? data.amount : max;}
-                    }
-                    args.visibleMax = max * 1.75;
-                  }
-                },
-                //# x축 설정
-                primaryXAxis: _primaryXAxis(),
-                    //# y축 설정
-                primaryYAxis: _primaryYAxis(),
-                //: 기본 패딩 없앰
-                margin: EdgeInsets.zero,
-                //: 기본 테두리 안보이게 설정
-                plotAreaBorderWidth: 0,
-                enableSideBySideSeriesPlacement: false,
-                series: <ChartSeries<TrendChartDataModel, DateTime>>[
-                  _splineAreaSeries(context),
-                ]),
-          );
+              ///# 최대값 구함
+              double max;
+              try {
+                max = chartData[0].amount;
+              } catch (e) {
+                max = 0;
+              }
+              //: chartData의 가장 최대값
+              for (TrendChartDataModel data in chartData) {
+                if (data.amount < 0) {
+                  max = data.amount.abs() > max ? data.amount.abs() : max;
+                } else {
+                  max = data.amount > max ? data.amount : max;
+                }
+              }
+              args.visibleMax = max * 1.75;
+            }
+          },
+          //# x축 설정
+          primaryXAxis: _primaryXAxis(),
+          //# y축 설정
+          primaryYAxis: _primaryYAxis(),
+          //: 기본 패딩 없앰
+          margin: EdgeInsets.zero,
+          //: 기본 테두리 안보이게 설정
+          plotAreaBorderWidth: 0,
+          enableSideBySideSeriesPlacement: false,
+          series: <ChartSeries<TrendChartDataModel, DateTime>>[
+            _splineAreaSeries(context),
+          ]),
+    );
   }
 
   NumericAxis _primaryYAxis() {
@@ -96,9 +95,9 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
 
   ChartAxis _primaryXAxis() {
     return DateTimeAxis(
-        //: x축 안보이게 설정
-        isVisible: false,
-        );
+      //: x축 안보이게 설정
+      isVisible: false,
+    );
   }
 
   SplineAreaSeries<TrendChartDataModel, DateTime> _splineAreaSeries(
@@ -112,6 +111,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
         xValueMapper: (TrendChartDataModel data, _) => data.date,
         yValueMapper: (TrendChartDataModel data, _) => data.amount);
   }
+
   _getMinimumValue() {
     double minimum;
     try {
@@ -128,4 +128,3 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
     return minimum;
   }
 }
-

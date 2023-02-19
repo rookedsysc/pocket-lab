@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
+import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/goal/component/goal_chart.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
@@ -38,8 +39,8 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   }
 
   Future<void> getGoalList() async {
-    final goalStream = await ref.read(goalRepositoryProvider.future);
-    goalStreamSubscription = goalStream.getAllGoals().listen((event) {
+    final goalRepository = await ref.read(goalRepositoryProvider.future);
+    goalStreamSubscription = goalRepository.getAllGoals().listen((event) {
       if (mounted) {
         goals = event;
         setState(() {});
@@ -125,9 +126,16 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   }
 
   ListTile _listTile(List<Goal> goals, int index) {
+    final TextTheme textStyle = Theme.of(context).textTheme;
     return ListTile(
-      title: Text(goals[index].name),
-      subtitle: Text(goals[index].firstDate.toString()),
+      title: Text(goals[index].name, style: textStyle.bodyMedium,),
+      subtitle: Text(
+        "Created At ${CustomDateUtils().dateToFyyyyMMdd(goals[index].firstDate)}",
+        style: textStyle 
+            .bodySmall
+            ?.copyWith(color: Colors.grey),
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: Text(CustomNumberUtils.formatCurrency(goals[index].amount)),
     );
   }

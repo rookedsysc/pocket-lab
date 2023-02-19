@@ -11,11 +11,13 @@ import 'package:pocket_lab/common/component/budget_icon_and_name.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/layout/two_row_layout.dart';
+import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
@@ -130,17 +132,28 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
           return null;
         }
 
+        ///# 새로 추가하는 경우
         if (widget.transaction == null) {
           changeWalletBalance(_transaction);
           await ref
               .read(transactionRepositoryProvider.notifier)
               .configTransaction(_transaction);
-        } else {
+          await ref
+              .read(trendRepositoryProvider.notifier)
+              .syncTrend(_transaction.walletId);
+        }
+
+        ///# 기존에 있던 것을 수정하는 경우
+        else {
           changeWalletBalance(widget.transaction!);
           await ref
               .read(transactionRepositoryProvider.notifier)
               .configTransaction(widget.transaction!);
+          await ref
+              .read(trendRepositoryProvider.notifier)
+              .syncTrend(widget.transaction!.walletId);
         }
+
         Navigator.of(context).pop();
       }
     };
@@ -148,10 +161,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   //# Transaction Type에 따라서 기존 wallet의 잔고에 + -
   void changeWalletBalance(Transaction transaction) async {
-    final Wallet? _wallet = await ref
+    Wallet? _wallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.walletId);
-    final Wallet? _toWallet = await ref
+    Wallet? _toWallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.toWallet);
 
@@ -313,8 +326,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                           child: Row(
                             children: [
                               Icon(Icons.circle,
-                                  color: Color(
-                                      int.parse('FF${e.color}', radix: 16))),
+                                  color: ColorUtils.stringToColor(e.color)),
                               SizedBox(width: 8),
                               Text(e.name),
                             ],
@@ -396,6 +408,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       /// 숫자만 추출하여 double로 변환
       String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(value);
       widget.transaction?.amount = double.parse(_amountOnlyDigit);
+      _transaction.amount = double.parse(_amountOnlyDigit);
     };
   }
 

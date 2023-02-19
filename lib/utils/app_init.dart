@@ -51,6 +51,6 @@ class AppInit {
     final _goalRepositoryProvider =
         await ref.read(goalRepositoryProvider.future);
     List<Goal> goals = await _goalRepositoryProvider.getAllGoalsFuture();
-    ref.refresh(goalListProvider.notifier).addGoals(goals);
+    ref.refresh(goalLocalListProvider.notifier).addGoals(goals);
   }
 }

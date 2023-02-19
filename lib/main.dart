@@ -59,10 +59,10 @@ class MyApp extends ConsumerWidget {
   }
 
   final ThemeData _theme = ThemeData(
-      scaffoldBackgroundColor: const Color.fromRGBO(236, 237, 240, 1),
+      scaffoldBackgroundColor: const Color.fromRGBO(243, 244, 252, 1),
       //* Bottom Navigation Bar 색
       canvasColor: const Color.fromRGBO(236, 237, 240, 1),
-      iconTheme: const IconThemeData(color: Colors.blue),
+      iconTheme: const IconThemeData(color: Colors.black),
 
       //# 메인 색상
       primaryColor: const Color.fromRGBO(74, 110, 94, 1),
@@ -70,10 +70,10 @@ class MyApp extends ConsumerWidget {
 
       //# 텍스트 색상
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
+        bodyLarge: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w900),
         //: 보통 글귀
-        bodyMedium: TextStyle(color: Colors.black, fontSize: 12),
-        bodySmall: TextStyle(color: Colors.black, fontSize: 10),
+        bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
+        bodySmall: TextStyle(color: Colors.black, fontSize: 12),
       ),
       cardColor: Colors.white);
 
@@ -82,7 +82,7 @@ class MyApp extends ConsumerWidget {
     //* Bottom Navigation Bar 색
     canvasColor: const Color.fromRGBO(30, 30, 30, 1),
 
-    iconTheme: const IconThemeData(color: Colors.blue),
+    iconTheme: const IconThemeData(color: Colors.white),
 
     //# 메인 색상
     primaryColor: const Color.fromRGBO(74, 110, 94, 1),

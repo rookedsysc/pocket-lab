@@ -32,6 +32,7 @@ class Wallet {
 
   walletToWalletCard() {
     return WalletCard(
+      walletId: id,
       imgAddr: imgAddr,
       name: name,
       balance: balance,

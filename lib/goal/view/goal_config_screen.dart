@@ -117,7 +117,7 @@ class GoalConfigScreen extends ConsumerWidget {
           await ref
               .read(goalRepositoryProvider.future)
               .then((value) => value.addGoal(goal!));
-          ref.read(goalListProvider.notifier).addGoal(goal!);
+          ref.refresh(goalLocalListProvider.notifier).addGoal(goal!);
           Navigator.of(context).pop();
           return;
         }
@@ -137,7 +137,7 @@ class GoalConfigScreen extends ConsumerWidget {
         await ref
             .read(goalRepositoryProvider.future)
             .then((value) => value.addGoal(goal!));
-        ref.read(goalListProvider.notifier).addGoal(goal!);
+        ref.read(goalLocalListProvider.notifier).addGoal(goal!);
         Navigator.of(context).pop();
       }
     };

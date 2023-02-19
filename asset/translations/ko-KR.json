@@ -1,4 +1,10 @@
 {
-  "Set a goal" : "목표를 설정해주세요",
-  "Input Value" : "값을 입력하세요"
+  "Set a goal" : "목표를 설정해주세요.",
+  "Input Value" : "값을 입력하세요.",
+  "Loading data" : "데이터를 불러오는 중입니다...",
+  "total balance" : "총 합계 {}",
+  "no expend data" : "최근 한 달간 지출 내역이 없습니다.",
+  "asset grownth nagative mention" : "자산 증가량이 감소하는 추세이기 때문에 목표 달성일을 예측할 수 없습니다.",
+  "remain day" : "{}일 남음",
+  "can buy" : "지금 바로 구입이 가능합니다."
 }

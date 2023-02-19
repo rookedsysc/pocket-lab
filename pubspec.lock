@@ -217,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.2"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -249,6 +257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "155556c4aba56c8474308d51b4e5446b80a07db9ab66a3cb74aff05c110df982"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.60.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -687,6 +703,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  skeletons:
+    dependency: "direct main"
+    description:
+      name: skeletons
+      sha256: "5b2d08ae7f908ee1f7007ca99f8dcebb4bfc1d3cb2143dec8d112a5be5a45c8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -748,6 +772,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: "34d4c1cd35de6ebe5a3cdfe72a1154fdb04117625517609308d992789121bf78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.50"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "33141f9073c607bd113898d241aa6a03ccc1856a314bd061015180c35d47012f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.50"
   table_calendar:
     dependency: "direct main"
     description:

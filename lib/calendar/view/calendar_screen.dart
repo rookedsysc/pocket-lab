@@ -6,45 +6,10 @@ import 'package:pocket_lab/calendar/component/calendar.dart';
 import 'package:pocket_lab/calendar/component/month_header.dart';
 import 'package:pocket_lab/calendar/component/month_pickcer.dart';
 import 'package:pocket_lab/calendar/component/week_header.dart';
+import 'package:pocket_lab/calendar/model/calendar_model.dart';
+import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-final calendarProvider = StateNotifierProvider<CalendarNotifier, CalendarModel>((ref) {
-  return CalendarNotifier();
-});
-
-class CalendarNotifier extends StateNotifier<CalendarModel> {
-  CalendarNotifier(): super(
-    CalendarModel(
-      focusedDay: DateTime.now(),
-      selectedDay: null
-    )
-  );
-
-  void setSelectedDay(DateTime selectedDay) {
-    state = CalendarModel(
-      focusedDay: state.focusedDay,
-      selectedDay: selectedDay
-    );
-  }
-
-  void setFocusedDay(DateTime focusedDay) {
-    state = CalendarModel(
-      focusedDay: focusedDay,
-      selectedDay: state.selectedDay
-    );
-  }
-}
-
-class CalendarModel {
-  DateTime focusedDay = DateTime.now();
-  DateTime? selectedDay;
-
-  CalendarModel({
-    required this.focusedDay,
-    this.selectedDay
-  });
-}
 
 class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
@@ -75,18 +40,18 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       child: ListView(
         children: [
           MonthPicker(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: MonthHeader(),
-          ),
+          MonthHeader(),
           SizedBox(
             height: 75.0,
             child: ListView(
               //: 가로로 스크롤
               scrollDirection: Axis.horizontal,
               children: List.generate(
-                  CalendarUtils().getWeeksInMonth(_focusedDay),
-                  (index) => WeekHeader(index: index,),),
+                CalendarUtils().getWeeksInMonth(_focusedDay),
+                (index) => WeekHeader(
+                  index: index,
+                ),
+              ),
             ),
           ),
           Calendar()

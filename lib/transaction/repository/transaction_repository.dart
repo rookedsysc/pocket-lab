@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/constant/daily_budget.dart';
@@ -6,7 +5,6 @@ import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
-import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 
 final transactionRepositoryProvider =
@@ -61,7 +59,6 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   ///# 해당 월 지출 Stream으로 가져오기
   Stream<List<Transaction>> getThisMonthExpenditure(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
-
     yield* isar.transactions
         .filter()
         .transactionTypeEqualTo(TransactionType.expenditure)
@@ -71,6 +68,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
+  ///# 해당 월 Transaction Stream으로 가져오기
   Stream<List<Transaction>> getThisMonthTransactions(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
 
@@ -78,6 +76,25 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .filter()
         .dateGreaterThan(DateTime(date.year, date.month, 1))
         .dateLessThan(DateTime(date.year, date.month + 1, 1))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
+
+  ///# 특정 기간의 거래내역 Stream으로 가져오기
+  ///: startDate(포함) ~ endDate(포함)
+  Stream<List<Transaction>> getTransactionByPeriod(
+      DateTime startDate, DateTime endDate) async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    startDate = DateTime(startDate.year, startDate.month, startDate.day - 1, 23,
+        59, 59, 999, 999);
+    endDate =
+        DateTime(endDate.year, endDate.month, endDate.day + 1, 0, 0, 0, 0, 0);
+
+    yield* isar.transactions
+        .filter()
+        .dateGreaterThan(startDate)
+        .dateLessThan(endDate)
         .watch(fireImmediately: true)
         .asBroadcastStream();
   }

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/category_chart.dart';
 
-class MonthHeader extends StatelessWidget {
+class MonthHeader extends ConsumerStatefulWidget {
   const MonthHeader ({super.key});
 
+  @override
+  ConsumerState<MonthHeader> createState() => _MonthHeaderState();
+}
+
+class _MonthHeaderState extends ConsumerState<MonthHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -29,8 +29,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     super.didChangeDependencies();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,8 +44,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               scrollDirection: Axis.horizontal,
               children: List.generate(
                 CalendarUtils().getWeeksInMonth(_focusedDay),
-                (index) => WeekHeader(
-                  index: index,
+                (index) => Padding(
+                  padding: getPadding(index),
+                  child: WeekHeader(
+                    index: index,
+                  ),
                 ),
               ),
             ),
@@ -56,6 +57,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         ],
       ),
     );
+  }
+
+  EdgeInsets getPadding(int index) {
+    if (index == 0) {
+      return EdgeInsets.only(left: 16.0);
+    } else if (CalendarUtils().getWeeksInMonth(_focusedDay) == index + 1) {
+      return EdgeInsets.only(left: 4, right: 16.0);
+    }
+    return EdgeInsets.only(left: 4);
+
   }
 
   void initRiverpod() {

@@ -23,18 +23,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime? _selectedDay;
   late CalendarModel _calendarState;
 
-  void initRiverpod() {
-    _calendarState = ref.watch(calendarProvider);
-    _focusedDay = _calendarState.focusedDay;
-    if (_calendarState.selectedDay != null) {
-      _selectedDay = _calendarState.selectedDay;
-    }
+  @override
+  void didChangeDependencies() {
+    initRiverpod();
+    super.didChangeDependencies();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
-    initRiverpod();
-
     return SafeArea(
       top: true,
       child: ListView(
@@ -58,5 +56,13 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         ],
       ),
     );
+  }
+
+  void initRiverpod() {
+    _calendarState = ref.watch(calendarProvider);
+    _focusedDay = _calendarState.focusedDay;
+    if (_calendarState.selectedDay != null) {
+      _selectedDay = _calendarState.selectedDay;
+    }
   }
 }

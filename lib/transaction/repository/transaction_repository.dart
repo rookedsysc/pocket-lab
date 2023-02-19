@@ -9,38 +9,45 @@ import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 
-final transactionRepositoryProvider = StateNotifierProvider<TransactionRepositoryNotifier, Transaction>((ref) {
+final transactionRepositoryProvider =
+    StateNotifierProvider<TransactionRepositoryNotifier, Transaction>((ref) {
   return TransactionRepositoryNotifier(ref);
 });
 
 class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   final Ref ref;
-  TransactionRepositoryNotifier(this.ref): super(Transaction(transactionType: TransactionType.expenditure, category: 0, amount: 0, date: DateTime.now(), title: "", walletId: 0));
+  TransactionRepositoryNotifier(this.ref)
+      : super(Transaction(
+            transactionType: TransactionType.expenditure,
+            category: 0,
+            amount: 0,
+            date: DateTime.now(),
+            title: "",
+            walletId: 0));
 
   //# Transaction 추가
   Future<void> configTransaction(Transaction transaction) async {
-    state = transaction; 
+    state = transaction;
     final Isar isar = await ref.read(isarProvieder.future);
 
     await isar.writeTxn(() async {
       await isar.transactions.put(transaction);
     });
   }
-  
-  ///# 이번달 지출만 Stream으로 가져오기 
-  Stream<List<Transaction>> getLast30DaysExpenditure(int? walletId) async* {
 
+  ///# 최근 한 달 지출 Stream으로 가져오기
+  Stream<List<Transaction>> getLast30DaysExpenditure(int? walletId) async* {
     final Isar isar = await ref.read(isarProvieder.future);
 
     //: 특정 wallet을 지정해주면 해당 id의 지출만 가져오기
-    if(walletId != null) {
+    if (walletId != null) {
       yield* isar.transactions
-        .filter()
-        .walletIdEqualTo(walletId)
-        .transactionTypeEqualTo(TransactionType.expenditure)
-        .dateGreaterThan(DateTime.now().subtract(Duration(days: 31)))
-        .watch(fireImmediately: true)
-        .asBroadcastStream();
+          .filter()
+          .walletIdEqualTo(walletId)
+          .transactionTypeEqualTo(TransactionType.expenditure)
+          .dateGreaterThan(DateTime.now().subtract(Duration(days: 31)))
+          .watch(fireImmediately: true)
+          .asBroadcastStream();
     }
 
     yield* isar.transactions
@@ -51,6 +58,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
+  ///# 해당 월 지출 Stream으로 가져오기
   Stream<List<Transaction>> getThisMonthExpenditure(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
 
@@ -63,6 +71,28 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
+  Stream<List<Transaction>> getThisMonthTransactions(DateTime date) async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    yield* isar.transactions
+        .filter()
+        .dateGreaterThan(DateTime(date.year, date.month, 1))
+        .dateLessThan(DateTime(date.year, date.month + 1, 1))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
+
+  ///# 특정 일자 지출 가져오기
+  Future<List<Transaction>> getExpenditureByDate(DateTime date) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions
+        .filter()
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .dateEqualTo(date)
+        .findAll();
+  }
+
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
   Future<Transaction?> getLastDailyBudgetByWalletId(Wallet wallet) async {
     final Isar isar = await ref.read(isarProvieder.future);
@@ -70,7 +100,9 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     final Transaction? lastDailyTransactions = await isar.transactions
         .filter()
         .walletIdEqualTo(wallet.id)
-        .titleEqualTo(dailyBudget).sortByDateDesc().findFirst();
+        .titleEqualTo(dailyBudget)
+        .sortByDateDesc()
+        .findFirst();
 
     return lastDailyTransactions;
   }

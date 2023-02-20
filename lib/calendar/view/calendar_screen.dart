@@ -6,6 +6,7 @@ import 'package:pocket_lab/calendar/component/calendar.dart';
 import 'package:pocket_lab/calendar/component/month_header.dart';
 import 'package:pocket_lab/calendar/component/month_pickcer.dart';
 import 'package:pocket_lab/calendar/component/week_header.dart';
+import 'package:pocket_lab/calendar/layout/week_header_layout.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
@@ -23,40 +24,32 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime? _selectedDay;
   late CalendarModel _calendarState;
 
-  void initRiverpod() {
-    _calendarState = ref.watch(calendarProvider);
-    _focusedDay = _calendarState.focusedDay;
-    if (_calendarState.selectedDay != null) {
-      _selectedDay = _calendarState.selectedDay;
-    }
+  @override
+  void didChangeDependencies() {
+    initRiverpod();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    initRiverpod();
-
     return SafeArea(
       top: true,
       child: ListView(
         children: [
           MonthPicker(),
           MonthHeader(),
-          SizedBox(
-            height: 75.0,
-            child: ListView(
-              //: 가로로 스크롤
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                CalendarUtils().getWeeksInMonth(_focusedDay),
-                (index) => WeekHeader(
-                  index: index,
-                ),
-              ),
-            ),
-          ),
+          WeekHeaderLayOut(focusedDay: _focusedDay),
           Calendar()
         ],
       ),
     );
+  }
+
+  void initRiverpod() {
+    _calendarState = ref.watch(calendarProvider);
+    _focusedDay = _calendarState.focusedDay;
+    if (_calendarState.selectedDay != null) {
+      _selectedDay = _calendarState.selectedDay;
+    }
   }
 }

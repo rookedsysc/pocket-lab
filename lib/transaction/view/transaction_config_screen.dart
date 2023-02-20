@@ -328,7 +328,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                               Icon(Icons.circle,
                                   color: ColorUtils.stringToColor(e.color)),
                               SizedBox(width: 8),
-                              Text(e.name),
+                              Text(e.name, style: Theme.of(context).textTheme.bodyMedium,),
                             ],
                           )),
                     )

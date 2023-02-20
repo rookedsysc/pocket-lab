@@ -90,7 +90,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
                     .textTheme
                     .bodySmall!
                     .copyWith(fontWeight: FontWeight.bold)) : null,
-            dataLabelMapper: !widget.isHome ? (data, _) =>
+            dataLabelMapper: widget.isHome ? (data, _) =>
                 "${CustomNumberUtils.formatCurrency(data.amount)}" : null,
           ),
         ]);

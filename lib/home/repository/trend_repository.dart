@@ -37,16 +37,34 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
         await isar.trends.filter().walletIdEqualTo(walletId).findAll();
     Trend? todayTrend;
     try {
-      todayTrend = trends.firstWhere((element) =>
-          CustomDateUtils().isSameDay(element.date, now));
+      todayTrend = trends.firstWhere(
+          (element) => CustomDateUtils().isSameDay(element.date, now));
     } catch (e) {}
 
     return todayTrend;
   }
 
+  ///# 모든 Trend List를 wallet 별로 반환
+  Future<Map<int, List<Trend>>> getAllTrendsAsMap() async {
+    final isar = await ref.read(isarProvieder.future);
+    Map<int, List<Trend>> allTrends = {};
+    final wallets =
+        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+
+    for (Wallet wallet in wallets) {
+      List<Trend> trends =
+          await isar.trends.filter().walletIdEqualTo(wallet.id).findAll();
+      Map<int, List<Trend>> trendMap = {wallet.id: trends};
+
+      allTrends.addAll(trendMap);
+    }
+    return allTrends;
+  }
+
   ///* 전체 Trend 데이터 가지고 오기
   Future<List<Trend>> getTotalTrends() async {
     List<Trend> trends = [];
+
     ///: 같은 날짜의 값을 하나로 합친 데이터들
     List<Trend> totalTrends = [];
     final isar = await ref.read(isarProvieder.future);
@@ -56,6 +74,7 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
       trends.addAll(
           await isar.trends.filter().walletIdEqualTo(wallet.id).findAll());
     }
+
     ///: results 안에 있는 같은 날짜인 데이터들의 amount를 합친 데이터를 만들어서 totalResults에 넣기
     trends.forEach((element) {
       try {
@@ -68,6 +87,14 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     });
 
     return totalTrends;
+  }
+
+  ///# 해당 walletId를 가지고 있는 데이터 전부 삭제하기
+  Future<void> deleteTrend(int walletId) async {
+    final isar = await ref.read(isarProvieder.future);
+    await isar.writeTxn(() async {
+      await isar.trends.filter().walletIdEqualTo(walletId).deleteAll();
+    });
   }
 
   ///* Wallet의 잔액을 Trend에 저장

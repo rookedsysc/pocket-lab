@@ -15,11 +15,11 @@ import 'package:pocket_lab/home/view/menu_screen/wallet_config_screen.dart';
 import 'package:sheet/route.dart';
 
 class MenuScreen extends ConsumerWidget {
-  const MenuScreen ({super.key});
+  const MenuScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return  Material(
+    return Material(
       child: SafeArea(
         top: true,
         child: Column(
@@ -30,10 +30,10 @@ class MenuScreen extends ConsumerWidget {
               child: _walletHeader(context),
             ),
             _walletListStreamBuilder(ref)
-            ],
-          ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   StreamBuilder<List<Wallet>> _walletListStreamBuilder(WidgetRef ref) {
@@ -44,15 +44,17 @@ class MenuScreen extends ConsumerWidget {
           if (snapshot.data == null) {
             return const Center(
               child: CircularProgressIndicator(),
-                    );
-                  }
-                  final wallets = snapshot.data!;
-                  return Expanded(
-                      child: ListView.builder(
-                          itemBuilder: ((context, index) =>
-                              WalletTile(wallet: wallets[index])),
-                          itemCount: wallets.length));
-                });
+            );
+          }
+          final wallets = snapshot.data!;
+
+          return Expanded(
+              child: ListView.builder(
+                  itemBuilder: ((context, index) {
+                    return WalletTile(wallet: wallets[index]);
+                  }),
+                  itemCount: wallets.length));
+        });
   }
 
   Row _walletHeader(BuildContext context) {
@@ -69,7 +71,9 @@ class MenuScreen extends ConsumerWidget {
               stops: <double>[0, 0.7, 1],
               //: Screen은 이동할 스크린
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              builder: (BuildContext context) => WalletConfigScreen(isEdit: false,),
+              builder: (BuildContext context) => WalletConfigScreen(
+                isEdit: false,
+              ),
             ));
           },
           icon: Icon(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
@@ -91,10 +92,10 @@ class _GoalChartState extends ConsumerState<GoalChart> {
                 xValueMapper: (data, _) => data.date,
                 yValueMapper: (data, _) => data.amount),
             LineSeries<TrendChartDataModel, DateTime>(
-              dataLabelSettings: DataLabelSettings(
+                dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     builder: (data, point, series, pointIndex, seriesIndex) {
-                      if (pointIndex == chartData.length - 1) {
+                      if (pointIndex == futureChartData.length - 1) {
                         return Text(
                           CustomDateUtils().dateToFyyyyMMdd(
                               futureChartData[pointIndex].date),
@@ -153,7 +154,9 @@ class _GoalChartState extends ConsumerState<GoalChart> {
 
     _getFutureChartData(totalBalance);
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   ///* 목표 도달까지 걸릴 일 수를 return 해주고

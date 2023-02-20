@@ -52,11 +52,13 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   Widget build(BuildContext context) {
     return goals.length == 0
         ?
+
         ///# 목표 없을 경우
         Container(
             child: _emtyGoalsView(context),
           )
         :
+
         ///# 목표 있을 경우
         ListView.builder(
             itemBuilder: (context, index) {
@@ -64,14 +66,11 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
                 margin: EdgeInsets.only(bottom: 4.0),
                 //: container 둥글게
                 decoration: _boxDecoration(context),
-                child: ExpansionTile(
-                  title: _slidable(
-                      goals: goals,
-                      index: index,
-                      ref: ref,
-                      child: _listTile(goals, index)),
-                  children: [GoalChart(goalAmount: goals[index].amount)],
-                ),
+                child: _slidable(
+                    goals: goals,
+                    index: index,
+                    ref: ref,
+                    child: _listTile(goals, index)),
               );
             },
             itemCount: goals.length,
@@ -80,9 +79,9 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
 
   BoxDecoration _boxDecoration(BuildContext context) {
     return BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(10),
-              );
+      color: Theme.of(context).cardColor,
+      borderRadius: BorderRadius.circular(10),
+    );
   }
 
   Text _emtyGoalsView(BuildContext context) {
@@ -125,18 +124,30 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
     );
   }
 
-  ListTile _listTile(List<Goal> goals, int index) {
+  Widget _listTile(List<Goal> goals, int index) {
     final TextTheme textStyle = Theme.of(context).textTheme;
-    return ListTile(
-      title: Text(goals[index].name, style: textStyle.bodyMedium,),
-      subtitle: Text(
-        "Created At ${CustomDateUtils().dateToFyyyyMMdd(goals[index].firstDate)}",
-        style: textStyle 
-            .bodySmall
-            ?.copyWith(color: Colors.grey),
-        overflow: TextOverflow.ellipsis,
+    return ExpansionTile(
+      ///* 버튼 오른쪽이 아닌 왼쪽에 배치
+      // controlAffinity: ListTileControlAffinity.leading,
+      collapsedTextColor: Theme.of(context).textTheme.bodyMedium?.color,
+      collapsedIconColor: Theme.of(context).textTheme.bodyMedium?.color,
+      tilePadding: null,
+      childrenPadding: null,
+      title: ListTile(
+        title: Text(
+          goals[index].name,
+          style: textStyle.bodyMedium,
+        ),
+        subtitle: Text(
+          "Created At ${CustomDateUtils().dateToFyyyyMMdd(goals[index].firstDate)}",
+          style: textStyle.bodySmall?.copyWith(color: Colors.grey),
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Text(CustomNumberUtils.formatCurrency(goals[index].amount)),
       ),
-      trailing: Text(CustomNumberUtils.formatCurrency(goals[index].amount)),
+      children: [
+        GoalChart(goalAmount: goals[index].amount)
+      ],
     );
   }
 }

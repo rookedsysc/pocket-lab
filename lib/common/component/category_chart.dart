@@ -82,16 +82,16 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
             yValueMapper: (CategoryChartData data, _) => data.amount,
 
             //# 라벨 설정
-            dataLabelSettings: DataLabelSettings(
+            dataLabelSettings: widget.isHome ? DataLabelSettings(
                 // overflowMode: OverflowMode.trim,
                 // labelPosition: ChartDataLabelPosition.outside,
                 isVisible: true,
                 textStyle: Theme.of(context)
                     .textTheme
                     .bodySmall!
-                    .copyWith(fontWeight: FontWeight.bold)),
-            dataLabelMapper: (data, _) =>
-                "${CustomNumberUtils.formatCurrency(data.amount)}",
+                    .copyWith(fontWeight: FontWeight.bold)) : null,
+            dataLabelMapper: !widget.isHome ? (data, _) =>
+                "${CustomNumberUtils.formatCurrency(data.amount)}" : null,
           ),
         ]);
   }

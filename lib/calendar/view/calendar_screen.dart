@@ -6,6 +6,7 @@ import 'package:pocket_lab/calendar/component/calendar.dart';
 import 'package:pocket_lab/calendar/component/month_header.dart';
 import 'package:pocket_lab/calendar/component/month_pickcer.dart';
 import 'package:pocket_lab/calendar/component/week_header.dart';
+import 'package:pocket_lab/calendar/layout/week_header_layout.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
@@ -37,36 +38,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         children: [
           MonthPicker(),
           MonthHeader(),
-          SizedBox(
-            height: 75.0,
-            child: ListView(
-              //: 가로로 스크롤
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                CalendarUtils().getWeeksInMonth(_focusedDay),
-                (index) => Padding(
-                  padding: getPadding(index),
-                  child: WeekHeader(
-                    index: index,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          WeekHeaderLayOut(focusedDay: _focusedDay),
           Calendar()
         ],
       ),
     );
-  }
-
-  EdgeInsets getPadding(int index) {
-    if (index == 0) {
-      return EdgeInsets.only(left: 16.0);
-    } else if (CalendarUtils().getWeeksInMonth(_focusedDay) == index + 1) {
-      return EdgeInsets.only(left: 4, right: 16.0);
-    }
-    return EdgeInsets.only(left: 4);
-
   }
 
   void initRiverpod() {

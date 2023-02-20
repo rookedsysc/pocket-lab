@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -97,16 +98,16 @@ class WeekHeader extends ConsumerWidget {
 
   String _indexToWeek() {
     if (index == 0)
-      return '첫 번째 주';
+      return 'week name.firstWeek'.tr();
     else if (index == 1)
-      return '두 번째 주';
+      return 'week name.secondWeek'.tr();
     else if (index == 2)
-      return '세 번째 주';
+      return 'week name.thirdWeek'.tr();
     else if (index == 3)
-      return '네 번째 주';
+      return 'week name.fourthWeek'.tr();
     else if (index == 4)
-      return '다섯 번째 주';
+      return 'week name.fifthWeek'.tr();
     else
-      return '여섯 번째 주';
+      return 'week name.sixthWeek'.tr();
   }
 }

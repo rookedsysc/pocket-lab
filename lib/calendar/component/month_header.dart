@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/common/component/category_chart.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
@@ -22,13 +23,14 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
   late StreamSubscription transactionSubscribtion;
   double totalIncome = 0.0;
   double totalExpense = 0.0;
+  late CalendarModel calendarModel;
 
   @override
   void didChangeDependencies() {
-    final focusDay = ref.watch(calendarProvider).focusedDay;
+    calendarModel = ref.watch(calendarProvider);
     final transactionStream = ref
         .watch(transactionRepositoryProvider.notifier)
-        .getThisMonthTransactions(focusDay);
+        .getThisMonthTransactions(calendarModel.focusedDay);
     transactionSubscribtion = transactionStream.listen((events) {
       for (Transaction event in events) {
         if (event.transactionType == TransactionType.income) {
@@ -37,6 +39,7 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
           totalExpense += event.amount;
         }
       }
+      setState(() {});
     });
 
     super.didChangeDependencies();
@@ -55,8 +58,9 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(5)),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Column(

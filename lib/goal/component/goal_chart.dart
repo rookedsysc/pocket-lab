@@ -59,7 +59,6 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
           ///: 남을 일 수
           children: [
             Padding(
@@ -145,7 +144,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
   Future<void> _getChartData() async {
     final List<Trend> _trends =
         await ref.read(trendRepositoryProvider.notifier).getTotalTrends();
-    chartData = TrendChartDataModel.getChartData(_trends, chartData);
+    chartData = TrendChartDataModel.getChartData(ref:ref, trends: _trends);
 
     ///: 현재 전체 지갑의 잔액 총 합
     final List<Wallet> wallets =
@@ -195,7 +194,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       if (futureChartData.isEmpty) {
         ///: 첫 날 데이터
         futureChartData
-            .add(TrendChartDataModel(chartData.last.date, totalBalance));
+            .add(TrendChartDataModel(chartData.last.name,chartData.last.date, totalBalance));
 
         ///: 두 번째 날 데이터
         totalBalance += average;

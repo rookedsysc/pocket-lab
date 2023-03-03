@@ -83,8 +83,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
   }
 
   void initRiverpod() {
-    setState(() {
-    });
+    setState(() {});
     _calendarState = ref.watch(calendarProvider);
     _pickerYear = _calendarState.focusedDay.year;
     if (_calendarState.selectedDay != null) {
@@ -144,7 +143,6 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
           ),
           AnimatedSize(
               curve: Curves.easeInOut,
-              vsync: this,
               duration: Duration(milliseconds: 300),
               child: generateMonths()),
           const SizedBox(

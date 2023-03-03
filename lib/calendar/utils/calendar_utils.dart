@@ -23,11 +23,13 @@ class CalendarUtils {
   }
 
   ///# 이번 주의 첫 날(일요일) 이번 주의 마지막 날(토요일) 계산
-  CalendartWeekModel getEndOfWeek(
+  ///# 이번 달 내에서 첫 주를 계산할 경우 월의 첫 날짜가 일요일이 아닌 경우에도 이번 달의 첫 주로 계산
+  ///: ex) 5월 1일이 목요일이면 목요일이 주의 시작으로 5월 첫 째주가 5월 1일이 되는 식으로 계산됨
+  CalendarWeekModel getEndOfWeekByMonth(
       {required DateTime date, required int index}) {
     final nextMonth = DateTime(date.year, date.month + 1, 1);
     date = DateTime(date.year, date.month, 1);
-    CalendartWeekModel weekModel = CalendartWeekModel(
+    CalendarWeekModel weekModel = CalendarWeekModel(
         firstDayOfWeek: date,
         lastDayOfWeek: date.add(Duration(days: 6 - date.weekday)));
     int lastIndex = getWeeksInMonth(date);
@@ -37,7 +39,7 @@ class CalendarUtils {
         ///# 첫 번째 주인 경우
         if (index == 0) {
           int _weekDay = date.weekday == 7 ? 0 : date.weekday;
-          weekModel = CalendartWeekModel(
+          weekModel = CalendarWeekModel(
               firstDayOfWeek: date,
               lastDayOfWeek: date.add(Duration(days: 6 - _weekDay)));
           break;
@@ -49,14 +51,14 @@ class CalendarUtils {
           if (date.isAfter(nextMonth)) {
             final DateTime _lastDayOfWeek =
                 DateTime(nextMonth.year, nextMonth.month, nextMonth.day - 1);
-            weekModel = CalendartWeekModel(
+            weekModel = CalendarWeekModel(
                 firstDayOfWeek: getFirstDayOfWeek(_lastDayOfWeek),
                 lastDayOfWeek: _lastDayOfWeek);
           }
 
           ///# 날짜가 다음 달로 넘어가지 않았을 경우
           else {
-            weekModel = CalendartWeekModel(
+            weekModel = CalendarWeekModel(
                 firstDayOfWeek: getFirstDayOfWeek(date),
                 lastDayOfWeek: getFirstDayOfWeek(date).add(Duration(days: 6)));
           }
@@ -95,10 +97,11 @@ class CalendarUtils {
   }
 }
 
-class CalendartWeekModel {
+class CalendarWeekModel {
   final DateTime firstDayOfWeek;
   final DateTime lastDayOfWeek;
+  final String? weekName;
 
-  CalendartWeekModel(
-      {required this.firstDayOfWeek, required this.lastDayOfWeek});
+  CalendarWeekModel(
+      {this.weekName,required this.firstDayOfWeek, required this.lastDayOfWeek});
 }

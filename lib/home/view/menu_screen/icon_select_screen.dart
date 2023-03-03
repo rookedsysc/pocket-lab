@@ -56,7 +56,7 @@ class IconSelectScreen extends ConsumerWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Column(
                       children: [

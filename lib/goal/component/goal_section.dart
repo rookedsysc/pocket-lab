@@ -95,7 +95,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           color: Theme.of(context).cardColor),
       child: Center(
         child: Text(
@@ -115,7 +115,7 @@ class _GoalHeaderState extends ConsumerState<GoalSection> {
     return Container(
               height: 50,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
             color: Theme.of(context).cardColor),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

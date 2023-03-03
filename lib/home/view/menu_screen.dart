@@ -9,6 +9,7 @@ import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
 import 'package:pocket_lab/home/view/menu_screen/wallet_config_screen.dart';
@@ -20,6 +21,7 @@ class MenuScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         top: true,
         child: Column(

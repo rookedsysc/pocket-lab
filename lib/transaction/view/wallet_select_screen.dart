@@ -55,7 +55,7 @@ class WalletSelectScreen extends ConsumerWidget {
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             decoration: BoxDecoration(
                               color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

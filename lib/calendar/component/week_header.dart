@@ -25,7 +25,7 @@ class WeekHeader extends ConsumerWidget {
         height: 50.0,
         width: 125.0,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(5.0),
             color: Theme.of(context).cardColor),
         child: _weeksTransactionColumn(
             textTheme: Theme.of(context).textTheme, ref: ref),
@@ -38,8 +38,8 @@ class WeekHeader extends ConsumerWidget {
     final date = ref.watch(calendarProvider).focusedDay;
     double totalIncome = 0.0;
     double totalExpenditure = 0.0;
-    CalendartWeekModel week =
-        CalendarUtils().getEndOfWeek(date: date, index: index);
+    CalendarWeekModel week =
+        CalendarUtils().getEndOfWeekByMonth(date: date, index: index);
 
     return StreamBuilder<List<Transaction>>(
         stream: ref

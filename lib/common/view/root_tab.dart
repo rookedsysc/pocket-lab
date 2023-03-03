@@ -61,6 +61,8 @@ class _RootTabState extends ConsumerState<RootTab>
   }
 
   Widget _bottomNavigationBar() => BottomNavigationBar(
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    elevation: 0,
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -69,7 +71,7 @@ class _RootTabState extends ConsumerState<RootTab>
                 : Icons.stacked_bar_chart_outlined),
             label: 'Chart',
           ),
-          //TODO: jtab 추가시 수정
+          //TODO: tab 추가시 수정
           BottomNavigationBarItem(
             icon: Icon(index == 1 ? Icons.home : Icons.home_outlined),
             label: 'Home',

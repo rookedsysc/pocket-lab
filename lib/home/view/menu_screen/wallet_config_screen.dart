@@ -17,6 +17,7 @@ import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/provider/budget_type_provider.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
 import 'package:sheet/route.dart';
@@ -68,12 +69,19 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             //: widget.wallet != null일 경우는 edit mode
             if (widget.wallet != null) {
               await walletRepository.configWallet(widget.wallet!);
+              await ref
+                  .read(trendRepositoryProvider.notifier)
+                  .syncTrend(widget.wallet!.id);
             } else {
               //: 선택된 아이콘 저장
               //: add mode
               await walletRepository.configWallet(_wallet);
+              await ref
+                  .read(trendRepositoryProvider.notifier)
+                  .syncTrend(_wallet.id);
             }
             await GetDailyBudget(ref).main();
+
             Navigator.of(context).pop();
           }
         });
@@ -132,10 +140,11 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _amountInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
-    _wallet.budget.balance = double.parse(newValue);
-    _wallet.budget.originBalance = double.parse(newValue);
-    widget.wallet?.budget.originBalance = double.parse(newValue);
-    widget.wallet?.budget.balance = double.parse(newValue);
+    String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(newValue);
+    _wallet.budget.balance = double.parse(_amountOnlyDigit);
+    _wallet.budget.originBalance = double.parse(_amountOnlyDigit);
+    widget.wallet?.budget.originBalance = double.parse(_amountOnlyDigit);
+    widget.wallet?.budget.balance = double.parse(_amountOnlyDigit);
   }
 
   FormFieldValidator<String?> _amountInputTileValidator() => (String? val) {
@@ -231,7 +240,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             height: 0,
             color: Theme.of(context).primaryColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          style: Theme.of(context).textTheme.bodyMedium,
           value: initialValue,
           isDense: true,
           items: BudgetType.values
@@ -262,7 +272,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
           onTap: () => showCupertinoModalPopup(
               context: context, builder: (context) => IconSelectScreen()),
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
             //: 선태된 이미지
             child: Image.asset(
               ref.watch(selectedIconProvider),
@@ -325,6 +335,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   void _balanceInputTileOnSaved(String? newValue) {
     if (newValue == null || newValue.isEmpty) return;
+
     /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
     /// 숫자만 추출하여 double로 변환
     String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(newValue);

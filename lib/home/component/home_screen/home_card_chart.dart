@@ -28,7 +28,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
     trendStreamSubscription = trendStream.listen((event) {
       if (mounted) {
         setState(() {
-          chartData = TrendChartDataModel.getChartData(event, chartData);
+          chartData = TrendChartDataModel.getChartData(trends: event, ref: ref);
         });
       }
     });
@@ -43,10 +43,27 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(5),
       child: SfCartesianChart(
           //# 그래프 가시 범위
-          onActualRangeChanged: (ActualRangeChangedArgs args) {
+          onActualRangeChanged: _onActualRangeChanged(),
+          //# x축 설정
+          primaryXAxis: _primaryXAxis(),
+          //# y축 설정
+          primaryYAxis: _primaryYAxis(),
+          //: 기본 패딩 없앰
+          margin: EdgeInsets.zero,
+          //: 기본 테두리 안보이게 설정
+          plotAreaBorderWidth: 0,
+          enableSideBySideSeriesPlacement: false,
+          series: <ChartSeries<TrendChartDataModel, DateTime>>[
+            _splineAreaSeries(context),
+          ]),
+    );
+  }
+
+  ChartActualRangeChangedCallback _onActualRangeChanged() {
+    return (ActualRangeChangedArgs args) {
             if (args.axisName == 'primaryYAxis') {
               // : chartData의 가장 최소값
               args.visibleMin = _getMinimumValue();
@@ -68,20 +85,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
               }
               args.visibleMax = max * 1.75;
             }
-          },
-          //# x축 설정
-          primaryXAxis: _primaryXAxis(),
-          //# y축 설정
-          primaryYAxis: _primaryYAxis(),
-          //: 기본 패딩 없앰
-          margin: EdgeInsets.zero,
-          //: 기본 테두리 안보이게 설정
-          plotAreaBorderWidth: 0,
-          enableSideBySideSeriesPlacement: false,
-          series: <ChartSeries<TrendChartDataModel, DateTime>>[
-            _splineAreaSeries(context),
-          ]),
-    );
+          };
   }
 
   NumericAxis _primaryYAxis() {

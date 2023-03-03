@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
-import 'package:pocket_lab/home/component/home_screen/home_card_chart.dart';
+import 'dart:math';
 import 'package:pocket_lab/home/model/trend_model.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
@@ -44,7 +44,7 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     return todayTrend;
   }
 
-  ///# 모든 Trend List를 wallet 별로 반환
+  ///* 모든 Trend List를 wallet 별로 반환
   Future<Map<int, List<Trend>>> getAllTrendsAsMap() async {
     final isar = await ref.read(isarProvieder.future);
     Map<int, List<Trend>> allTrends = {};
@@ -102,7 +102,7 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     final isar = await ref.read(isarProvieder.future);
 
     ///: 같은 날짜인 데이터에 새로운 데이터 덮어쓰기
-    final Trend? trend = await getTodayTrend(walletId);
+    Trend? trend = await getTodayTrend(walletId);
 
     ///: trend가 null이면 새로운 데이터 쓰기
     if (trend == null) {
@@ -116,12 +116,14 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
       return;
     }
 
-    final Wallet? wallet = await ref
+    Wallet? wallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(walletId);
 
-    ///: 선택한 지갑이 없다면 종료
-    if (wallet == null) {
+    if (wallet != null) {
+      trend.walletName = wallet.name;
+    } else {
+      //: 선택한 지갑이나 trend 데이터가 없으면 종료
       return;
     }
 
@@ -132,5 +134,25 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     await isar.writeTxn(() async {
       await isar.trends.put(trend);
     });
+  }
+
+  ///* 90일치 Random Trend 데이터 생성
+  Future<void> createRandomTrend() async {
+    final isar = await ref.read(isarProvieder.future);
+    final wallets =
+        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+
+    for (Wallet wallet in wallets) {
+      //: 90일치 데이터 
+      for (int i = 0; i < 90; i++) {
+        await isar.writeTxn(() async {
+          await isar.trends.put(Trend(
+            walletName: await ref.read(walletRepositoryProvider.notifier).getWalletName(wallet.id),
+              walletId: wallet.id,
+              amount: Random().nextInt(100000).toDouble(),
+              date: DateTime.now().subtract(Duration(days: i))));
+        });
+      }
+    }
   }
 }

@@ -70,6 +70,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
     return SfCircularChart(
         //# 카테고리 목록
         legend: Legend(
+          textStyle: Theme.of(context).textTheme.bodySmall,
             overflowMode: LegendItemOverflowMode.wrap,
             isVisible: widget.isHome,
             position: LegendPosition.bottom),

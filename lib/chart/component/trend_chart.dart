@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/common/util/date_utils.dart';
+import 'package:pocket_lab/chart/component/trend_chart_series.dart';
+import 'package:pocket_lab/chart/utils/chart_type.dart';
 import 'package:pocket_lab/home/model/trend_chart_data_model.dart';
 import 'package:pocket_lab/home/model/trend_model.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
@@ -15,6 +17,7 @@ class TrendChart extends ConsumerStatefulWidget {
 
 class _TrendChartState extends ConsumerState<TrendChart> {
   Map<int, List<Trend>> trendList = {};
+  late TooltipBehavior _tooltipBehavior;
 
   @override
   void didChangeDependencies() {
@@ -26,6 +29,11 @@ class _TrendChartState extends ConsumerState<TrendChart> {
         setState(() {});
       }
     });
+
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+      header: null,
+    );
     super.didChangeDependencies();
   }
 
@@ -36,58 +44,74 @@ class _TrendChartState extends ConsumerState<TrendChart> {
       height: 300,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: SfCartesianChart(
-          primaryXAxis: DateTimeAxis(),
-          primaryYAxis: NumericAxis(),
+          primaryXAxis: _xAxis(
+            trendMap: trendList,
+          ),
+          primaryYAxis: NumericAxis(
+            //: Y축에 표시되는 값에 Format 적용
+            numberFormat: NumberFormat.simpleCurrency()),
+
+          ///# 스크롤 가능하게 설정
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
+
+          tooltipBehavior: _tooltipBehavior,
           series: [
             ...List.generate(
               trendList.keys.length,
               (index) {
                 int _indexKey = trendList.keys.toList()[index];
-                return _trendSeries(
+                return _seriesBySegmentType(
                     color: colorGenerate(index % 12),
                     walletId: _indexKey,
-                    trends: trendList[_indexKey]!);
+                    trends: trendList[_indexKey]!,
+                    ref: ref);
               },
             ),
           ]),
     );
   }
 
-  LineSeries _trendSeries(
+  CategoryAxis _xAxis({required Map<int, List<Trend>> trendMap}) {
+    double _maximum = 0;
+    List<TrendChartDataModel> chartData = [];
+
+    trendMap.forEach((key, value) {
+      chartData = TrendChartDataModel.getChartData(ref: ref, trends: value);
+      if (chartData.length > _maximum) {
+        _maximum = chartData.length.toDouble() - 1;
+      }
+    });
+
+    if (_maximum > 10) {
+      _maximum = 10;
+    }
+
+    return CategoryAxis(
+      isInversed: true,
+      autoScrollingMode: AutoScrollingMode.end,
+      visibleMaximum: _maximum,
+      axisLine: AxisLine(width: 0),
+      //: x축 간격
+      interval: 1
+    );
+  }
+
+  ///# 현재 선택한 segmentType에 따라 차트를 그림
+  LineSeries _seriesBySegmentType(
       {required Color color,
       required int walletId,
-      required List<Trend> trends}) {
-    List<TrendChartDataModel> chartData = _getChartData(trends);
-    return 
-      LineSeries<TrendChartDataModel, DateTime>(
-          dataSource: chartData,
-          color: color,
-          xValueMapper: (data, _) => data.date,
-          yValueMapper: (data, _) => data.amount);
-      // LineSeries<TrendChartDataModel, DateTime>(
-      //     dataLabelSettings: DataLabelSettings(
-      //         isVisible: true,
-      //         builder: (data, point, series, pointIndex, seriesIndex) {
-      //           if (pointIndex == chartData.length - 1) {
-      //             return Text(
-      //               CustomDateUtils()
-      //                   .dateToFyyyyMMdd(futureChartData[pointIndex].date),
-      //               style: Theme.of(context).textTheme.bodyMedium,
-      //             );
-      //           }
-      //           return SizedBox();
-      //         }),
-      //     dataLabelMapper: (_, index) => index + 1 == futureChartData.length
-      //         ? CustomDateUtils().dateToFyyyyMMdd(futureChartData[index].date)
-      //         : null,
-      //     dataSource: futureChartData,
-      //     color: Theme.of(context).primaryColor,
-      //     xValueMapper: (data, _) => data.date,
-      //     yValueMapper: (data, _) => data.amount)
-    
+      required List<Trend> trends,
+      required WidgetRef ref}) {
+    List<TrendChartDataModel> chartData = [];
+    chartData = TrendChartDataModel.getChartData(ref: ref, trends: trends);
+
+    return TrendChartSeries()
+        .seriesBySegmentType(color: color, chartData: chartData);
   }
 
   Color colorGenerate(int index) {
@@ -119,13 +143,6 @@ class _TrendChartState extends ConsumerState<TrendChart> {
       default:
         return Colors.black;
     }
-  }
-
-  List<TrendChartDataModel> _getChartData(List<Trend> trends) {
-    List<TrendChartDataModel> chartData = [];
-    chartData = TrendChartDataModel.getChartData(trends, chartData);
-
-    return chartData;
   }
 
   Future<void> fetchTrendList() async {

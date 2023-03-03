@@ -80,7 +80,7 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   BoxDecoration _boxDecoration(BuildContext context) {
     return BoxDecoration(
       color: Theme.of(context).cardColor,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(5),
     );
   }
 

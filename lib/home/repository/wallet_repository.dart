@@ -125,4 +125,11 @@ class WalletRepository extends StateNotifier<Wallet> {
     final walletCount = await isar.wallets.count();
     return walletCount == 0;
   }
+
+  // 지갑 id로 지갑 이름 가져오기
+  Future<String> getWalletName(int walletId) async {
+    final isar = await ref.read(isarProvieder.future);
+    final wallet = await isar.wallets.get(walletId);
+    return wallet!.name;
+  }
 }

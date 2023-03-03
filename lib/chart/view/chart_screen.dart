@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:pocket_lab/chart/component/chart_segement.dart';
 import 'package:pocket_lab/chart/component/trend_chart.dart';
 
 class ChartScreen extends StatelessWidget {
@@ -11,8 +12,16 @@ class ChartScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         top: true,
-        child: TrendChart(),
-      ),
+        child: ListView(
+          children: [
+            ChartSegment(),
+            SizedBox(
+              height: 8.0,
+            ),
+            TrendChart(),
+          ],
+        )
+        ),
     );
   }
 }

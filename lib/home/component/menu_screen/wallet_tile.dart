@@ -9,6 +9,7 @@ import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
+import 'package:pocket_lab/common/util/get_daily_budget.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -37,6 +38,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         await ref
             .read(walletRepositoryProvider.notifier)
             .setIsSelectedWallet(widget.wallet.id);
+            GetDailyBudget(ref).main();
 
         zoomDrawerController.toggle!();
       },
@@ -57,7 +59,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           //: container 안 여백
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
             //: isSelected인 타일 색상 primaryColor로
             color: widget.wallet.isSelected
                 ? Theme.of(context).primaryColor

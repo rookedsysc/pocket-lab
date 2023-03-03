@@ -65,12 +65,13 @@ class MyApp extends ConsumerWidget {
       iconTheme: const IconThemeData(color: Colors.black),
 
       //# 메인 색상
-      primaryColor: const Color.fromRGBO(74, 110, 94, 1),
-      primaryColorLight: const Color.fromRGBO(74, 110, 94, 0.75),
+      primaryColor: Color(0xff00BFFE),
+      primaryColorLight: Color.fromRGBO(111, 207, 251, 1),
 
       //# 텍스트 색상
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w900),
+        bodyLarge: TextStyle(
+            color: Colors.black, fontSize: 20, fontWeight: FontWeight.w900),
         //: 보통 글귀
         bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
         bodySmall: TextStyle(color: Colors.black, fontSize: 12),
@@ -78,15 +79,15 @@ class MyApp extends ConsumerWidget {
       cardColor: Colors.white);
 
   final ThemeData _darkTheme = ThemeData(
-    scaffoldBackgroundColor: const Color.fromRGBO(30, 30, 30, 1),
+    scaffoldBackgroundColor: const Color.fromRGBO(18, 18, 18, 1),
     //* Bottom Navigation Bar 색
     canvasColor: const Color.fromRGBO(30, 30, 30, 1),
 
     iconTheme: const IconThemeData(color: Colors.white),
 
     //# 메인 색상
-    primaryColor: const Color.fromRGBO(74, 110, 94, 1),
-    primaryColorLight: const Color.fromRGBO(74, 110, 94, 0.75),
+    primaryColor: Color(0xff00BFFE),
+    primaryColorLight: Color(0x8000BFFE),
 
     //# 텍스트 색상
     textTheme: const TextTheme(
@@ -96,6 +97,6 @@ class MyApp extends ConsumerWidget {
       bodySmall: TextStyle(color: Colors.white, fontSize: 10),
     ),
 
-    cardColor: Colors.black,
+    cardColor: const Color.fromRGBO(30, 30, 30, 1),
   );
 }

@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/component/trend_chart_series.dart';
-import 'package:pocket_lab/chart/utils/chart_type.dart';
 import 'package:pocket_lab/home/model/trend_chart_data_model.dart';
 import 'package:pocket_lab/home/model/trend_model.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
@@ -37,11 +36,12 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     super.didChangeDependencies();
   }
 
+  ///! Build 함수 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      height: 300,
+      height: 400,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(5),
@@ -51,14 +51,50 @@ class _TrendChartState extends ConsumerState<TrendChart> {
             trendMap: trendList,
           ),
           primaryYAxis: NumericAxis(
-            //: Y축에 표시되는 값에 Format 적용
-            numberFormat: NumberFormat.simpleCurrency()),
+              //: Y축에 표시되는 값에 Format 적용
+              numberFormat: NumberFormat.simpleCurrency()),
 
           ///# 스크롤 가능하게 설정
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
           ),
+          tooltipBehavior: _tooltipBehavior,
+          series: [
+            ...List.generate(
+              trendList.keys.length,
+              (index) {
+                int _indexKey = trendList.keys.toList()[index];
+                return _seriesBySegmentType(
+                    color: colorGenerate(index % 12),
+                    walletId: _indexKey,
+                    trends: trendList[_indexKey]!,
+                    ref: ref);
+              },
+            ),
+          ]),
+    );
+  }
 
+  Container _chart(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      height: 400,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: SfCartesianChart(
+          primaryXAxis: _xAxis(
+            trendMap: trendList,
+          ),
+          primaryYAxis: NumericAxis(
+              //: Y축에 표시되는 값에 Format 적용
+              numberFormat: NumberFormat.simpleCurrency()),
+
+          ///# 스크롤 가능하게 설정
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
           tooltipBehavior: _tooltipBehavior,
           series: [
             ...List.generate(
@@ -92,13 +128,12 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     }
 
     return CategoryAxis(
-      isInversed: true,
-      autoScrollingMode: AutoScrollingMode.end,
-      visibleMaximum: _maximum,
-      axisLine: AxisLine(width: 0),
-      //: x축 간격
-      interval: 1
-    );
+        isInversed: true,
+        autoScrollingMode: AutoScrollingMode.end,
+        visibleMaximum: _maximum,
+        axisLine: AxisLine(width: 0),
+        //: x축 간격
+        interval: 1);
   }
 
   ///# 현재 선택한 segmentType에 따라 차트를 그림

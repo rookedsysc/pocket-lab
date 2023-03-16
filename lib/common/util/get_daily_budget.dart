@@ -146,7 +146,7 @@ class GetDailyBudget {
     await ref.read(transactionRepositoryProvider.notifier).configTransaction(
         Transaction(
             transactionType: TransactionType.income,
-            category: null,
+            categoryId: null,
             amount: amount,
             date: DateTime.now(),
             title: dailyBudget,

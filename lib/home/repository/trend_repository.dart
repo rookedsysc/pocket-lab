@@ -144,7 +144,7 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
 
     for (Wallet wallet in wallets) {
       //: 90일치 데이터 
-      for (int i = 0; i < 90; i++) {
+      for (int i = 0; i < 300 ; i++) {
         await isar.writeTxn(() async {
           await isar.trends.put(Trend(
             walletName: await ref.read(walletRepositoryProvider.notifier).getWalletName(wallet.id),

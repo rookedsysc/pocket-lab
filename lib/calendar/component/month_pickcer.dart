@@ -47,7 +47,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
           child: TextButton(
             onPressed: () {
               setState(() {
-                ref.read(calendarProvider.notifier).setFocusedDay(dateTime);
+                ref.refresh(calendarProvider.notifier).setFocusedDay(dateTime);
                 debugPrint("[*] Month Picker Select Month : ${ref.read(calendarProvider).focusedDay}");
               });
             },

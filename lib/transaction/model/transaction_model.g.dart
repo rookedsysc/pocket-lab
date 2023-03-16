@@ -22,9 +22,9 @@ const TransactionSchema = CollectionSchema(
       name: r'amount',
       type: IsarType.double,
     ),
-    r'category': PropertySchema(
+    r'categoryId': PropertySchema(
       id: 1,
-      name: r'category',
+      name: r'categoryId',
       type: IsarType.long,
     ),
     r'date': PropertySchema(
@@ -86,7 +86,7 @@ void _transactionSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDouble(offsets[0], object.amount);
-  writer.writeLong(offsets[1], object.category);
+  writer.writeLong(offsets[1], object.categoryId);
   writer.writeDateTime(offsets[2], object.date);
   writer.writeString(offsets[3], object.title);
   writer.writeLong(offsets[4], object.toWallet);
@@ -102,7 +102,7 @@ Transaction _transactionDeserialize(
 ) {
   final object = Transaction(
     amount: reader.readDouble(offsets[0]),
-    category: reader.readLongOrNull(offsets[1]),
+    categoryId: reader.readLongOrNull(offsets[1]),
     date: reader.readDateTime(offsets[2]),
     title: reader.readString(offsets[3]),
     toWallet: reader.readLongOrNull(offsets[4]),
@@ -311,62 +311,63 @@ extension TransactionQueryFilter
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
-      categoryIsNull() {
+      categoryIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'category',
+        property: r'categoryId',
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
-      categoryIsNotNull() {
+      categoryIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'category',
+        property: r'categoryId',
       ));
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> categoryEqualTo(
-      int? value) {
+  QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
+      categoryIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'category',
+        property: r'categoryId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
-      categoryGreaterThan(
+      categoryIdGreaterThan(
     int? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'category',
+        property: r'categoryId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
-      categoryLessThan(
+      categoryIdLessThan(
     int? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'category',
+        property: r'categoryId',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterFilterCondition> categoryBetween(
+  QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
+      categoryIdBetween(
     int? lower,
     int? upper, {
     bool includeLower = true,
@@ -374,7 +375,7 @@ extension TransactionQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'category',
+        property: r'categoryId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -906,15 +907,15 @@ extension TransactionQuerySortBy
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByCategory() {
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByCategoryId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'category', Sort.asc);
+      return query.addSortBy(r'categoryId', Sort.asc);
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByCategoryDesc() {
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByCategoryIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'category', Sort.desc);
+      return query.addSortBy(r'categoryId', Sort.desc);
     });
   }
 
@@ -994,15 +995,15 @@ extension TransactionQuerySortThenBy
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterSortBy> thenByCategory() {
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> thenByCategoryId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'category', Sort.asc);
+      return query.addSortBy(r'categoryId', Sort.asc);
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QAfterSortBy> thenByCategoryDesc() {
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> thenByCategoryIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'category', Sort.desc);
+      return query.addSortBy(r'categoryId', Sort.desc);
     });
   }
 
@@ -1088,9 +1089,9 @@ extension TransactionQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Transaction, Transaction, QDistinct> distinctByCategory() {
+  QueryBuilder<Transaction, Transaction, QDistinct> distinctByCategoryId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'category');
+      return query.addDistinctBy(r'categoryId');
     });
   }
 
@@ -1142,9 +1143,9 @@ extension TransactionQueryProperty
     });
   }
 
-  QueryBuilder<Transaction, int?, QQueryOperations> categoryProperty() {
+  QueryBuilder<Transaction, int?, QQueryOperations> categoryIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'category');
+      return query.addPropertyName(r'categoryId');
     });
   }
 

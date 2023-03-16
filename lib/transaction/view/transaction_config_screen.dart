@@ -56,7 +56,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     amount: 0,
     title: "",
     date: DateTime.now(),
-    category: 1,
+    categoryId: 1,
     transactionType: TransactionType.expenditure,
     walletId: 0,
   );
@@ -206,7 +206,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
     //: 거래타입이 지출이고 widget.category가 존재하지 않으면 category 선택하라는 알림창 나옴
     if (widget.transactionType == TransactionType.expenditure &&
-        widget.transaction?.category == null &&
+        widget.transaction?.categoryId == null &&
         widget.isEdit) {
       debugPrint("Check3");
       _categoryInputTileHint = "Select Category";
@@ -297,7 +297,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             String _initialValue;
             try {
               _initialValue = categories
-                  .firstWhere((element) => element.id == _transaction.category)
+                  .firstWhere((element) => element.id == _transaction.categoryId)
                   .name;
             } catch (e) {
               _initialValue = categories.first.name;
@@ -325,10 +325,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                     )
                     .toList(),
                 onChanged: (val) {
-                  _transaction.category = categories
+                  _transaction.categoryId = categories
                       .firstWhere((element) => element.name == val)
                       .id;
-                  widget.transaction?.category = categories
+                  widget.transaction?.categoryId = categories
                       .firstWhere((element) => element.name == val)
                       .id;
                   setState(() {});

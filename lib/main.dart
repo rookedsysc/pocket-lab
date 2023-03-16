@@ -65,8 +65,8 @@ class MyApp extends ConsumerWidget {
       iconTheme: const IconThemeData(color: Colors.black),
 
       //# 메인 색상
-      primaryColor: Color(0xff00BFFE),
-      primaryColorLight: Color.fromRGBO(111, 207, 251, 1),
+      primaryColor: Color.fromRGBO(52, 120, 246, 1),
+      primaryColorLight: Color.fromRGBO(89, 171, 225, 1),
 
       //# 텍스트 색상
       textTheme: const TextTheme(
@@ -86,8 +86,8 @@ class MyApp extends ConsumerWidget {
     iconTheme: const IconThemeData(color: Colors.white),
 
     //# 메인 색상
-    primaryColor: Color(0xff00BFFE),
-    primaryColorLight: Color(0x8000BFFE),
+    primaryColor: Color.fromRGBO(52, 120, 246, 1),
+    primaryColorLight: Color.fromRGBO(89, 171, 225, 1),
 
     //# 텍스트 색상
     textTheme: const TextTheme(

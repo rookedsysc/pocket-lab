@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/chart/component/trend_chart.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -161,21 +162,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
   ///* 목표 도달까지 걸릴 일 수를 return 해주고
   ///* futureChartData에 미래 데이터를 추가해줌
   int _getFutureChartData(double totalBalance) {
-    List<double> diffList = [];
-
-    //: 평균 금액
-    for (int i = 0; i < chartData.length; i++) {
-      if (i != 0) {
-        double diff = 0;
-        if (chartData[i - 1].amount < 0) {
-          diff = chartData[i].amount + chartData[i - 1].amount;
-        } else {
-          diff = chartData[i].amount - chartData[i - 1].amount;
-        }
-
-        diffList.add(diff);
-      }
-    }
+    List<double> diffList = TrendChartDataModel.getDiffList(chartData: chartData);
 
     average = (diffList.fold<double>(0, (prev, next) => prev + next)) /
         diffList.length;

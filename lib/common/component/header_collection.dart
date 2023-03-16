@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-enum HeaderType {
-  wallet,
-  goal,
-  total,
-}
+enum HeaderType { wallet, goal, total, trendChart, categoryChart }
 
 class HeaderCollection extends StatelessWidget {
   final HeaderType headerType;
-  const HeaderCollection ({required this.headerType, super.key});
+  const HeaderCollection({required this.headerType, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +27,10 @@ class HeaderCollection extends StatelessWidget {
         return "Goal";
       case HeaderType.total:
         return "Total Balance";
+      case HeaderType.trendChart:
+        return "Trend Chart";
+      case HeaderType.categoryChart:
+        return "Category Chart";
     }
   }
 }

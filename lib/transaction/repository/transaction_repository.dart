@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
+import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
+import 'package:pocket_lab/transaction/repository/category_repository.dart';
 
 final transactionRepositoryProvider =
     StateNotifierProvider<TransactionRepositoryNotifier, Transaction>((ref) {
@@ -16,7 +18,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   TransactionRepositoryNotifier(this.ref)
       : super(Transaction(
             transactionType: TransactionType.expenditure,
-            category: 0,
+            categoryId: 0,
             amount: 0,
             date: DateTime.now(),
             title: "",
@@ -56,8 +58,12 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   ///# 해당 월 지출 Stream으로 가져오기
-  Stream<List<Transaction>> getThisMonthExpenditure(DateTime date) async* {
+  Stream<List<Transaction>> getSelectMonthExpenditure(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
+    //: 카테고리 ID를 통해서 Category Name, Color 가져옴
+    //: 그전에 DB와 Local Cache간의 데이터 동기화 
+    await ref.read(categoryRepositoryProvider.notifier).syncCategoryCache(); 
+
     yield* isar.transactions
         .filter()
         .transactionTypeEqualTo(TransactionType.expenditure)
@@ -68,7 +74,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   ///# 해당 월 Transaction Stream으로 가져오기
-  Stream<List<Transaction>> getThisMonthTransactions(DateTime date) async* {
+  Stream<List<Transaction>> getSelectMonthTransactions(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
 
     yield* isar.transactions

@@ -22,10 +22,5 @@ class DiaryScreen extends ConsumerWidget {
 
   Future<void> _createRandomTrend(WidgetRef ref) async{
     await ref.read(trendRepositoryProvider.notifier).createRandomTrend();
-
-    
-
   }
-
-
 }

@@ -32,16 +32,20 @@ class _CalendarState extends ConsumerState<Calendar> {
   late CalendarModel _calendarState;
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
     initRiverpod();
+    super.didChangeDependencies();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       //* 월의 주 수에 따라서 Calendar 크기 조정
       height: CalendarUtils().getCalendarHeight(_focusedDay),
       child: StreamBuilder<List<Transaction>>(
           stream: ref
               .watch(transactionRepositoryProvider.notifier)
-              .getThisMonthTransactions(_focusedDay),
+              .getSelectMonthTransactions(_focusedDay),
           builder: (context, snapshot) {
             if (snapshot.data == null) {
               return CustomSkeletone().square(
@@ -112,6 +116,7 @@ class _CalendarState extends ConsumerState<Calendar> {
     return (focusedDay) {
       debugPrint("[*] onPageChaged : ${focusedDay.toString()}");
       setState(() {
+        _focusedDay = focusedDay;
         ref.read(calendarProvider.notifier).setFocusedDay(focusedDay);
       });
     };

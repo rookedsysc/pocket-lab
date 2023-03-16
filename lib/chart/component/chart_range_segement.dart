@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/chart/utils/chart_type.dart';
+import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 
-class ChartSegment extends ConsumerWidget {
+class ChartRangeSegment extends ConsumerWidget {
   late final int groupValue;
-  ChartSegment({super.key});
+  ChartRangeSegment({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,7 +14,7 @@ class ChartSegment extends ConsumerWidget {
         borderColor: Colors.transparent,
         selectedColor: Theme.of(context).primaryColor,
         unselectedColor: Theme.of(context).cardColor,
-        groupValue: ref.watch(chartSegmentProvider).index,
+        groupValue: ref.watch(chartRangeProvider).index,
         children: {
           0: buildSegment(
             text: "D",
@@ -40,25 +38,25 @@ class ChartSegment extends ConsumerWidget {
           ),
         },
         onValueChanged: (value) {
-          ref.refresh(chartSegmentProvider.notifier).state =
+          ref.refresh(chartRangeProvider.notifier).state =
               numberToType(value);
         });
   }
 
-  ChartSegmentType numberToType(int num) {
+  ChartRangeType numberToType(int num) {
     switch (num) {
       case 0:
-        return ChartSegmentType.daily;
+        return ChartRangeType.daily;
       case 1:
-        return ChartSegmentType.weekly;
+        return ChartRangeType.weekly;
       case 2:
-        return ChartSegmentType.monthly;
+        return ChartRangeType.monthly;
       case 3:
-        return ChartSegmentType.quarterly;
+        return ChartRangeType.quarterly;
       case 4:
-        return ChartSegmentType.yearly;
+        return ChartRangeType.yearly;
       default:
-        return ChartSegmentType.daily;
+        return ChartRangeType.daily;
     }
   }
 

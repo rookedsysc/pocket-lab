@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/component/trend_chart.dart';
-import 'package:pocket_lab/chart/utils/chart_type.dart';
+import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/model/trend_model.dart';
 
@@ -9,7 +9,7 @@ class TrendChartDataModel {
   String name;
   DateTime date;
   double amount;
-  TrendChartDataModel(this.name,this.date, this.amount);
+  TrendChartDataModel(this.name, this.date, this.amount);
 
   String get getLabel {
     return this.label;
@@ -24,7 +24,8 @@ class TrendChartDataModel {
     DateTime? date,
     double? amount,
   }) {
-    return TrendChartDataModel(this.name, date ?? this.date, amount ?? this.amount);
+    return TrendChartDataModel(
+        this.name, date ?? this.date, amount ?? this.amount);
   }
 
   static List<TrendChartDataModel> getChartData({
@@ -43,7 +44,9 @@ class TrendChartDataModel {
       if (trendMap.containsKey(label)) {
         trendMap[label]!.add(_trendChartDataModel);
       } else {
-        trendMap[label] = [TrendChartDataModel(trend.walletName,trend.date, trend.amount)];
+        trendMap[label] = [
+          TrendChartDataModel(trend.walletName, trend.date, trend.amount)
+        ];
       }
     }
 
@@ -55,8 +58,8 @@ class TrendChartDataModel {
         double amount = trendChartList.fold<double>(
             0, (previousValue, element) => element.amount + previousValue);
         double average = amount / trendChartList.length;
-        TrendChartDataModel result =
-            TrendChartDataModel(trendChartList.last.name,trendChartList.last.date, average);
+        TrendChartDataModel result = TrendChartDataModel(
+            trendChartList.last.name, trendChartList.last.date, average);
         result.setLabel = _getStringLabel(trendChartList[0].date, ref);
         chartData.add(result);
       }
@@ -69,22 +72,44 @@ class TrendChartDataModel {
     return chartData;
   }
 
+  ///* 차트의 각 데이터의 차이를 List로 정렬해서 반환함
+  static List<double> getDiffList({
+    required List<TrendChartDataModel> chartData,
+  }) {
+    chartData.sort((a, b) => a.date.compareTo(b.date));
+    List<double> diffList = [];
+    for (int i = 0; i < chartData.length; i++) {
+      if (i != 0) {
+        double diff = 0;
+        //: 빼야할 금액이 음수일 경우 -- 는 +연산이 되므로 더해줌
+        if (chartData[i - 1].amount < 0) {
+          diff = chartData[i].amount + chartData[i - 1].amount;
+        } else {
+          diff = chartData[i].amount - chartData[i - 1].amount;
+        }
+
+        diffList.add(diff);
+      }
+    }
+    return diffList;
+  }
+
   static String _getStringLabel(DateTime date, WidgetRef ref) {
-    switch (ref.watch(chartSegmentProvider)) {
+    switch (ref.watch(chartRangeProvider)) {
       //: 일별
-      case ChartSegmentType.daily:
+      case ChartRangeType.daily:
         return CustomDateUtils().dateToFyyyyMMdd(date);
       //: 주별
-      case ChartSegmentType.weekly:
+      case ChartRangeType.weekly:
         return CustomDateUtils().dateToWeek(date);
       //: 월별
-      case ChartSegmentType.monthly:
+      case ChartRangeType.monthly:
         return CustomDateUtils().monthToEng(date.month);
       //: 분기별
-      case ChartSegmentType.quarterly:
+      case ChartRangeType.quarterly:
         return CustomDateUtils().dateToQuarter(date);
       //: 연간
-      case ChartSegmentType.yearly:
+      case ChartRangeType.yearly:
         return "${date.year}";
       default:
         return CustomDateUtils().dateToFyyyyMMdd(date);

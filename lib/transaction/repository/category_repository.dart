@@ -11,13 +11,15 @@ import 'package:pocket_lab/transaction/model/transaction_model.dart';
 //   return CategoryRepository(await isar);
 // });
 
-final categoryRepositoryProvider = StateNotifierProvider<CategoryRepository, TransactionCategory>((ref) {
+final categoryRepositoryProvider =
+    StateNotifierProvider<CategoryRepository, List<TransactionCategory>>((ref) {
   return CategoryRepository(ref);
 });
 
-class CategoryRepository extends StateNotifier<TransactionCategory>{
+class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   final Ref ref;
-  CategoryRepository(this.ref): super(TransactionCategory(name: "", color: "##000000"));
+  CategoryRepository(this.ref)
+      : super([TransactionCategory(name: "", color: "##000000")]);
 
   //# 모든 카테고리
   Stream<List<TransactionCategory>> getAllCategories() async* {
@@ -49,5 +51,13 @@ class CategoryRepository extends StateNotifier<TransactionCategory>{
     isar.writeTxn(() async {
       await isar.transactionCategorys.delete(category.id);
     });
+  }
+
+  //# DB <===> Local Cache 동기화 
+  Future<void> syncCategoryCache() async {
+    //DB에 있는 모든 카테고리 현재 state와 연동
+    final isar = await ref.read(isarProvieder.future);
+    // 모든 카테고리 불러오기
+    state = await isar.transactionCategorys.where().findAll();
   }
 }

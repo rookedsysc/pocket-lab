@@ -84,9 +84,9 @@ Trend _trendDeserialize(
     amount: reader.readDouble(offsets[0]),
     date: reader.readDateTime(offsets[1]),
     walletId: reader.readLong(offsets[2]),
+    walletName: reader.readStringOrNull(offsets[3]) ?? "",
   );
   object.id = id;
-  object.walletName = reader.readString(offsets[3]);
   return object;
 }
 
@@ -104,7 +104,7 @@ P _trendDeserializeProp<P>(
     case 2:
       return (reader.readLong(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? "") as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }

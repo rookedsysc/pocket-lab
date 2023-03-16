@@ -1,24 +1,12 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:isar/isar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
-import 'package:pocket_lab/goal/component/modal_fit.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
-import 'package:sheet/route.dart';
-import 'package:sheet/sheet.dart';
 
 class GoalSection extends ConsumerStatefulWidget {
   const GoalSection({super.key});

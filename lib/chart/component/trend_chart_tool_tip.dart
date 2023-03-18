@@ -36,7 +36,7 @@ class _TrendChartToolTipState extends ConsumerState<TrendChartToolTip> {
       margin: EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

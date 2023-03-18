@@ -240,7 +240,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             height: 0,
             color: Theme.of(context).primaryColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           style: Theme.of(context).textTheme.bodyMedium,
           value: initialValue,
           isDense: true,
@@ -272,7 +272,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
           onTap: () => showCupertinoModalPopup(
               context: context, builder: (context) => IconSelectScreen()),
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             //: 선태된 이미지
             child: Image.asset(
               ref.watch(selectedIconProvider),

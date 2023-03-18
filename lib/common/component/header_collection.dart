@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-enum HeaderType { wallet, goal, total, trendChart, categoryChart }
+enum HeaderType { wallet, goal, total, trendChart, categoryChart, averageGrowth }
 
 class HeaderCollection extends StatelessWidget {
   final HeaderType headerType;
@@ -31,6 +31,8 @@ class HeaderCollection extends StatelessWidget {
         return "Trend Chart";
       case HeaderType.categoryChart:
         return "Category Chart";
+        case HeaderType.averageGrowth:
+        return "Average Growth";
     }
   }
 }

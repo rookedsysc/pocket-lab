@@ -308,7 +308,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   height: 0,
                   color: Theme.of(context).primaryColor,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 value: _initialValue,
                 items: categories
                     .map(

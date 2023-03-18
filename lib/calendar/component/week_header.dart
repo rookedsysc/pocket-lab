@@ -20,7 +20,7 @@ class WeekHeader extends ConsumerWidget {
         height: 50.0,
         width: 125.0,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(8),
             color: Theme.of(context).cardColor),
         child: _weeksTransactionColumn(
             textTheme: Theme.of(context).textTheme, ref: ref),

@@ -34,7 +34,7 @@ class WalletCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(5.0),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Stack(
           children: [

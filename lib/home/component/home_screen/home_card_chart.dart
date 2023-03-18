@@ -43,7 +43,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(8),
       child: SfCartesianChart(
           //# 그래프 가시 범위
           onActualRangeChanged: _onActualRangeChanged(),

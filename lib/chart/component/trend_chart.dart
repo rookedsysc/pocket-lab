@@ -44,7 +44,7 @@ class _TrendChartState extends ConsumerState<TrendChart> {
       height: 400,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: SfCartesianChart(
           primaryXAxis: _xAxis(
@@ -81,7 +81,7 @@ class _TrendChartState extends ConsumerState<TrendChart> {
       height: 400,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: SfCartesianChart(
           primaryXAxis: _xAxis(

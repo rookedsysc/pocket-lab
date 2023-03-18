@@ -41,7 +41,7 @@ class InputTile extends StatelessWidget {
                   padding: EdgeInsets.only(right: 4),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Center(child: inputField)),

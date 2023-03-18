@@ -25,6 +25,10 @@ class TrendChartView extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: HeaderCollection(headerType: HeaderType.averageGrowth),
+          ),
           TrendChartToolTip()
       ],
     );

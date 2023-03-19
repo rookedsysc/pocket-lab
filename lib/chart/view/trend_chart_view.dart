@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:pocket_lab/chart/component/chart_range_segement.dart';
+import 'package:pocket_lab/chart/component/transaction_trend_chart.dart';
 import 'package:pocket_lab/chart/component/trend_chart.dart';
 import 'package:pocket_lab/chart/component/trend_chart_tool_tip.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
@@ -12,8 +13,7 @@ class TrendChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return ListView(
       children: [
         ///* Trend Chart
         Padding(
@@ -25,6 +25,10 @@ class TrendChartView extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: HeaderCollection(headerType: HeaderType.transactionTrendChart),
+          ),
+          TransactionTrendChart(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: HeaderCollection(headerType: HeaderType.averageGrowth),

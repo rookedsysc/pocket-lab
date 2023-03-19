@@ -1,4 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 
 class CustomDateUtils  {
   ///* Date / String을 String yyyy-MM-dd 형식으로 변환
@@ -165,6 +167,28 @@ class CustomDateUtils  {
         return 'Dec';
       default:
         return '';
+    }
+  }
+
+    String getStringLabel(DateTime date, WidgetRef ref) {
+    switch (ref.watch(chartRangeProvider)) {
+      //: 일별
+      case ChartRangeType.daily:
+        return CustomDateUtils().dateToFyyyyMMdd(date);
+      //: 주별
+      case ChartRangeType.weekly:
+        return CustomDateUtils().dateToWeek(date);
+      //: 월별
+      case ChartRangeType.monthly:
+        return CustomDateUtils().monthToEng(date.month);
+      //: 분기별
+      case ChartRangeType.quarterly:
+        return CustomDateUtils().dateToQuarter(date);
+      //: 연간
+      case ChartRangeType.yearly:
+        return "${date.year}";
+      default:
+        return CustomDateUtils().dateToFyyyyMMdd(date);
     }
   }
 }

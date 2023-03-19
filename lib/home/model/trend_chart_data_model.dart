@@ -39,8 +39,8 @@ class TrendChartDataModel {
     for (var trend in trends) {
       TrendChartDataModel _trendChartDataModel =
           TrendChartDataModel(trend.walletName, trend.date, trend.amount);
-      _trendChartDataModel.setLabel = _getStringLabel(trend.date, ref);
-      String label = _getStringLabel(trend.date, ref);
+      _trendChartDataModel.setLabel = CustomDateUtils().getStringLabel(trend.date, ref);
+      String label = CustomDateUtils().getStringLabel(trend.date, ref);
       if (trendMap.containsKey(label)) {
         trendMap[label]!.add(_trendChartDataModel);
       } else {
@@ -60,7 +60,7 @@ class TrendChartDataModel {
         double average = amount / trendChartList.length;
         TrendChartDataModel result = TrendChartDataModel(
             trendChartList.last.name, trendChartList.last.date, average);
-        result.setLabel = _getStringLabel(trendChartList[0].date, ref);
+        result.setLabel = CustomDateUtils().getStringLabel(trendChartList[0].date, ref);
         chartData.add(result);
       }
     }
@@ -92,27 +92,5 @@ class TrendChartDataModel {
       }
     }
     return diffList;
-  }
-
-  static String _getStringLabel(DateTime date, WidgetRef ref) {
-    switch (ref.watch(chartRangeProvider)) {
-      //: 일별
-      case ChartRangeType.daily:
-        return CustomDateUtils().dateToFyyyyMMdd(date);
-      //: 주별
-      case ChartRangeType.weekly:
-        return CustomDateUtils().dateToWeek(date);
-      //: 월별
-      case ChartRangeType.monthly:
-        return CustomDateUtils().monthToEng(date.month);
-      //: 분기별
-      case ChartRangeType.quarterly:
-        return CustomDateUtils().dateToQuarter(date);
-      //: 연간
-      case ChartRangeType.yearly:
-        return "${date.year}";
-      default:
-        return CustomDateUtils().dateToFyyyyMMdd(date);
-    }
   }
 }

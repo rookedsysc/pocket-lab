@@ -115,6 +115,13 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .findAll();
   }
 
+  //* 모든 트랜잭션 가져오기
+  Future<List<Transaction>> getAllTransactions() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.where().findAll();
+  }
+
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
   Future<Transaction?> getLastDailyBudgetByWalletId(Wallet wallet) async {
     final Isar isar = await ref.read(isarProvieder.future);

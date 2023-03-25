@@ -31,6 +31,7 @@ class TrendChartDataModel {
   static List<TrendChartDataModel> getChartData({
     required List<Trend> trends,
     required WidgetRef ref,
+    bool isHome = false,
   }) {
     List<TrendChartDataModel> chartData = [];
     Map<String, List<TrendChartDataModel>> trendMap = {};
@@ -39,7 +40,11 @@ class TrendChartDataModel {
     for (var trend in trends) {
       TrendChartDataModel _trendChartDataModel =
           TrendChartDataModel(trend.walletName, trend.date, trend.amount);
-      _trendChartDataModel.setLabel = CustomDateUtils().getStringLabel(trend.date, ref);
+      if (isHome) {
+        ref.read(chartRangeProvider.notifier).state = ChartRangeType.daily;
+      }
+      _trendChartDataModel.setLabel =
+          CustomDateUtils().getStringLabel(trend.date, ref);
       String label = CustomDateUtils().getStringLabel(trend.date, ref);
       if (trendMap.containsKey(label)) {
         trendMap[label]!.add(_trendChartDataModel);
@@ -60,7 +65,8 @@ class TrendChartDataModel {
         double average = amount / trendChartList.length;
         TrendChartDataModel result = TrendChartDataModel(
             trendChartList.last.name, trendChartList.last.date, average);
-        result.setLabel = CustomDateUtils().getStringLabel(trendChartList[0].date, ref);
+        result.setLabel =
+            CustomDateUtils().getStringLabel(trendChartList[0].date, ref);
         chartData.add(result);
       }
     }

@@ -7,6 +7,5 @@ final chartTypeProvider = StateProvider<int>((ref) {
 enum ChartSegmentType{
   trendChart,
   categoryChart,
-  categoryTrendChart,
   timeChart,
 }

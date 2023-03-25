@@ -35,6 +35,7 @@ class TransactionTrendChartDataModel {
       }
     }
 
+
     return chartData;
   }
 }

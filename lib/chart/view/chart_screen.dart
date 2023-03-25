@@ -21,7 +21,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = TabController(length: 4, vsync: this);
+    controller = TabController(length: 3, vsync: this, initialIndex: ref.watch(chartTypeProvider));
     controller.addListener(() {
       tabListner();
     });
@@ -48,7 +48,6 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
                     controller: controller,
                     children: [
                       TrendChartView(),
-                      CategoryPieChartView(),
                       CategoryPieChartView(),
                       CategoryPieChartView(),
                     ]),
@@ -93,6 +92,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
   void tabListner() {
     if (mounted) {
       index = ref.watch(chartTypeProvider);
+      controller.animateTo(index);
     }
   }
 }

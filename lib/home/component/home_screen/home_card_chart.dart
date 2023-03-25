@@ -8,7 +8,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomeCardChart extends ConsumerStatefulWidget {
   final int walletId;
-  const HomeCardChart({required this.walletId, super.key});
+  bool isHome;
+  HomeCardChart({this.isHome = false, required this.walletId, super.key});
 
   @override
   ConsumerState<HomeCardChart> createState() => _HomeCardChartState();
@@ -28,7 +29,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
     trendStreamSubscription = trendStream.listen((event) {
       if (mounted) {
         setState(() {
-          chartData = TrendChartDataModel.getChartData(trends: event, ref: ref);
+          chartData = TrendChartDataModel.getChartData(isHome: widget.isHome,trends: event, ref: ref);
         });
       }
     });
@@ -64,28 +65,28 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
 
   ChartActualRangeChangedCallback _onActualRangeChanged() {
     return (ActualRangeChangedArgs args) {
-            if (args.axisName == 'primaryYAxis') {
-              // : chartData의 가장 최소값
-              args.visibleMin = _getMinimumValue();
+      if (args.axisName == 'primaryYAxis') {
+        // : chartData의 가장 최소값
+        args.visibleMin = _getMinimumValue();
 
-              ///# 최대값 구함
-              double max;
-              try {
-                max = chartData[0].amount;
-              } catch (e) {
-                max = 0;
-              }
-              //: chartData의 가장 최대값
-              for (TrendChartDataModel data in chartData) {
-                if (data.amount < 0) {
-                  max = data.amount.abs() > max ? data.amount.abs() : max;
-                } else {
-                  max = data.amount > max ? data.amount : max;
-                }
-              }
-              args.visibleMax = max * 1.75;
-            }
-          };
+        ///# 최대값 구함
+        double max;
+        try {
+          max = chartData[0].amount;
+        } catch (e) {
+          max = 0;
+        }
+        //: chartData의 가장 최대값
+        for (TrendChartDataModel data in chartData) {
+          if (data.amount < 0) {
+            max = data.amount.abs() > max ? data.amount.abs() : max;
+          } else {
+            max = data.amount > max ? data.amount : max;
+          }
+        }
+        args.visibleMax = max * 1.75;
+      }
+    };
   }
 
   NumericAxis _primaryYAxis() {

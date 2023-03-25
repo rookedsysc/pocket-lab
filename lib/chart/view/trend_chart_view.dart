@@ -13,28 +13,40 @@ class TrendChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ///* Trend Chart
-        Padding(
-            padding: const EdgeInsets.all(16),
-            child: HeaderCollection(headerType: HeaderType.trendChart),
+        _padding(),
+        ChartRangeSegment(),
+        Expanded(
+          child: ListView(
+            children: [
+              ///* Trend Chart
+              _padding(
+                header: HeaderCollection(headerType: HeaderType.trendChart),
+              ),
+        
+              TrendChart(),
+              SizedBox(
+                height: 8,
+              ),
+              _padding(
+                header: HeaderCollection(headerType: HeaderType.transactionTrendChart),
+              ),
+              TransactionTrendChart(),
+              _padding(),
+              TrendChartToolTip()
+            ],
           ),
-          ChartRangeSegment(),
-          TrendChart(),
-          SizedBox(
-            height: 8,
-          ),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: HeaderCollection(headerType: HeaderType.transactionTrendChart),
-          ),
-          TransactionTrendChart(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: HeaderCollection(headerType: HeaderType.averageGrowth),
-          ),
-          TrendChartToolTip()
+        ),
       ],
+    );
+  }
+
+  Padding _padding({HeaderCollection? header}) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16, left: 16, bottom: 4, top: 8),
+      child: header,
     );
   }
 }

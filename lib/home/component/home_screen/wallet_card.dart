@@ -38,7 +38,7 @@ class WalletCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            HomeCardChart(walletId: walletId),
+            HomeCardChart(walletId: walletId, isHome: true,),
             Padding(
             padding: const EdgeInsets.only(
                 right: 24.0, left: 24.0, top: 36.0, bottom: 24.0),

@@ -50,7 +50,7 @@ class _TrendChartState extends ConsumerState<TrendChart> {
               trends: trendList[_indexKey]!,
               ref: ref);
         },
-      ),
+      ), xAxis: _xAxis(),
     );
   }
 
@@ -96,5 +96,27 @@ class _TrendChartState extends ConsumerState<TrendChart> {
       default:
         return Colors.black;
     }
+  }
+    CategoryAxis _xAxis() {
+    double _maximum = 0;
+    List<TrendChartDataModel> chartData = [];
+
+    trendList.forEach((key, value) {
+      chartData = TrendChartDataModel.getChartData(ref: ref, trends: value);
+      if (chartData.length > _maximum) {
+        _maximum = chartData.length.toDouble() - 1;
+      }
+    });
+
+    if (_maximum > 10) {
+      _maximum = 10;
+    }
+
+    return CategoryAxis(
+        autoScrollingMode: AutoScrollingMode.end,
+        visibleMaximum: _maximum,
+        axisLine: AxisLine(width: 0),
+        //: x축 간격
+        interval: 1);
   }
 }

@@ -8,7 +8,10 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TrendChartLayout extends ConsumerStatefulWidget {
   final List<ChartSeries> seriesList;
-  const TrendChartLayout ({required this.seriesList,super.key});
+  //: X축 간격
+  final CategoryAxis xAxis;
+  const TrendChartLayout(
+      {required this.xAxis, required this.seriesList, super.key});
 
   @override
   ConsumerState<TrendChartLayout> createState() => _TrendChartLayoutState();
@@ -17,7 +20,6 @@ class TrendChartLayout extends ConsumerStatefulWidget {
 class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
   Map<int, List<Trend>> trendList = {};
   late TooltipBehavior _tooltipBehavior;
-
 
   @override
   void didChangeDependencies() {
@@ -48,9 +50,7 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: SfCartesianChart(
-          primaryXAxis: _xAxis(
-            trendMap: trendList,
-          ),
+          primaryXAxis: widget.xAxis,
           primaryYAxis: NumericAxis(
               //: Y축에 표시되는 값에 Format 적용
               numberFormat: NumberFormat.simpleCurrency()),
@@ -60,33 +60,9 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
             enablePanning: true,
           ),
           tooltipBehavior: _tooltipBehavior,
-          series: 
-            widget.seriesList
-          ),
+          series: widget.seriesList),
     );
   }
 
-  CategoryAxis _xAxis({required Map<int, List<Trend>> trendMap}) {
-    double _maximum = 0;
-    List<TrendChartDataModel> chartData = [];
 
-    trendMap.forEach((key, value) {
-      chartData = TrendChartDataModel.getChartData(ref: ref, trends: value);
-      if (chartData.length > _maximum) {
-        _maximum = chartData.length.toDouble() - 1;
-      }
-    });
-
-    if (_maximum > 10) {
-      _maximum = 10;
-    }
-
-    return CategoryAxis(
-        isInversed: true,
-        autoScrollingMode: AutoScrollingMode.end,
-        visibleMaximum: _maximum,
-        axisLine: AxisLine(width: 0),
-        //: x축 간격
-        interval: 1);
-  }
 }

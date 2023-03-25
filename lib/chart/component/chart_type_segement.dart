@@ -10,7 +10,7 @@ class ChartTypeSegement extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final width = MediaQuery.of(context).size.width / 4;
+    final width = MediaQuery.of(context).size.width / 3;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: CupertinoSegmentedControl(
@@ -29,16 +29,10 @@ class ChartTypeSegement extends ConsumerWidget {
           1: buildSegment(
             width: width,
             icon: Icon(Icons.pie_chart, size: width * 0.1),
-            text: "Category Pie",
+            text: "Category",
             textTheme: textTheme,
           ),
           2: buildSegment(
-            width: width,
-            icon: Icon(Icons.timeline, size: width * 0.1),
-            text: "Category Trend",
-            textTheme: textTheme,
-          ),
-          3: buildSegment(
             width: width,
             icon: Icon(Icons.view_column, size: width * 0.1),
             text: "Time HeatMap",
@@ -57,8 +51,6 @@ class ChartTypeSegement extends ConsumerWidget {
       case 1:
         return ChartSegmentType.categoryChart;
       case 2:
-        return ChartSegmentType.categoryTrendChart;
-      case 3:
         return ChartSegmentType.timeChart;
       default:
         return ChartSegmentType.trendChart;
@@ -73,17 +65,16 @@ class ChartTypeSegement extends ConsumerWidget {
   }) {
     return SizedBox(
       width: width,
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center, 
+        children: [
         icon,
         SizedBox(width: 8),
-        SizedBox(
-          //: icon 과 text 사이의 간격(8) + padding(4)
-          width: (width * 0.8) - 20,
-          child: Text(
-            text,
-            style: textTheme.bodySmall?.copyWith(fontSize: 10),
-            overflow: TextOverflow.ellipsis,
-          ),
+        Text(
+          text,
+          style: textTheme.bodySmall?.copyWith(fontSize: 10),
+          overflow: TextOverflow.ellipsis,
         ),
       ]),
     );

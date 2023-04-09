@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_lab/common/model/trend_multiple_chart_model.dart';
+import 'package:pocket_lab/chart/model/transaction_trend_chart_data_model.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

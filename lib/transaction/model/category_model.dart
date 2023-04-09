@@ -5,11 +5,12 @@ part 'category_model.g.dart';
 
 @Collection()
 class TransactionCategory {
-  Id id = Isar.autoIncrement;
+  Id id;
   String name;
   String color;
 
   TransactionCategory({
+    this.id = Isar.autoIncrement,
     required this.name,
     required this.color,
   });

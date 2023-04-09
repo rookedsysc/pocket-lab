@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 
-class CustomDateUtils  {
+class CustomDateUtils {
   ///* Date / String을 String yyyy-MM-dd 형식으로 변환
   String dateToFyyyyMMdd(dynamic date) {
     if (date is DateTime) {
@@ -22,6 +23,11 @@ class CustomDateUtils  {
   DateTime getLastDate(List<DateTime> dateTimes) {
     dateTimes.sort();
     return dateTimes.last;
+  }
+
+  ///* 년, 월, 일만 return 
+  DateTime onlyDate(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
   }
 
   //* 다음 budgetDate를 구함
@@ -86,6 +92,13 @@ class CustomDateUtils  {
     return '${monthToEng(firstSunday.month)} ${numberToOrdinal(weekOfMonth)}';
   }
 
+  DateTime findFirstSundayOfWeek(DateTime date) {
+    if (date.weekday != 7) {
+      date = date.subtract(Duration(days: date.weekday));
+    }
+    return date;
+  }
+
   ///* 시간 > 분기로 변환
   String dateToQuarter(DateTime date) {
     switch (date.month) {
@@ -107,6 +120,30 @@ class CustomDateUtils  {
         return '${date.year} 4th Quarter';
       default:
         return '';
+    }
+  }
+
+  ///* 해당 쿼터의 첫 번째 날을 Return
+  DateTime dateToFirstQuarterDay(DateTime date) {
+    switch (date.month) {
+      case 1:
+      case 2:
+      case 3:
+        return DateTime(date.year, 1, 1);
+      case 4:
+      case 5:
+      case 6:
+        return DateTime(date.year, 4, 1);
+      case 7:
+      case 8:
+      case 9:
+        return DateTime(date.year, 7, 1);
+      case 10:
+      case 11:
+      case 12:
+        return DateTime(date.year, 10, 1);
+      default:
+        return DateTime(date.year, 1, 1);
     }
   }
 
@@ -170,7 +207,7 @@ class CustomDateUtils  {
     }
   }
 
-    String getStringLabel(DateTime date, WidgetRef ref) {
+  String getStringLabel(DateTime date, WidgetRef ref) {
     switch (ref.watch(chartRangeProvider)) {
       //: 일별
       case ChartRangeType.daily:
@@ -189,6 +226,29 @@ class CustomDateUtils  {
         return "${date.year}";
       default:
         return CustomDateUtils().dateToFyyyyMMdd(date);
+    }
+  }
+
+  ///* 세그먼트의 타입에 따라서 첫 번째 날짜를 반환
+  DateTime getFristDateBySegment(DateTime date, WidgetRef ref) {
+    switch (ref.watch(chartRangeProvider)) {
+      //: 일별
+      case ChartRangeType.daily:
+        return date;
+      //: 주별
+      case ChartRangeType.weekly:
+        return CustomDateUtils().findFirstSundayOfWeek(date);
+      //: 월별
+      case ChartRangeType.monthly:
+        return DateTime(date.year, date.month, 1);
+      //: 분기별
+      case ChartRangeType.quarterly:
+        return CustomDateUtils().dateToFirstQuarterDay(date);
+      //: 연간
+      case ChartRangeType.yearly:
+        return DateTime(date.year, 1, 1);
+      default:
+        return date;
     }
   }
 }

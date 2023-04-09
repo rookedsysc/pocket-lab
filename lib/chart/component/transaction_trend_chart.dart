@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/component/transaction_trend_chart_series.dart';
 import 'package:pocket_lab/chart/layout/trend_chart_layout.dart';
-import 'package:pocket_lab/common/model/trend_multiple_chart_model.dart';
+import 'package:pocket_lab/chart/model/transaction_trend_chart_data_model.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
@@ -82,6 +82,6 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
         axisLine: AxisLine(width: 0),
         //: x축 간격
         interval: 1,
-        isInversed: false);
+        isInversed: true);
   }
 }

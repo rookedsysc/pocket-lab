@@ -6,8 +6,9 @@ import 'package:pocket_lab/transaction/model/transaction_model.dart';
 class TransactionTrendChartDataModel {
   String label = '';
   double amount;
+  DateTime date;
 
-  TransactionTrendChartDataModel({required this.amount});
+  TransactionTrendChartDataModel({required this.date, required this.amount});
 
   set setLabel(String changeValue) {
     label = changeValue;
@@ -21,9 +22,10 @@ class TransactionTrendChartDataModel {
     List<TransactionTrendChartDataModel> chartData = [];
 
     for (var transaction in transactions) {
-     if (type == transaction.transactionType) {
+      if (type == transaction.transactionType) {
         TransactionTrendChartDataModel _trendChartDataModel =
-            TransactionTrendChartDataModel(amount: transaction.amount);
+            TransactionTrendChartDataModel(
+                amount: transaction.amount, date: transaction.date);
         String label = CustomDateUtils().getStringLabel(transaction.date, ref);
         _trendChartDataModel.setLabel = label;
         try {
@@ -35,6 +37,8 @@ class TransactionTrendChartDataModel {
       }
     }
 
+    chartData.sort((a, b) => a.date.compareTo(b.date));
+    chartData = chartData.reversed.toList();
 
     return chartData;
   }

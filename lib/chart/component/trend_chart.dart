@@ -1,14 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/chart/component/trend_chart_series.dart';
 import 'package:pocket_lab/chart/layout/trend_chart_layout.dart';
-import 'package:pocket_lab/common/model/trend_multiple_chart_model.dart';
-import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
+import 'package:pocket_lab/chart/utils/trend_chart_series.dart';
 import 'package:pocket_lab/home/model/trend_chart_data_model.dart';
 import 'package:pocket_lab/home/model/trend_model.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
-import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TrendChart extends ConsumerStatefulWidget {
@@ -19,16 +15,14 @@ class TrendChart extends ConsumerStatefulWidget {
 }
 
 class _TrendChartState extends ConsumerState<TrendChart> {
-  Map<int, List<Trend>> trendList = {};
-  List<TransactionTrendChartDataModel> incomeChartData = [];
-  List<TransactionTrendChartDataModel> expenditureChartData = [];
+  Map<int, List<Trend>> _trendList = {};
 
   @override
   void didChangeDependencies() {
     final futureTrends =
         ref.read(trendRepositoryProvider.notifier).getAllTrendsAsMap();
     futureTrends.then((value) {
-      trendList = value;
+      _trendList = value;
       if (mounted) {
         setState(() {});
       }
@@ -36,21 +30,21 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     super.didChangeDependencies();
   }
 
-  ///! Build 함수
   @override
   Widget build(BuildContext context) {
     return TrendChartLayout(
       seriesList: List.generate(
-        trendList.keys.length,
+        _trendList.keys.length,
         (index) {
-          int _indexKey = trendList.keys.toList()[index];
+          int _indexKey = _trendList.keys.toList()[index];
           return _seriesBySegmentType(
               color: _colorGenerate(index % 12),
               walletId: _indexKey,
-              trends: trendList[_indexKey]!,
+              trends: _trendList[_indexKey]!,
               ref: ref);
         },
-      ), xAxis: _xAxis(),
+      ),
+      xAxis: _xAxis(),
     );
   }
 
@@ -97,11 +91,15 @@ class _TrendChartState extends ConsumerState<TrendChart> {
         return Colors.black;
     }
   }
-    CategoryAxis _xAxis() {
+
+
+
+
+  CategoryAxis _xAxis() {
     double _maximum = 0;
     List<TrendChartDataModel> chartData = [];
 
-    trendList.forEach((key, value) {
+    _trendList.forEach((key, value) {
       chartData = TrendChartDataModel.getChartData(ref: ref, trends: value);
       if (chartData.length > _maximum) {
         _maximum = chartData.length.toDouble() - 1;
@@ -113,6 +111,7 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     }
 
     return CategoryAxis(
+        isInversed: true,
         autoScrollingMode: AutoScrollingMode.end,
         visibleMaximum: _maximum,
         axisLine: AxisLine(width: 0),

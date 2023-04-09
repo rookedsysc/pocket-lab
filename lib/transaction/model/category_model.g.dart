@@ -72,9 +72,9 @@ TransactionCategory _transactionCategoryDeserialize(
 ) {
   final object = TransactionCategory(
     color: reader.readString(offsets[0]),
+    id: id,
     name: reader.readString(offsets[1]),
   );
-  object.id = id;
   return object;
 }
 

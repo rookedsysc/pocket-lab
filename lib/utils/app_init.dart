@@ -32,8 +32,12 @@ class AppInit {
 
   Future<void> categoryInit() async {
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
-    categoryRepository.getAllCategories().listen((event) {
+    categoryRepository.allCategoriesStream().listen((event) {
       if (event.isEmpty) {
+        categoryRepository.configCategory(
+            TransactionCategory(id: 1,name: "For Chart", color: "FFFFFF")); //: 갈색
+        categoryRepository.configCategory(
+            TransactionCategory(id: 2, name: "No Element", color: "000000")); //: 갈색
         categoryRepository.configCategory(TransactionCategory(
             name: "Living Expense", color: "964B00")); //: 갈색
         categoryRepository.configCategory(

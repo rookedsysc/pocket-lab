@@ -9,8 +9,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class TrendChartLayout extends ConsumerStatefulWidget {
   final List<ChartSeries> seriesList;
   //: X축 간격
-  final CategoryAxis xAxis;
-  const TrendChartLayout(
+  final ChartAxis xAxis;
+  TrendChartLayout(
       {required this.xAxis, required this.seriesList, super.key});
 
   @override
@@ -35,6 +35,7 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
     _tooltipBehavior = TooltipBehavior(
       enable: true,
       header: null,
+
     );
     super.didChangeDependencies();
   }
@@ -54,7 +55,6 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
           primaryYAxis: NumericAxis(
               //: Y축에 표시되는 값에 Format 적용
               numberFormat: NumberFormat.simpleCurrency()),
-
           ///# 스크롤 가능하게 설정
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,

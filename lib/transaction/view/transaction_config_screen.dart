@@ -282,7 +282,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       fieldName: "Select Category",
       inputField: StreamBuilder<List<TransactionCategory>>(
           stream:
-              ref.watch(categoryRepositoryProvider.notifier).getAllCategories(),
+              ref.watch(categoryRepositoryProvider.notifier).allCategoriesStream(),
           builder: (context, snapshot) {
             if (snapshot.data == null || snapshot.data!.isEmpty) {
               return Center(

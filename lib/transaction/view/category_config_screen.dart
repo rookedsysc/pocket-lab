@@ -27,7 +27,7 @@ class _CategoryConfigScreenState extends ConsumerState<CategoryConfigScreen> {
     super.didChangeDependencies();
     _categoryListener = ref
         .watch(categoryRepositoryProvider.notifier)
-        .getAllCategories()
+        .allCategoriesStream()
         .listen((event) {
           categories = event;
       setState(() {});

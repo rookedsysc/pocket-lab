@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
+import 'package:pocket_lab/chart/repository/category_trend_chart_repository.dart';
 import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -36,6 +37,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     await isar.writeTxn(() async {
       await isar.transactions.put(transaction);
     });
+    await ref.read(categoryTrendChartProvider.notifier).createCategoryTrend(transaction);
   }
 
   ///# 최근 한 달 지출 Stream으로 가져오기
@@ -179,6 +181,20 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     return isar.transactions.where().findAll();
   }
 
+  //* 모든 지출내역 가져오기
+    Future<List<Transaction>> getAllExpenditures() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).findAll();
+  }
+
+  //* 특정 카테고리의 지출내역들 가져오기
+  Future<List<Transaction>> getTransactionsByCategoryId(int id) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).categoryIdEqualTo(id).findAll();
+  }
+
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
   Future<Transaction?> getLastDailyBudgetByWalletId(Wallet wallet) async {
     final Isar isar = await ref.read(isarProvieder.future);
@@ -209,15 +225,19 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
       for (int i = 0; i < 100; i++) {
         int _categoryId =
             _categoryIds[Random().nextInt(_categoryIds.length)].id;
-        await isar.writeTxn(() async {
-          await isar.transactions.put(Transaction(
+                      Transaction _randomTransaction = Transaction(
               transactionType: TransactionType.expenditure,
               categoryId: _categoryId,
               amount: Random().nextInt(100000).toDouble(),
               date: DateTime.now().subtract(Duration(days: i)),
               title: "Test $i",
-              walletId: _wallet.id));
+              walletId: _wallet.id);
+        await isar.writeTxn(() async {
+          await isar.transactions.put(_randomTransaction);
         });
+        await ref
+            .read(categoryTrendChartProvider.notifier)
+            .createCategoryTrend(_randomTransaction);
       }
     }
   }
@@ -230,6 +250,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
     for (Transaction _transaction in _transactions) {
       _ids.add(_transaction.id);
+      await ref.read(categoryTrendChartProvider.notifier).subtractData(_transaction);
     }
 
     await isar.writeTxn(() async {

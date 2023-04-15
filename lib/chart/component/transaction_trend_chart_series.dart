@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TransactionTrendChartSeries {
   ColumnSeries columnSeriesBySegmentType(
-      {required String seriesName,required Color color, required List<TransactionTrendChartDataModel> chartData}) {
+      {required String seriesName,required Color color, required List<TransactionTrendChartDataModel> chartData, required TextStyle textStyle}) {
     return ColumnSeries<TransactionTrendChartDataModel, String>(
       dataSource: chartData,
       color: color,
@@ -13,6 +13,7 @@ class TransactionTrendChartSeries {
       yValueMapper: (data, _) => data.amount,
       initialSelectedDataIndexes: [chartData.length - 1],
       name: seriesName,
+      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: textStyle)
     );
   }
 }

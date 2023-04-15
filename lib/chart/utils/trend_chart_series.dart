@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TrendChartSeries {
   LineSeries seriesBySegmentType(
-      {required Color color, required List<TrendChartDataModel> chartData}) {
+      {required Color color, required List<TrendChartDataModel> chartData, required TextStyle textStyle}) {
     return LineSeries<TrendChartDataModel, String>(
       markerSettings: MarkerSettings(isVisible: true),
       dataSource: chartData,
@@ -17,12 +17,13 @@ class TrendChartSeries {
       yValueMapper: (data, _) => data.amount,
       initialSelectedDataIndexes: [chartData.length - 1],
       //: tooltip 선택시 header 이름
-      name: chartData.last.name + " Wallet"
+      name: chartData.last.name + " Wallet",
       // dataLabelMapper: (datum, index) => CustomNumberUtils.formatCurrency(datum.amount),
       // dataLabelSettings: DataLabelSettings(
       //   textStyle: TextStyle(color: color),
       //   isVisible: true),
       //
+      dataLabelSettings: DataLabelSettings(isVisible: true, )
     );
   }
 }

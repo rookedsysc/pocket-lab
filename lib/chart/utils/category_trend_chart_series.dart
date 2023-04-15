@@ -9,9 +9,12 @@ class CategoryTrendChartSeries {
     required List<CategoryTrendChartDataModel> chartData,
     //: 마지막 데이터 표시안함
     required bool isFirst,
+    required TextStyle labelTextStyle,
   }) {
     return LineSeries<CategoryTrendChartDataModel, String>(
-      markerSettings: MarkerSettings(isVisible: true, 
+      dataLabelSettings: DataLabelSettings(textStyle: labelTextStyle),
+      markerSettings: MarkerSettings(
+        isVisible: true,
       ),
       dataSource: chartData,
       color: color,

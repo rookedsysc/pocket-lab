@@ -35,7 +35,6 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
     _tooltipBehavior = TooltipBehavior(
       enable: true,
       header: null,
-
     );
     super.didChangeDependencies();
   }

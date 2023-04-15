@@ -50,6 +50,13 @@ class CustomDateUtils {
     return dateA.isBefore(dateB);
   }
 
+  ///* 이전 날짜인지(시간에 상관없이) 구해줌
+  bool isAfterDay(DateTime dateA, DateTime dateB) {
+    dateA = DateTime(dateA.year, dateA.month, dateA.day);
+    dateB = DateTime(dateB.year, dateB.month, dateB.day);
+    return dateA.isAfter(dateB);
+  }
+
   ///* 시간에 상관없이 일수만 가지고 차이 구해줌
   /// dateA - dateB
   int diffDays(DateTime dateA, DateTime dateB) {

@@ -43,11 +43,13 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
               TransactionTrendChartSeries().columnSeriesBySegmentType(
                   seriesName: "Expense",
                   color: Colors.red,
-                  chartData: _expenseData),
+                  chartData: _expenseData,
+                  textStyle: Theme.of(context).textTheme.bodySmall!),
               TransactionTrendChartSeries().columnSeriesBySegmentType(
                   seriesName: "Income",
                   color: Colors.green,
-                  chartData: _incomeData),
+                  chartData: _incomeData,
+                  textStyle: Theme.of(context).textTheme.bodySmall!),
             ],
             xAxis: _categoryAxis(),
           );

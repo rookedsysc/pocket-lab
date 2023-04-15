@@ -42,16 +42,6 @@ const CategoryTrendChartDataModelSchema = CollectionSchema(
       id: 4,
       name: r'label',
       type: IsarType.string,
-    ),
-    r'setDate': PropertySchema(
-      id: 5,
-      name: r'setDate',
-      type: IsarType.dateTime,
-    ),
-    r'setLabel': PropertySchema(
-      id: 6,
-      name: r'setLabel',
-      type: IsarType.string,
     )
   },
   estimateSize: _categoryTrendChartDataModelEstimateSize,
@@ -76,7 +66,6 @@ int _categoryTrendChartDataModelEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.categoryName.length * 3;
   bytesCount += 3 + object.label.length * 3;
-  bytesCount += 3 + object.setLabel.length * 3;
   return bytesCount;
 }
 
@@ -91,8 +80,6 @@ void _categoryTrendChartDataModelSerialize(
   writer.writeString(offsets[2], object.categoryName);
   writer.writeDateTime(offsets[3], object.date);
   writer.writeString(offsets[4], object.label);
-  writer.writeDateTime(offsets[5], object.setDate);
-  writer.writeString(offsets[6], object.setLabel);
 }
 
 CategoryTrendChartDataModel _categoryTrendChartDataModelDeserialize(
@@ -105,12 +92,10 @@ CategoryTrendChartDataModel _categoryTrendChartDataModelDeserialize(
     amount: reader.readDoubleOrNull(offsets[0]) ?? 0,
     categoryId: reader.readLong(offsets[1]),
     categoryName: reader.readString(offsets[2]),
+    date: reader.readDateTime(offsets[3]),
+    label: reader.readString(offsets[4]),
   );
-  object.date = reader.readDateTime(offsets[3]);
   object.id = id;
-  object.label = reader.readString(offsets[4]);
-  object.setDate = reader.readDateTime(offsets[5]);
-  object.setLabel = reader.readString(offsets[6]);
   return object;
 }
 
@@ -130,10 +115,6 @@ P _categoryTrendChartDataModelDeserializeProp<P>(
     case 3:
       return (reader.readDateTime(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
-      return (reader.readDateTime(offset)) as P;
-    case 6:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -748,200 +729,6 @@ extension CategoryTrendChartDataModelQueryFilter on QueryBuilder<
       ));
     });
   }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setDateEqualTo(DateTime value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'setDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setDateGreaterThan(
-    DateTime value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'setDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setDateLessThan(
-    DateTime value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'setDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setDateBetween(
-    DateTime lower,
-    DateTime upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'setDate',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'setLabel',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-          QAfterFilterCondition>
-      setLabelContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'setLabel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-          QAfterFilterCondition>
-      setLabelMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'setLabel',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'setLabel',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterFilterCondition> setLabelIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'setLabel',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension CategoryTrendChartDataModelQueryObject on QueryBuilder<
@@ -1023,34 +810,6 @@ extension CategoryTrendChartDataModelQuerySortBy on QueryBuilder<
       QAfterSortBy> sortByLabelDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'label', Sort.desc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> sortBySetDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setDate', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> sortBySetDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setDate', Sort.desc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> sortBySetLabel() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setLabel', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> sortBySetLabelDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setLabel', Sort.desc);
     });
   }
 }
@@ -1140,34 +899,6 @@ extension CategoryTrendChartDataModelQuerySortThenBy on QueryBuilder<
       return query.addSortBy(r'label', Sort.desc);
     });
   }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> thenBySetDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setDate', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> thenBySetDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setDate', Sort.desc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> thenBySetLabel() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setLabel', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QAfterSortBy> thenBySetLabelDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'setLabel', Sort.desc);
-    });
-  }
 }
 
 extension CategoryTrendChartDataModelQueryWhereDistinct on QueryBuilder<
@@ -1204,20 +935,6 @@ extension CategoryTrendChartDataModelQueryWhereDistinct on QueryBuilder<
       QDistinct> distinctByLabel({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'label', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QDistinct> distinctBySetDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'setDate');
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, CategoryTrendChartDataModel,
-      QDistinct> distinctBySetLabel({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'setLabel', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1263,20 +980,6 @@ extension CategoryTrendChartDataModelQueryProperty on QueryBuilder<
       labelProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'label');
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, DateTime, QQueryOperations>
-      setDateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'setDate');
-    });
-  }
-
-  QueryBuilder<CategoryTrendChartDataModel, String, QQueryOperations>
-      setLabelProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'setLabel');
     });
   }
 }

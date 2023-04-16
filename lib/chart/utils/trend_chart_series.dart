@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_lab/chart/component/trend_chart.dart';
-import 'package:pocket_lab/common/util/custom_number_utils.dart';
-import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/model/trend_chart_data_model.dart';
-import 'package:pocket_lab/home/model/trend_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TrendChartSeries {
@@ -23,7 +19,7 @@ class TrendChartSeries {
       //   textStyle: TextStyle(color: color),
       //   isVisible: true),
       //
-      dataLabelSettings: DataLabelSettings(isVisible: true, )
+      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: textStyle)
     );
   }
 }

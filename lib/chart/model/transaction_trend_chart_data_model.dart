@@ -37,8 +37,6 @@ class TransactionTrendChartDataModel {
       }
     }
 
-    chartData.sort((a, b) => a.date.compareTo(b.date));
-    chartData = chartData.reversed.toList();
 
     return chartData;
   }

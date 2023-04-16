@@ -73,6 +73,7 @@ class TrendChartDataModel {
 
     //: chartData 시간순으로 정렬
     chartData.sort((a, b) => a.date.compareTo(b.date));
+    chartData = chartData.reversed.toList();
 
     return chartData;
   }

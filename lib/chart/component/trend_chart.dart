@@ -57,8 +57,10 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     List<TrendChartDataModel> chartData = [];
     chartData = TrendChartDataModel.getChartData(ref: ref, trends: trends);
 
-    return TrendChartSeries()
-        .seriesBySegmentType(color: color, chartData: chartData);
+    return TrendChartSeries().seriesBySegmentType(
+        color: color,
+        chartData: chartData,
+        textStyle: Theme.of(context).textTheme.bodySmall!);
   }
 
   Color _colorGenerate(int index) {

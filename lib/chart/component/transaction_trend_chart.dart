@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/component/transaction_trend_chart_series.dart';
 import 'package:pocket_lab/chart/layout/trend_chart_layout.dart';
 import 'package:pocket_lab/chart/model/transaction_trend_chart_data_model.dart';
+import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
@@ -61,6 +62,39 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
         type: TransactionType.income, transactions: data, ref: ref);
     _expenseData = TransactionTrendChartDataModel.getChartData(
         type: TransactionType.expenditure, transactions: data, ref: ref);
+
+    //: _income 데이터가 있는 날 중 _expense 데이터가 없는 날에 대해서
+    //: _expnese 데이터를 동일한 label, date에 amount는 0으로 지정해서 넣어줌
+    for (final model in _incomeData) {
+      TransactionTrendChartDataModel? temp;
+      try {
+        temp =
+            _expenseData.firstWhere((element) => element.label == model.label);
+      } catch (e) {}
+      if (temp == null) {
+        temp = TransactionTrendChartDataModel(amount: 0, date: model.date);
+        temp.setLabel = CustomDateUtils().getStringLabel(model.date, ref);
+        _expenseData.add(temp);
+      }
+    }
+    //: 위의 반복문을 반대로 작업
+    for (final model in _expenseData) {
+      TransactionTrendChartDataModel? temp;
+      try {
+        temp =
+            _incomeData.firstWhere((element) => element.label == model.label);
+      } catch (e) {}
+      if (temp == null) {
+        temp = TransactionTrendChartDataModel(amount: 0, date: model.date);
+        temp.setLabel = CustomDateUtils().getStringLabel(model.date, ref);
+        _incomeData.add(temp);
+      }
+    }
+
+    _incomeData.sort((a, b) => a.date.compareTo(b.date));
+    _incomeData = _incomeData.reversed.toList();
+    _expenseData.sort((a, b) => a.date.compareTo(b.date));
+    _expenseData = _expenseData.reversed.toList();
   }
 
   CategoryAxis _categoryAxis() {
@@ -75,8 +109,6 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
     } else {
       _maximum = _maximum - 1;
     }
-
-
 
     return CategoryAxis(
         autoScrollingMode: AutoScrollingMode.end,

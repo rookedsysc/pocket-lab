@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/common/constant/init_screen.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
@@ -28,9 +29,6 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //! 어플리케이션 초기화 작업
-    AppInit(ref).main();
-
     return MaterialApp(
       ///* easy locaization init
       supportedLocales: context.supportedLocales,
@@ -49,7 +47,7 @@ class MyApp extends ConsumerWidget {
   MaterialPageRoute? _onGenerateRoute(settings) {
     switch (settings.name) {
       case ('/'):
-        return MaterialExtendedPageRoute(builder: ((_) => RootTab()));
+        return MaterialExtendedPageRoute(builder: ((_) => InitScreen()));
       case ('/drawer_screen'):
         return MaterialExtendedPageRoute(builder: ((_) => DrawerScreen()));
       case ('/drawer_screen/goal_screen'):

@@ -41,8 +41,8 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   Future<void> getGoalList() async {
     final goalRepository = await ref.read(goalRepositoryProvider.future);
     goalStreamSubscription = goalRepository.getAllGoals().listen((event) {
+      goals = event;
       if (mounted) {
-        goals = event;
         setState(() {});
       }
     });

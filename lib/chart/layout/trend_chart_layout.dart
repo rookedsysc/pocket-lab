@@ -10,8 +10,9 @@ class TrendChartLayout extends ConsumerStatefulWidget {
   final List<ChartSeries> seriesList;
   //: X축 간격
   final ChartAxis xAxis;
+  final Legend? legend;
   TrendChartLayout(
-      {required this.xAxis, required this.seriesList, super.key});
+      {this.legend,required this.xAxis, required this.seriesList, super.key});
 
   @override
   ConsumerState<TrendChartLayout> createState() => _TrendChartLayoutState();
@@ -50,6 +51,7 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: SfCartesianChart(
+        legend: widget.legend,
           primaryXAxis: widget.xAxis,
           primaryYAxis: NumericAxis(
               //: Y축에 표시되는 값에 Format 적용

@@ -199,7 +199,10 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                             widget.wallet?.budget.originDay = value[0]!.day;
                             debugPrint(
                                 "[WalletConfigScreen]\n widget.wallet?.budget.budgetDate = ${widget.wallet?.budget.budgetDate}");
-                            setState(() {});
+                            if (mounted) {
+                              setState(() {});
+                            }
+
                             Navigator.of(context).pop();
                           },
                           config: CalendarDatePicker2Config(

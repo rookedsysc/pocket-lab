@@ -46,6 +46,12 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
           }
 
           return TrendChartLayout(
+                        legend: Legend(
+              textStyle: Theme.of(context).textTheme.bodySmall,
+                overflowMode: LegendItemOverflowMode.wrap,
+                isVisible: true,
+                position: LegendPosition.bottom),
+
               xAxis: _xAxis(),
               seriesList: _seriesList);
         });

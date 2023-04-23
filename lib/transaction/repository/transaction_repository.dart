@@ -37,7 +37,12 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     await isar.writeTxn(() async {
       await isar.transactions.put(transaction);
     });
-    await ref.read(categoryTrendChartProvider.notifier).createCategoryTrend(transaction);
+    //: 지출 이벤트일 경우 카테고리 트렌드 차트 데이터 생성
+    if (transaction.transactionType == TransactionType.expenditure) {
+      await ref
+          .read(categoryTrendChartProvider.notifier)
+          .createCategoryTrend(transaction);
+    }
   }
 
   ///# 최근 한 달 지출 Stream으로 가져오기
@@ -223,13 +228,14 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
     for (Wallet _wallet in _wallets) {
       for (int i = 0; i < 100; i++) {
+        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, 4, Random().nextInt(60));
         int _categoryId =
             _categoryIds[Random().nextInt(_categoryIds.length)].id;
                       Transaction _randomTransaction = Transaction(
               transactionType: TransactionType.expenditure,
               categoryId: _categoryId,
               amount: Random().nextInt(100000).toDouble(),
-              date: DateTime.now().subtract(Duration(days: i)),
+              date: date,
               title: "Test $i",
               walletId: _wallet.id);
         await isar.writeTxn(() async {

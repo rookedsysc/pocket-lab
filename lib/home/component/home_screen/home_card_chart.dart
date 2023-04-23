@@ -27,10 +27,10 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
         .watch(trendRepositoryProvider.notifier)
         .getTrendStream(widget.walletId);
     trendStreamSubscription = trendStream.listen((event) {
+      chartData = TrendChartDataModel.getChartData(
+          isHome: widget.isHome, trends: event, ref: ref);
       if (mounted) {
-        setState(() {
-          chartData = TrendChartDataModel.getChartData(isHome: widget.isHome,trends: event, ref: ref);
-        });
+        setState(() {});
       }
     });
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,20 +106,24 @@ class _CalendarState extends ConsumerState<Calendar> {
 
   OnDaySelected _onDaySelected() {
     return (selectedDay, focusedDay) {
-      setState(() {
-        ref.read(calendarProvider.notifier).setSelectedDay(selectedDay);
-        ref.read(calendarProvider.notifier).setFocusedDay(selectedDay);
-      });
+      if (mounted) {
+        setState(() {
+          ref.read(calendarProvider.notifier).setSelectedDay(selectedDay);
+          ref.read(calendarProvider.notifier).setFocusedDay(selectedDay);
+        });
+      }
     };
   }
 
   void Function(DateTime focusedDay) _onPageChanged() {
     return (focusedDay) {
       debugPrint("[*] onPageChaged : ${focusedDay.toString()}");
-      setState(() {
-        _focusedDay = focusedDay;
-        ref.read(calendarProvider.notifier).setFocusedDay(focusedDay);
-      });
+      if (mounted) {
+        setState(() {
+          _focusedDay = focusedDay;
+          ref.read(calendarProvider.notifier).setFocusedDay(focusedDay);
+        });
+      }
     };
   }
 
@@ -181,14 +186,14 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
         .watch(transactionRepositoryProvider.notifier)
         .getTransactionByPeriod(widget.date, widget.date);
     transactionSubscription = transactionStream.listen((events) {
-      for(Transaction event in events) {
-        if(event.transactionType == TransactionType.income) {
+      for (Transaction event in events) {
+        if (event.transactionType == TransactionType.income) {
           totalIncome += event.amount;
-        } else if(event.transactionType == TransactionType.expenditure){
+        } else if (event.transactionType == TransactionType.expenditure) {
           totalExpenditure += event.amount;
         }
       }
-      if(mounted) {
+      if (mounted) {
         setState(() {});
       }
     });
@@ -214,12 +219,10 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
                   fontWeight: FontWeight.w700,
                   color: widget.textColor ??
                       Theme.of(context).textTheme.bodyMedium?.color,
-                      
                 ),
             textAlign: TextAlign.center,
           ),
-          
-          
+
           //: 오늘 수입/지출
           Expanded(
             child: Column(

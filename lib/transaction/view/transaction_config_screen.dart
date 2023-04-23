@@ -331,7 +331,9 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   widget.transaction?.categoryId = categories
                       .firstWhere((element) => element.name == val)
                       .id;
-                  setState(() {});
+                  if (mounted) {
+                    setState(() {});
+                  }
                 });
           }),
     );
@@ -425,10 +427,11 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             child: CalendarDatePicker2(
               onValueChanged: (value) {
                 if (value[0] != null) {
-                  setState(() {
-                    widget.transaction?.date = value[0]!;
-                    _transaction.date = value[0]!;
-                  });
+                  widget.transaction?.date = value[0]!;
+                  _transaction.date = value[0]!;
+                  if (mounted) {
+                    setState(() {});
+                  }
                 }
                 Navigator.of(context).pop();
               },

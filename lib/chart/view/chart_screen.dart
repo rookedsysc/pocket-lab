@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/component/chart_type_segement.dart';
 import 'package:pocket_lab/chart/constant/chart_type.dart';
 import 'package:pocket_lab/chart/view/category_chart_view.dart';
+import 'package:pocket_lab/chart/view/time_heatmap_chart_view.dart';
 import 'package:pocket_lab/chart/view/trend_chart_view.dart';
 
 class ChartScreen extends ConsumerStatefulWidget {
@@ -44,13 +45,14 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
               Expanded(
                 child: TabBarView(
                     // 좌우로 스크롤 안되게 해줌
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: controller,
-                    children: [
-                      TrendChartView(),
-                      CategoryChartView(),
-                      CategoryChartView(),
-                    ]),
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  children: [
+                    TrendChartView(),
+                    CategoryChartView(),
+                    TimeHeatMapChartView()
+                  ],
+                ),
               ),
             ],
           ),

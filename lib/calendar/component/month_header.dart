@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +73,9 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
           totalExpense += event.amount;
         }
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     debugPrint('didUpdateWidget');
     super.didUpdateWidget(oldWidget);

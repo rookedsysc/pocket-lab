@@ -12,20 +12,20 @@ class CategoryChartView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        _padding(),
+        _padding(HeaderCollection(headerType: HeaderType.categoryChart)),
         MonthPicker(),
         CategoryChart(isHome: true),
-        _padding(),
+        _padding(HeaderCollection(headerType: HeaderType.categoryTrendChart)),
         ChartRangeSegment(),
         CategoryTrendChart()
       ],
     );
   }
 
-  Padding _padding() {
+  Padding _padding(Widget child) {
     return Padding(
       padding: EdgeInsets.all(16.0),
-      child: HeaderCollection(headerType: HeaderType.categoryChart),
+      child: child,
     );
   }
 }

@@ -9,6 +9,7 @@ enum HeaderType {
   trendChart,
   transactionTrendChart,
   categoryChart,
+  categoryTrendChart,
   averageGrowth
 }
 
@@ -39,6 +40,8 @@ class HeaderCollection extends StatelessWidget {
         return "Trend Chart";
       case HeaderType.categoryChart:
         return "Category Chart";
+        case HeaderType.categoryTrendChart:
+        return "Category Trend Chart";
       case HeaderType.averageGrowth:
         return "Average Growth";
       case HeaderType.transactionTrendChart:

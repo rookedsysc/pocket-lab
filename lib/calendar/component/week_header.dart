@@ -1,14 +1,9 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
-import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
@@ -25,7 +20,7 @@ class WeekHeader extends ConsumerWidget {
         height: 50.0,
         width: 125.0,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(8),
             color: Theme.of(context).cardColor),
         child: _weeksTransactionColumn(
             textTheme: Theme.of(context).textTheme, ref: ref),
@@ -38,8 +33,8 @@ class WeekHeader extends ConsumerWidget {
     final date = ref.watch(calendarProvider).focusedDay;
     double totalIncome = 0.0;
     double totalExpenditure = 0.0;
-    CalendartWeekModel week =
-        CalendarUtils().getEndOfWeek(date: date, index: index);
+    CalendarWeekModel week =
+        CalendarUtils().getEndOfWeekByMonth(date: date, index: index);
 
     return StreamBuilder<List<Transaction>>(
         stream: ref
@@ -73,7 +68,10 @@ class WeekHeader extends ConsumerWidget {
               if (totalIncome != 0)
                 Text(
                   '+${CustomNumberUtils.formatNumber(totalIncome)}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontSize: 12),
                 ),
               if (totalExpenditure != 0)
                 Text(

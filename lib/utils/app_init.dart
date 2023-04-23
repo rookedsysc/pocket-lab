@@ -27,13 +27,21 @@ class AppInit {
     if (walletCount == 0) {
       await ref.read(walletRepositoryProvider.notifier).configWallet(
           Wallet(name: "Default", isSelected: true, budget: BudgetModel()));
+      Wallet _wallet = await ref
+          .read(walletRepositoryProvider.notifier)
+          .getIsSelectedWallet();
+      debugPrint("wallet id: ${_wallet.id}");
     }
   }
 
   Future<void> categoryInit() async {
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
-    categoryRepository.getAllCategories().listen((event) {
+    categoryRepository.allCategoriesStream().listen((event) {
       if (event.isEmpty) {
+        categoryRepository.configCategory(TransactionCategory(
+            id: 1, name: "For Chart", color: "FFFFFF")); //: 갈색
+        categoryRepository.configCategory(TransactionCategory(
+            id: 2, name: "No Element", color: "000000")); //: 갈색
         categoryRepository.configCategory(TransactionCategory(
             name: "Living Expense", color: "964B00")); //: 갈색
         categoryRepository.configCategory(
@@ -44,6 +52,7 @@ class AppInit {
             TransactionCategory(name: "Etc", color: "808080")); //: 빨간색
       }
     });
+    ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
   }
 
   //: 처음에 시작할 때 db에 있는 목표 목록 불러오기

@@ -9,10 +9,12 @@ import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
+import 'package:pocket_lab/common/util/get_daily_budget.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
@@ -36,6 +38,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         await ref
             .read(walletRepositoryProvider.notifier)
             .setIsSelectedWallet(widget.wallet.id);
+            GetDailyBudget(ref).main();
 
         zoomDrawerController.toggle!();
       },
@@ -56,7 +59,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           //: container 안 여백
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(8),
             //: isSelected인 타일 색상 primaryColor로
             color: widget.wallet.isSelected
                 ? Theme.of(context).primaryColor
@@ -91,22 +94,24 @@ class _MenuTileState extends ConsumerState<WalletTile> {
     //# BudgetType 별로 표시할 금액을 다르게 설정
     String _amountPerPeriod = "";
     //# Budget Type이 perSpecificDate일 경우
-    if(widget.wallet.budgetType == BudgetType.perSpecificDate) {
-      if(widget.wallet.budget.balance == null || widget.wallet.budget.budgetDate == null) {
+    if (widget.wallet.budgetType == BudgetType.perSpecificDate) {
+      if (widget.wallet.budget.balance == null ||
+          widget.wallet.budget.budgetDate == null) {
         return SizedBox();
-      }
-      else {
-        _amountPerPeriod = "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${CustomDateUtils().diffDays(widget.wallet.budget.budgetDate!, DateTime.now())}";
+      } else {
+        _amountPerPeriod =
+            "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${CustomDateUtils().diffDays(widget.wallet.budget.budgetDate!, DateTime.now())}";
       }
     }
 
     //# Budget Type이 7일 이나 30일 주기 일 경우
-    else{
-      if(widget.wallet.budget.balance == null || widget.wallet.budget.budgetPeriod == null) {
+    else {
+      if (widget.wallet.budget.balance == null ||
+          widget.wallet.budget.budgetPeriod == null) {
         return SizedBox();
-      }
-      else {
-        _amountPerPeriod = "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${widget.wallet.budget.budgetPeriod}";
+      } else {
+        _amountPerPeriod =
+            "${CustomNumberUtils.formatCurrency(widget.wallet.budget.balance!)} / ${widget.wallet.budget.budgetPeriod}";
       }
     }
     return Text(
@@ -163,6 +168,9 @@ class _MenuTileState extends ConsumerState<WalletTile> {
       await ref
           .read(walletRepositoryProvider.notifier)
           .deleteWallet(widget.wallet);
+      await ref
+          .read(trendRepositoryProvider.notifier)
+          .deleteTrend(widget.wallet.id);
 
       //: 선택된 지갑이 삭제된 경우
       //: 다른 지갑 중 하나를 선택된 지갑으로 설정

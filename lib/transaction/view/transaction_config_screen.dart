@@ -2,15 +2,10 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/common/component/budget_icon_and_name.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
-import 'package:pocket_lab/common/layout/two_row_layout.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -19,15 +14,11 @@ import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
-import 'package:pocket_lab/home/view/menu_screen.dart';
-import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
-import 'package:pocket_lab/transaction/view/category_config_screen.dart';
 import 'package:pocket_lab/transaction/view/wallet_select_screen.dart';
-import 'package:sheet/route.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey(debugLabel: 'formState');
 
@@ -65,7 +56,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     amount: 0,
     title: "",
     date: DateTime.now(),
-    category: 1,
+    categoryId: 1,
     transactionType: TransactionType.expenditure,
     walletId: 0,
   );
@@ -215,7 +206,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
     //: 거래타입이 지출이고 widget.category가 존재하지 않으면 category 선택하라는 알림창 나옴
     if (widget.transactionType == TransactionType.expenditure &&
-        widget.transaction?.category == null &&
+        widget.transaction?.categoryId == null &&
         widget.isEdit) {
       debugPrint("Check3");
       _categoryInputTileHint = "Select Category";
@@ -291,7 +282,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       fieldName: "Select Category",
       inputField: StreamBuilder<List<TransactionCategory>>(
           stream:
-              ref.watch(categoryRepositoryProvider.notifier).getAllCategories(),
+              ref.watch(categoryRepositoryProvider.notifier).allCategoriesStream(),
           builder: (context, snapshot) {
             if (snapshot.data == null || snapshot.data!.isEmpty) {
               return Center(
@@ -306,7 +297,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             String _initialValue;
             try {
               _initialValue = categories
-                  .firstWhere((element) => element.id == _transaction.category)
+                  .firstWhere((element) => element.id == _transaction.categoryId)
                   .name;
             } catch (e) {
               _initialValue = categories.first.name;
@@ -317,7 +308,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   height: 0,
                   color: Theme.of(context).primaryColor,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 value: _initialValue,
                 items: categories
                     .map(
@@ -328,19 +319,21 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                               Icon(Icons.circle,
                                   color: ColorUtils.stringToColor(e.color)),
                               SizedBox(width: 8),
-                              Text(e.name),
+                              Text(e.name, style: Theme.of(context).textTheme.bodyMedium,),
                             ],
                           )),
                     )
                     .toList(),
                 onChanged: (val) {
-                  _transaction.category = categories
+                  _transaction.categoryId = categories
                       .firstWhere((element) => element.name == val)
                       .id;
-                  widget.transaction?.category = categories
+                  widget.transaction?.categoryId = categories
                       .firstWhere((element) => element.name == val)
                       .id;
-                  setState(() {});
+                  if (mounted) {
+                    setState(() {});
+                  }
                 });
           }),
     );
@@ -434,10 +427,11 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             child: CalendarDatePicker2(
               onValueChanged: (value) {
                 if (value[0] != null) {
-                  setState(() {
-                    widget.transaction?.date = value[0]!;
-                    _transaction.date = value[0]!;
-                  });
+                  widget.transaction?.date = value[0]!;
+                  _transaction.date = value[0]!;
+                  if (mounted) {
+                    setState(() {});
+                  }
                 }
                 Navigator.of(context).pop();
               },

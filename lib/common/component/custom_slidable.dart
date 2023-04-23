@@ -11,7 +11,7 @@ class SlidableEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlidableAction(
       onPressed: onPressed,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(8),
       backgroundColor: Colors.grey,
       foregroundColor: Colors.black,
       icon: Icons.edit,
@@ -28,7 +28,7 @@ const SlidableDelete ({required this.onPressed,super.key});
   Widget build(BuildContext context) {
     return SlidableAction(
       onPressed: onPressed,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(8),
       backgroundColor: Colors.red,
       foregroundColor: Colors.black,
       icon: Icons.delete,

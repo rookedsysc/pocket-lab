@@ -14,5 +14,6 @@
     "fourthWeek" : "Fourth Week",
     "fifthWeek" : "Fifth Week",
     "sixthWeek" : "Sixth Week"
-  } 
+  },
+  "not enough data" : "Not enough data."
 }

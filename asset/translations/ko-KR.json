@@ -14,5 +14,6 @@
     "fourthWeek" : "넷째 주",
     "fifthWeek" : "다섯째 주",
     "sixthWeek" : "여섯째 주"
-  } 
+  } ,
+  "not enough data" : "충분한 데이터가 모이지 않았습니다."
 }

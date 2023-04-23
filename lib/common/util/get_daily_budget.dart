@@ -52,6 +52,7 @@ class GetDailyBudget {
         wallet.budget.originDay == null) {
       return;
     }
+
     //: 마지막 입력된 예산
     DateTime? _lastDailyBudgetDate = (await ref
           .read(transactionRepositoryProvider.notifier)
@@ -145,7 +146,7 @@ class GetDailyBudget {
     await ref.read(transactionRepositoryProvider.notifier).configTransaction(
         Transaction(
             transactionType: TransactionType.income,
-            category: null,
+            categoryId: null,
             amount: amount,
             date: DateTime.now(),
             title: dailyBudget,

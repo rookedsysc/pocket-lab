@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
+import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
+import 'package:pocket_lab/chart/repository/category_trend_chart_repository.dart';
 import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
-import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/wallet_repository.dart';
+import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
+import 'package:pocket_lab/transaction/repository/category_repository.dart';
 
 final transactionRepositoryProvider =
     StateNotifierProvider<TransactionRepositoryNotifier, Transaction>((ref) {
@@ -17,7 +23,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   TransactionRepositoryNotifier(this.ref)
       : super(Transaction(
             transactionType: TransactionType.expenditure,
-            category: 0,
+            categoryId: 0,
             amount: 0,
             date: DateTime.now(),
             title: "",
@@ -31,6 +37,12 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     await isar.writeTxn(() async {
       await isar.transactions.put(transaction);
     });
+    //: 지출 이벤트일 경우 카테고리 트렌드 차트 데이터 생성
+    if (transaction.transactionType == TransactionType.expenditure) {
+      await ref
+          .read(categoryTrendChartProvider.notifier)
+          .createCategoryTrend(transaction);
+    }
   }
 
   ///# 최근 한 달 지출 Stream으로 가져오기
@@ -57,8 +69,12 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   ///# 해당 월 지출 Stream으로 가져오기
-  Stream<List<Transaction>> getThisMonthExpenditure(DateTime date) async* {
+  Stream<List<Transaction>> getSelectMonthExpenditure(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
+    //: 카테고리 ID를 통해서 Category Name, Color 가져옴
+    //: 그전에 DB와 Local Cache간의 데이터 동기화
+    await ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
+
     yield* isar.transactions
         .filter()
         .transactionTypeEqualTo(TransactionType.expenditure)
@@ -69,11 +85,64 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   ///# 해당 월 Transaction Stream으로 가져오기
-  Stream<List<Transaction>> getThisMonthTransactions(DateTime date) async* {
+  Stream<List<Transaction>> getSelectMonthTransactions(DateTime date) async* {
     final Isar isar = await ref.read(isarProvieder.future);
 
     yield* isar.transactions
         .filter()
+        .dateGreaterThan(DateTime(date.year, date.month, 1))
+        .dateLessThan(DateTime(date.year, date.month + 1, 1))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
+
+  //* 모든 거래 내역 Stream으로 가져오기
+  //: Category 별로 Map<int(카테고리 ID), List<Transaction>> 형태로 가져옴
+  Stream<Map<int, List<Transaction>>> getTransactionsByCategory() async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    yield* isar.transactions
+        .where()
+        .watch(fireImmediately: true)
+        .asBroadcastStream()
+        .map((event) {
+      Map<int, List<Transaction>> map = {};
+      event.forEach((element) {
+        if (map.containsKey(element.categoryId)) {
+          map[element.categoryId]!.add(element);
+        } else {
+          if (element.categoryId == null) return;
+          map[element.categoryId!] = [element];
+        }
+      });
+      return map;
+    });
+  }
+
+  ///# 해당 월 지출 Stream으로 가져오기
+  Stream<List<Transaction>> getSelectMonthExpenditureByWallet(
+      DateTime date, int walletId) async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    yield* isar.transactions
+        .filter()
+        .walletIdEqualTo(walletId)
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .dateGreaterThan(DateTime(date.year, date.month, 1))
+        .dateLessThan(DateTime(date.year, date.month + 1, 1))
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
+  }
+
+  ///# 해당 월 지출 Stream으로 가져오기
+  Stream<List<Transaction>> getSelectMonthExpenditureByCategory(
+      DateTime date, int categoryId) async* {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    yield* isar.transactions
+        .filter()
+        .categoryIdEqualTo(categoryId)
+        .transactionTypeEqualTo(TransactionType.expenditure)
         .dateGreaterThan(DateTime(date.year, date.month, 1))
         .dateLessThan(DateTime(date.year, date.month + 1, 1))
         .watch(fireImmediately: true)
@@ -110,6 +179,27 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .findAll();
   }
 
+  //* 모든 트랜잭션 가져오기
+  Future<List<Transaction>> getAllTransactions() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.where().findAll();
+  }
+
+  //* 모든 지출내역 가져오기
+    Future<List<Transaction>> getAllExpenditures() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).findAll();
+  }
+
+  //* 특정 카테고리의 지출내역들 가져오기
+  Future<List<Transaction>> getTransactionsByCategoryId(int id) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).categoryIdEqualTo(id).findAll();
+  }
+
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
   Future<Transaction?> getLastDailyBudgetByWalletId(Wallet wallet) async {
     final Isar isar = await ref.read(isarProvieder.future);
@@ -122,5 +212,55 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .findFirst();
 
     return lastDailyTransactions;
+  }
+
+  //* 랜덤 트랜잭션 생덤
+  Future<void> createRandomTransaction() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+    List<TransactionCategory> _categoryIds =
+        await ref.read(categoryRepositoryProvider.notifier).getAllCategories();
+    _categoryIds.removeAt(0);
+    _categoryIds.removeAt(0);
+    //: categoryId 중에서 랜덤으로 하나 선택
+
+    final List<Wallet> _wallets =
+        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+
+    for (Wallet _wallet in _wallets) {
+      for (int i = 0; i < 100; i++) {
+        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, 4, Random().nextInt(60));
+        int _categoryId =
+            _categoryIds[Random().nextInt(_categoryIds.length)].id;
+                      Transaction _randomTransaction = Transaction(
+              transactionType: TransactionType.expenditure,
+              categoryId: _categoryId,
+              amount: Random().nextInt(100000).toDouble(),
+              date: date,
+              title: "Test $i",
+              walletId: _wallet.id);
+        await isar.writeTxn(() async {
+          await isar.transactions.put(_randomTransaction);
+        });
+        await ref
+            .read(categoryTrendChartProvider.notifier)
+            .createCategoryTrend(_randomTransaction);
+      }
+    }
+  }
+
+  //* 모든 트랜잭션 삭제
+  Future<void> deleteAllTransactions() async {
+    final Isar isar = await ref.read(isarProvieder.future);
+    final List<Transaction> _transactions = await getAllTransactions();
+    List<Id> _ids = [];
+
+    for (Transaction _transaction in _transactions) {
+      _ids.add(_transaction.id);
+      await ref.read(categoryTrendChartProvider.notifier).subtractData(_transaction);
+    }
+
+    await isar.writeTxn(() async {
+      await isar.transactions.deleteAll(_ids);
+    });
   }
 }

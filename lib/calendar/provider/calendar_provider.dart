@@ -2,7 +2,6 @@ import 'package:riverpod/riverpod.dart';
 
 import '../model/calendar_model.dart';
 
-
 final calendarProvider = StateNotifierProvider<CalendarNotifier, CalendarModel>((ref) {
   return CalendarNotifier();
 });
@@ -17,7 +16,7 @@ class CalendarNotifier extends StateNotifier<CalendarModel> {
 
   void setSelectedDay(DateTime selectedDay) {
     state = CalendarModel(
-      focusedDay: state.focusedDay,
+      focusedDay: DateTime(selectedDay.year, selectedDay.month, 1),
       selectedDay: selectedDay
     );
   }

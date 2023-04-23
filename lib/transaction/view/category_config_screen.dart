@@ -27,7 +27,7 @@ class _CategoryConfigScreenState extends ConsumerState<CategoryConfigScreen> {
     super.didChangeDependencies();
     _categoryListener = ref
         .watch(categoryRepositoryProvider.notifier)
-        .getAllCategories()
+        .allCategoriesStream()
         .listen((event) {
           categories = event;
       setState(() {});
@@ -77,7 +77,7 @@ class _CategoryConfigScreenState extends ConsumerState<CategoryConfigScreen> {
               //             height: 50,
               //             decoration: BoxDecoration(
               //               color: Theme.of(context).cardColor,
-              //               borderRadius: BorderRadius.circular(10),
+              //               borderRadius: BorderRadius.circular(8),
               //             ),
               //             child: Row(
               //               children: [
@@ -105,7 +105,7 @@ class _CategoryConfigScreenState extends ConsumerState<CategoryConfigScreen> {
                           height: 50,
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
                             children: [

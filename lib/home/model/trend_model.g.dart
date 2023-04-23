@@ -31,6 +31,11 @@ const TrendSchema = CollectionSchema(
       id: 2,
       name: r'walletId',
       type: IsarType.long,
+    ),
+    r'walletName': PropertySchema(
+      id: 3,
+      name: r'walletName',
+      type: IsarType.string,
     )
   },
   estimateSize: _trendEstimateSize,
@@ -53,6 +58,7 @@ int _trendEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.walletName.length * 3;
   return bytesCount;
 }
 
@@ -65,6 +71,7 @@ void _trendSerialize(
   writer.writeDouble(offsets[0], object.amount);
   writer.writeDateTime(offsets[1], object.date);
   writer.writeLong(offsets[2], object.walletId);
+  writer.writeString(offsets[3], object.walletName);
 }
 
 Trend _trendDeserialize(
@@ -77,6 +84,7 @@ Trend _trendDeserialize(
     amount: reader.readDouble(offsets[0]),
     date: reader.readDateTime(offsets[1]),
     walletId: reader.readLong(offsets[2]),
+    walletName: reader.readStringOrNull(offsets[3]) ?? "",
   );
   object.id = id;
   return object;
@@ -95,6 +103,8 @@ P _trendDeserializeProp<P>(
       return (reader.readDateTime(offset)) as P;
     case 2:
       return (reader.readLong(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset) ?? "") as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -406,6 +416,136 @@ extension TrendQueryFilter on QueryBuilder<Trend, Trend, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'walletName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'walletName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'walletName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'walletName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterFilterCondition> walletNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'walletName',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension TrendQueryObject on QueryBuilder<Trend, Trend, QFilterCondition> {}
@@ -446,6 +586,18 @@ extension TrendQuerySortBy on QueryBuilder<Trend, Trend, QSortBy> {
   QueryBuilder<Trend, Trend, QAfterSortBy> sortByWalletIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'walletId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterSortBy> sortByWalletName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterSortBy> sortByWalletNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletName', Sort.desc);
     });
   }
 }
@@ -498,6 +650,18 @@ extension TrendQuerySortThenBy on QueryBuilder<Trend, Trend, QSortThenBy> {
       return query.addSortBy(r'walletId', Sort.desc);
     });
   }
+
+  QueryBuilder<Trend, Trend, QAfterSortBy> thenByWalletName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QAfterSortBy> thenByWalletNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletName', Sort.desc);
+    });
+  }
 }
 
 extension TrendQueryWhereDistinct on QueryBuilder<Trend, Trend, QDistinct> {
@@ -516,6 +680,13 @@ extension TrendQueryWhereDistinct on QueryBuilder<Trend, Trend, QDistinct> {
   QueryBuilder<Trend, Trend, QDistinct> distinctByWalletId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'walletId');
+    });
+  }
+
+  QueryBuilder<Trend, Trend, QDistinct> distinctByWalletName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'walletName', caseSensitive: caseSensitive);
     });
   }
 }
@@ -542,6 +713,12 @@ extension TrendQueryProperty on QueryBuilder<Trend, Trend, QQueryProperty> {
   QueryBuilder<Trend, int, QQueryOperations> walletIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'walletId');
+    });
+  }
+
+  QueryBuilder<Trend, String, QQueryOperations> walletNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'walletName');
     });
   }
 }

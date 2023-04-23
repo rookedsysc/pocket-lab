@@ -22,6 +22,7 @@ class TextTypeTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        style: Theme.of(context).textTheme.bodyMedium,
         keyboardType: TextInputType.text,
         textAlign: TextAlign.right,
         //# 키보드 올라오면 키보드 크기 만큼 위로 올라가게 구현
@@ -33,7 +34,9 @@ class TextTypeTextFormField extends StatelessWidget {
         autofocus: true,
         onTap: onTap,
         decoration:
-            InputDecoration(border: InputBorder.none, hintText: hintText));
+            InputDecoration(border: InputBorder.none, 
+            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            hintText: hintText));
   }
 }
 
@@ -59,6 +62,7 @@ class _NumberTypeTextFormFieldState
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        style: Theme.of(context).textTheme.bodyMedium,
         //: 키보드가 숫자만 표시됨
         keyboardType: TextInputType.number,
         //: 숫자만 입력되게 함
@@ -74,6 +78,7 @@ class _NumberTypeTextFormFieldState
         onSaved: widget.onSaved,
         validator: widget.validator,
         decoration: InputDecoration(
+          hintStyle: Theme.of(context).textTheme.bodyMedium,
           hintText: widget.hintText != null
               ? CustomNumberUtils.formatNumber(double.parse(widget.hintText!))
               : null,
@@ -93,6 +98,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
     } catch (e) {
       print("Error Message : $e \n newValue : ${newValue.text}");
       value = 0;
+      return newValue.copyWith(text: "");
     }
 
     if (value == 0) {

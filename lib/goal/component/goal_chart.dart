@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/chart/component/trend_chart.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -58,7 +60,6 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
           ///: 남을 일 수
           children: [
             Padding(
@@ -91,10 +92,10 @@ class _GoalChartState extends ConsumerState<GoalChart> {
                 xValueMapper: (data, _) => data.date,
                 yValueMapper: (data, _) => data.amount),
             LineSeries<TrendChartDataModel, DateTime>(
-              dataLabelSettings: DataLabelSettings(
+                dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     builder: (data, point, series, pointIndex, seriesIndex) {
-                      if (pointIndex == chartData.length - 1) {
+                      if (pointIndex == futureChartData.length - 1) {
                         return Text(
                           CustomDateUtils().dateToFyyyyMMdd(
                               futureChartData[pointIndex].date),
@@ -144,7 +145,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
   Future<void> _getChartData() async {
     final List<Trend> _trends =
         await ref.read(trendRepositoryProvider.notifier).getTotalTrends();
-    chartData = TrendChartDataModel.getChartData(_trends, chartData);
+    chartData = TrendChartDataModel.getChartData(ref:ref, trends: _trends);
 
     ///: 현재 전체 지갑의 잔액 총 합
     final List<Wallet> wallets =
@@ -153,27 +154,15 @@ class _GoalChartState extends ConsumerState<GoalChart> {
 
     _getFutureChartData(totalBalance);
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   ///* 목표 도달까지 걸릴 일 수를 return 해주고
   ///* futureChartData에 미래 데이터를 추가해줌
   int _getFutureChartData(double totalBalance) {
-    List<double> diffList = [];
-
-    //: 평균 금액
-    for (int i = 0; i < chartData.length; i++) {
-      if (i != 0) {
-        double diff = 0;
-        if (chartData[i - 1].amount < 0) {
-          diff = chartData[i].amount + chartData[i - 1].amount;
-        } else {
-          diff = chartData[i].amount - chartData[i - 1].amount;
-        }
-
-        diffList.add(diff);
-      }
-    }
+    List<double> diffList = TrendChartDataModel.getDiffList(chartData: chartData);
 
     average = (diffList.fold<double>(0, (prev, next) => prev + next)) /
         diffList.length;
@@ -192,7 +181,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
       if (futureChartData.isEmpty) {
         ///: 첫 날 데이터
         futureChartData
-            .add(TrendChartDataModel(chartData.last.date, totalBalance));
+            .add(TrendChartDataModel(chartData.last.name,chartData.last.date, totalBalance));
 
         ///: 두 번째 날 데이터
         totalBalance += average;

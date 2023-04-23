@@ -6,11 +6,16 @@ enum HeaderType {
   wallet,
   goal,
   total,
+  trendChart,
+  transactionTrendChart,
+  categoryChart,
+  categoryTrendChart,
+  averageGrowth
 }
 
 class HeaderCollection extends StatelessWidget {
   final HeaderType headerType;
-  const HeaderCollection ({required this.headerType, super.key});
+  const HeaderCollection({required this.headerType, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,16 @@ class HeaderCollection extends StatelessWidget {
         return "Goal";
       case HeaderType.total:
         return "Total Balance";
+      case HeaderType.trendChart:
+        return "Trend Chart";
+      case HeaderType.categoryChart:
+        return "Category Chart";
+        case HeaderType.categoryTrendChart:
+        return "Category Trend Chart";
+      case HeaderType.averageGrowth:
+        return "Average Growth";
+      case HeaderType.transactionTrendChart:
+        return "Transaction Trend Chart";
     }
   }
 }

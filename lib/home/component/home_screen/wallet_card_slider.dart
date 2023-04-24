@@ -21,7 +21,7 @@ class WalletCardSlider extends ConsumerStatefulWidget {
 class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
   late StreamSubscription _stream;
   int _initialIndex = 0;
-  List<Wallet> wallets = [];
+  List<Wallet> _wallets = [];
   CarouselController _carouselController = CarouselController();
 
   @override
@@ -30,13 +30,19 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
         .watch(walletRepositoryProvider.notifier)
         .getAllWalletsStream()
         .listen((event) {
-      wallets = event;
+      _wallets = event;
 
       int _currentSelectedIndex =
           event.indexWhere((element) => element.isSelected);
       if (_currentSelectedIndex != _initialIndex) {
         _initialIndex = _currentSelectedIndex;
-        _carouselController.animateToPage(_currentSelectedIndex);
+        try {
+          if (_carouselController.ready) {
+              _carouselController.jumpToPage(_currentSelectedIndex);
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+        }
       }
 
       if (mounted) {
@@ -55,16 +61,16 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
   @override
   Widget build(BuildContext context) {
 
-    if (wallets.length == 0) {
+    if (_wallets.length == 0) {
       return Center(child: CircularProgressIndicator());
     }
-    
+
     return CarouselSlider.builder(
       carouselController: _carouselController,
-      options: _carouselOptions(_initialIndex, wallets: wallets),
-      itemCount: wallets.length,
+      options: _carouselOptions(_initialIndex, wallets: _wallets),
+      itemCount: _wallets.length,
       itemBuilder: (context, index, realIndex) {
-        return wallets[index].walletToWalletCard();
+        return _wallets[index].walletToWalletCard();
       },
     );
   }
@@ -77,6 +83,13 @@ class _WalletCardSliderState extends ConsumerState<WalletCardSlider> {
         enlargeCenterPage: true,
         initialPage: _initialIndex,
         onPageChanged: (index, reason) async {
+
+          if (reason == CarouselPageChangedReason.controller) {
+            debugPrint("return");
+            return;
+          }
+          debugPrint("onPageChanged Trigger : $index \n $reason");
+
           await ref
               .read(walletRepositoryProvider.notifier)
               .setIsSelectedWallet(wallets[index].id);

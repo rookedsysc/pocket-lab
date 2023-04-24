@@ -40,6 +40,7 @@ class _CalendarState extends ConsumerState<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+    _focusedDay = ref.watch(calendarProvider).focusedDay;
     return SizedBox(
       //* 월의 주 수에 따라서 Calendar 크기 조정
       height: CalendarUtils().getCalendarHeight(_focusedDay),

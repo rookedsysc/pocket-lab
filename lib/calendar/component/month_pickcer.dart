@@ -32,7 +32,6 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
 
   List<Widget> generateRowOfMonths(from, to) {
     List<Widget> months = [];
-    Color backgroundColor;
     for (int i = from; i <= to; i++) {
       //# 선택된 해의 1~12월까지 생성
       DateTime dateTime = DateTime(_pickerYear, i, 1);
@@ -117,7 +116,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
               //: 이전 년도로 이동
               IconButton(
                 onPressed: () {
-                  ref.read(calendarProvider.notifier).setFocusedDay(DateTime(
+                  ref.refresh(calendarProvider.notifier).setFocusedDay(DateTime(
                       _pickerYear - 1, _calendarState.focusedDay.month, 1));
                   if (mounted) {
                     setState(() {});
@@ -143,7 +142,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
               //: 다음 년도로 이동
               IconButton(
                 onPressed: () {
-                  ref.read(calendarProvider.notifier).setFocusedDay(DateTime(
+                  ref.refresh(calendarProvider.notifier).setFocusedDay(DateTime(
                       _pickerYear + 1, _calendarState.focusedDay.month, 1));
                   if (mounted) {
                     setState(() {});

@@ -1,26 +1,19 @@
-import 'dart:ffi';
-
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
-import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
-import 'package:pocket_lab/common/util/get_daily_budget.dart';
+import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
-import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/provider/budget_type_provider.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
-import 'package:sheet/route.dart';
 
 final walletConfigScrollProvider = Provider<ScrollController>((ref) {
   final ScrollController _scrollController = ScrollController();
@@ -80,7 +73,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   .read(trendRepositoryProvider.notifier)
                   .syncTrend(_wallet.id);
             }
-            await GetDailyBudget(ref).main();
+            await DailyBudget().add( ref);
 
             Navigator.of(context).pop();
           }

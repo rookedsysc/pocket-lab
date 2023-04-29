@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
+import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
@@ -18,6 +19,7 @@ class AppInit {
     await walletInit();
     await syncIsarWithLocalGoalList();
     await categoryInit();
+    await DailyBudget().add(ref);
   }
 
   Future<void> walletInit() async {

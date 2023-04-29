@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
-import 'package:pocket_lab/common/util/get_daily_budget.dart';
+import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/home_screen.dart';
 import 'package:pocket_lab/diary/view/diary_screen.dart';
@@ -30,13 +30,6 @@ class _RootTabState extends ConsumerState<RootTab>
     //TODO: length: 2 -> 2개의 탭.
     _tabController = TabController(initialIndex: 1,length: 4, vsync: this);
     _tabController.addListener(tabListner);
-  }
-
-  @override
-  void didChangeDependencies() {
-    debugPrint("root_tab : GetDailyBudget 호출");
-    GetDailyBudget(ref).main();
-    super.didChangeDependencies();
   }
 
   void tabListner() {

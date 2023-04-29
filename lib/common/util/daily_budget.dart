@@ -9,74 +9,87 @@ import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
-class GetDailyBudget {
-  final WidgetRef ref;
-  GetDailyBudget(this.ref);
+//* 각 Wallet의 예산 설정에 따라 하루 예산을 Wallet의 Balance에 추가해주는 Class -> 프로시저
+// a 예산 설정일 때 a 행동
+// b 예산 설정일 때 b 행동
+//! Class 명이 잘못됐음 GetDailyBudget -> AddDailyBudget
+//! 외부에서 호출하지 않는 메서드들은 Private로 변경
+//: 프로퍼티가 없는 클래스를 유틸리티 혹은 헬퍼 클래스라고 부름
 
-  Future<void> main() async {
-    final wallets =
+//# 각 메서드가 하나의 역할을 하는가
+//# wallet.budget..... 참조형식 변경
+//# WidgetRef 없이 구성없이 사용할 수 있도록 변경
+class DailyBudget {
+  DailyBudget();
+
+  //* 이 클래스의 메인로직, 모든 Wallet을 불러와서 반복하는 로직
+  //: Wallet 마다 예산 설정이 다 다른데 그 다른 예산 설정별로 분기처리를 해주고 있음
+  Future<void> add(WidgetRef ref) async {
+    List<Wallet> wallets =
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
     //# 모든 wallets을 반복
-    for (int index = 0; index < wallets.length; index++) {
-      await ref.read(trendRepositoryProvider.notifier).syncTrend(wallets[index].id);
-      if (wallets[index].budgetType == BudgetType.dontSet) {
+    for (Wallet wallet in wallets) {
+      await ref.read(trendRepositoryProvider.notifier)
+          .syncTrend(wallet.id);
+      if (wallet.budgetType == BudgetType.dontSet) {
         continue;
-      } else if (wallets[index].budgetType == BudgetType.perSpecificDate) {
-        await getSecificDateBudget(wallets[index]);
+      } else if (wallet.budgetType == BudgetType.perSpecificDate && wallet.budget.isExist) {
+        DateTime? _lastDailyBudgetDate = (await ref
+                .read(transactionRepositoryProvider.notifier)
+                .getLastDailyBudgetByWalletId(wallet))
+            ?.date;
+            
+        double _dailyBudgetAmount = await _getSecificDateBudget(
+            _lastDailyBudgetDate,
+            budget: wallet.budget,
+            ref: ref);
+        await _addTodayBudget(
+            wallet: wallet, amount: _dailyBudgetAmount, ref: ref);
+
         continue;
       }
       final double _budgetAmount =
-          await getBudgetAmount(wallet: wallets[index]);
+          await _getBudgetAmount(wallet: wallet, ref: ref);
       //: 해당 wallet이 dontSet 모드 인 경우
 
       //: 입력할 예산이 없는 경우 loop를 빠져나감
       if (_budgetAmount == 0 || _budgetAmount.isNaN) {
         continue;
       }
-
-      await addTodayBudget(wallet: wallets[index], amount: _budgetAmount);
+      await _addTodayBudget(
+          wallet: wallet, amount: _budgetAmount, ref: ref);
       debugPrint("""GetDailyBudget Calss : \n\n
-      Wallet: ${wallets[index].name} \n
+      Wallet: ${wallet.name} \n
       Budget Amount: $_budgetAmount \n
       """);
     }
   }
 
   //* 특정 일자에 반복되는 예산일 경우 예산 구하기
-  Future<void> getSecificDateBudget(Wallet wallet) async {
+  //refactor : -> 특정 일자에 반복되는 예산 구하기 (조건이 빠짐)
+  Future<double> _getSecificDateBudget(DateTime? lastDailyBudgetDate,
+      {required BudgetModel budget, required WidgetRef ref}) async {
     double _dailyBudgetAmount = 0;
-    //: null check
-    if (wallet.budget.balance == null ||
-        wallet.budget.originBalance == null ||
-        wallet.budget.budgetDate == null ||
-        wallet.budget.originDay == null) {
-      return;
-    }
-
-    //: 마지막 입력된 예산
-    DateTime? _lastDailyBudgetDate = (await ref
-          .read(transactionRepositoryProvider.notifier)
-          .getLastDailyBudgetByWalletId(wallet))?.date;
 
     do {
       //: 현재 wallet의 예산일
-      final DateTime _budgetDate = wallet.budget.budgetDate!;
+      final DateTime _budgetDate = budget.budgetDate!;
       //: 최초 예산 입력인 경우
-      if (_lastDailyBudgetDate == null) {
+      if (lastDailyBudgetDate == null) {
         //: 최초 예산인데 오늘 날짜가 예산일보다 이전인 경우
         if (DateTime.now().isBefore(_budgetDate)) {
-          int _diffDays = CustomDateUtils().diffDays(wallet.budget.budgetDate!, DateTime.now());
+          int _diffDays =
+              CustomDateUtils().diffDays(budget.budgetDate!, DateTime.now());
 
-          _dailyBudgetAmount += wallet.budget.balance! / _diffDays;
-          wallet.budget.balance =
-              wallet.budget.balance! - wallet.budget.balance! / _diffDays;
+          _dailyBudgetAmount += budget.balance! / _diffDays;
+          budget.balance = budget.balance! - budget.balance! / _diffDays;
 
-          _lastDailyBudgetDate = DateTime.now();
+          lastDailyBudgetDate = DateTime.now();
         }
         //: 최초 예산인데 오늘 날짜가 예산일과 같거나 큰 경우
         else {
-          wallet.budget.budgetDate = CustomDateUtils()
-              .getNextBugdetDate(_budgetDate, wallet.budget.originDay!);
+          budget.budgetDate = CustomDateUtils()
+              .getNextBugdetDate(_budgetDate, budget.originDay!);
         }
       }
 
@@ -84,31 +97,35 @@ class GetDailyBudget {
       //: 남은 예산 전부를 넣어주고
       //: 해당 예산을 초기화 해줌
       else if (DateTime.now().isAfter(_budgetDate)) {
-        _dailyBudgetAmount += wallet.budget.balance!;
+        _dailyBudgetAmount += budget.balance!;
         //: 초기화
-        wallet.budget.budgetDate = CustomDateUtils()
-            .getNextBugdetDate(_budgetDate, wallet.budget.originDay!);
-        wallet.budget.balance = wallet.budget.originBalance;
+        budget.budgetDate =
+            CustomDateUtils().getNextBugdetDate(_budgetDate, budget.originDay!);
+        budget.balance = budget.originBalance;
       }
       //: 오늘 날짜가 예산일보다 이전인 경우
       else {
         //: 마지막 예산일과 오늘 날짜의 차이
-        final int _diffDays = CustomDateUtils().diffDays(_budgetDate, DateTime.now());
+        final int _diffDays =
+            CustomDateUtils().diffDays(_budgetDate, DateTime.now());
         //: 마지막 예산일 ~ 오늘 날짜까지의 예산을 더해줌
-        _dailyBudgetAmount += wallet.budget.balance! / _diffDays;
-        wallet.budget.balance =
-            wallet.budget.balance! - wallet.budget.balance! / _diffDays;
+        _dailyBudgetAmount += budget.balance! / _diffDays;
+        budget.balance = budget.balance! - budget.balance! / _diffDays;
       }
-    } while (_lastDailyBudgetDate == null || CustomDateUtils().isBeforeDay(_lastDailyBudgetDate, DateTime.now()));
-    if (_dailyBudgetAmount == 0) {
-      return;
-    }
+    } while (lastDailyBudgetDate == null ||
+        CustomDateUtils().isBeforeDay(lastDailyBudgetDate, DateTime.now()));
 
-    await addTodayBudget(wallet: wallet, amount: _dailyBudgetAmount);
+    //! 이거 뭐지
+    // if (_dailyBudgetAmount == 0) {
+    //   return;
+    // }
+
+    return _dailyBudgetAmount;
   }
 
   //# 얼마의 예산을 넣을지 계산
-  Future<double> getBudgetAmount({required Wallet wallet}) async {
+  Future<double> _getBudgetAmount(
+      {required Wallet wallet, required WidgetRef ref}) async {
     final Transaction? _lastDailyBudget = await ref
         .read(transactionRepositoryProvider.notifier)
         .getLastDailyBudgetByWalletId(wallet);
@@ -140,8 +157,10 @@ class GetDailyBudget {
   }
 
   //# 실제 구해진 Daily Budget을 추가하는 함수
-  Future<void> addTodayBudget(
-      {required Wallet wallet, required double amount}) async {
+  Future<void> _addTodayBudget(
+      {required Wallet wallet,
+      required double amount,
+      required WidgetRef ref}) async {
     wallet.balance += amount;
     await ref.read(transactionRepositoryProvider.notifier).configTransaction(
         Transaction(
@@ -151,6 +170,9 @@ class GetDailyBudget {
             date: DateTime.now(),
             title: dailyBudget,
             walletId: wallet.id));
+
     ref.read(walletRepositoryProvider.notifier).configWallet(wallet);
   }
 }
+
+

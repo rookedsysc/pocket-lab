@@ -27,6 +27,7 @@ class GoalChart extends ConsumerStatefulWidget {
 class _GoalChartState extends ConsumerState<GoalChart> {
   List<TrendChartDataModel> chartData = [];
   List<TrendChartDataModel> futureChartData = [];
+  bool _chartDataLoading = true;
   double totalBalance = 0;
   double average = 0;
   int futureDays = 0;
@@ -34,12 +35,17 @@ class _GoalChartState extends ConsumerState<GoalChart> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _getChartData();
+    _getChartData().then((value) {
+      _chartDataLoading = false;
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (chartData.length == 0) {
+    if (_chartDataLoading || chartData.length == 0) {
       return _loading();
     }
 

@@ -21,114 +21,75 @@ class MonthHeader extends ConsumerStatefulWidget {
 }
 
 class _MonthHeaderState extends ConsumerState<MonthHeader> {
-  late StreamSubscription transactionSubscribtion;
-  late Stream<List<Transaction>> transactionStream;
-  late StreamSubscription dateStreamSubscription;
-  late DateTime date;
-
-  double totalIncome = 0.0;
-  double totalExpense = 0.0;
-
-  @override
-  void didChangeDependencies() {
-    final Stream<CalendarModel> dateStream =
-        ref.watch(calendarProvider.notifier).stream;
-    transactionStream = ref
-        .watch(transactionRepositoryProvider.notifier)
-        .getSelectMonthTransactions(ref.watch(calendarProvider).focusedDay);
-    dateStreamSubscription = dateStream.listen((event) {
-      debugPrint('date chage ${event.focusedDay}');
-      transactionStream = ref
-          .watch(transactionRepositoryProvider.notifier)
-          .getSelectMonthTransactions(event.focusedDay);
-      totalExpense = 0;
-      totalIncome = 0;
-      transactionSubscribtion = transactionStream.listen((events) {
-        for (Transaction event in events) {
-          if (event.transactionType == TransactionType.income) {
-            totalIncome += event.amount;
-          } else if (event.transactionType == TransactionType.expenditure) {
-            totalExpense += event.amount;
-          }
-        }
-      });
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(covariant MonthHeader oldWidget) {
-    transactionStream = ref
-        .watch(transactionRepositoryProvider.notifier)
-        .getSelectMonthTransactions(ref.watch(calendarProvider).focusedDay);
-    transactionSubscribtion = transactionStream.listen((events) {
-      for (Transaction event in events) {
-        if (event.transactionType == TransactionType.income) {
-          totalIncome += event.amount;
-        } else if (event.transactionType == TransactionType.expenditure) {
-          totalExpense += event.amount;
-        }
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    });
-    debugPrint('didUpdateWidget');
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    transactionSubscribtion.cancel();
-    dateStreamSubscription.cancel();
-    super.dispose();
-  }
+  double _totalIncome = 0.0;
+  double _totalExpense = 0.0;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(8)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+    DateTime _focusedDate = ref.watch(calendarProvider).focusedDay;
+    return StreamBuilder<List<Transaction>>(
+        stream: ref
+            .watch(transactionRepositoryProvider.notifier)
+            .getSelectMonthTransactions(_focusedDate),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          setData(snapshot.data!);
+
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(8)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (totalIncome != 0)
-                  Text(
-                    "+ ${CustomNumberUtils.formatCurrency(totalIncome)}",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (_totalIncome != 0)
+                        Text(
+                          "+ ${CustomNumberUtils.formatCurrency(_totalIncome)}",
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      if (_totalExpense != 0)
+                        Text(
+                          "- ${CustomNumberUtils.formatCurrency(_totalExpense)}",
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: Colors.red),
+                        ),
+                    ],
                   ),
-                if (totalExpense != 0)
-                  Text(
-                    "- ${CustomNumberUtils.formatCurrency(totalExpense)}",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.red),
-                  ),
+                ),
+                //: 카테고리별 간략한 통계
+                Container(
+                  width: 100.0,
+                  height: 100.0,
+                  child: CategoryChart(isHome: false),
+                ),
               ],
             ),
-          ),
-          //: 카테고리별 간략한 통계
-          Container(
-            width: 100.0,
-            height: 100.0,
-            child: CategoryChart(isHome: false),
-          ),
-        ],
-      ),
-    );
+          );
+        });
+  }
+
+  void setData(List<Transaction> transactions) {
+    _totalExpense = 0;
+    _totalIncome = 0;
+    for (Transaction event in transactions) {
+      if (event.transactionType == TransactionType.income) {
+        _totalIncome += event.amount;
+      } else if (event.transactionType == TransactionType.expenditure) {
+        _totalExpense += event.amount;
+      }
+    }
   }
 }

@@ -9,7 +9,7 @@ import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
-import 'package:pocket_lab/common/util/get_daily_budget.dart';
+import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/common/view/input_modal_screen.dart';
@@ -38,7 +38,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         await ref
             .read(walletRepositoryProvider.notifier)
             .setIsSelectedWallet(widget.wallet.id);
-            GetDailyBudget(ref).main();
+            await DailyBudget().add( ref);
 
         zoomDrawerController.toggle!();
       },

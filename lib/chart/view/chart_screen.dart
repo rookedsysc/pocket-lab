@@ -6,6 +6,9 @@ import 'package:pocket_lab/chart/constant/chart_type.dart';
 import 'package:pocket_lab/chart/view/category_chart_view.dart';
 import 'package:pocket_lab/chart/view/time_heatmap_chart_view.dart';
 import 'package:pocket_lab/chart/view/trend_chart_view.dart';
+import 'package:pocket_lab/common/util/daily_budget.dart';
+import 'package:pocket_lab/common/view/loading_view.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 
 class ChartScreen extends ConsumerStatefulWidget {
   const ChartScreen({super.key});
@@ -15,8 +18,9 @@ class ChartScreen extends ConsumerStatefulWidget {
 }
 
 class _ChartScreenState extends ConsumerState<ChartScreen>
-    with SingleTickerProviderStateMixin {
+  with SingleTickerProviderStateMixin {
   late TabController controller;
+  bool _trendUpdated = false;
   int index = 0;
 
   @override
@@ -26,6 +30,15 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
     controller.addListener(() {
       tabListner();
     });
+    _onRefresh(ref);
+  }
+
+  Future<void> _onRefresh(WidgetRef ref) async {
+    await DailyBudget().add(ref);
+    _trendUpdated = true;
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -36,6 +49,11 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    if(!_trendUpdated){
+      return LoadingView();
+    }
+
     return Material(
       child: CupertinoPageScaffold(
         child: SafeArea(

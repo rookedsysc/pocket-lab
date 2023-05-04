@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
-import 'package:pocket_lab/goal/model/goal_model.dart';
-import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
-import 'package:sheet/sheet.dart';
 
 class InputModalScreen extends ConsumerStatefulWidget {
-    ///: 외부에서 입력 옵션 받아와서 사이즈는 여기서 정
+  ///: 외부에서 입력 옵션 받아와서 사이즈는 여기서 정
   final List<InputTile> inputTile;
+
   ///: textField 등에 적용할 formkey
   final GlobalKey<FormState> formKey;
+
   ///: 저장 / ADD 버튼 눌렀을 경우 실행할 함수
   final VoidCallback onSavePressed;
+
   ///: 저장 버튼인지 ADD 버튼인지 구분
   ///: false면 Edit 버튼
   final bool isEdit;
+
   ///: 스크롤 컨트롤러
   final ScrollController scrollController;
 
   const InputModalScreen(
-      {required this.scrollController,required this.isEdit,
+      {required this.scrollController,
+      required this.isEdit,
       required this.formKey,
       required this.inputTile,
       required this.onSavePressed,
@@ -37,6 +36,7 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
   Widget build(BuildContext context) {
     final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
     return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         controller: widget.scrollController,
         child: Column(
@@ -59,7 +59,7 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
                 ),
               ),
             ),
-      
+
             ///# 키보드 올라왔을 때, 키보드 높이만큼 여백
             SizedBox(
               height: bottomInsets,

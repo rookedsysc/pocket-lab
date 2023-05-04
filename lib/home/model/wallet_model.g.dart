@@ -1022,13 +1022,18 @@ const BudgetModelSchema = Schema(
       name: r'budgetPeriod',
       type: IsarType.long,
     ),
-    r'originBalance': PropertySchema(
+    r'isExist': PropertySchema(
       id: 3,
+      name: r'isExist',
+      type: IsarType.bool,
+    ),
+    r'originBalance': PropertySchema(
+      id: 4,
       name: r'originBalance',
       type: IsarType.double,
     ),
     r'originDay': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'originDay',
       type: IsarType.long,
     )
@@ -1057,8 +1062,9 @@ void _budgetModelSerialize(
   writer.writeDouble(offsets[0], object.balance);
   writer.writeDateTime(offsets[1], object.budgetDate);
   writer.writeLong(offsets[2], object.budgetPeriod);
-  writer.writeDouble(offsets[3], object.originBalance);
-  writer.writeLong(offsets[4], object.originDay);
+  writer.writeBool(offsets[3], object.isExist);
+  writer.writeDouble(offsets[4], object.originBalance);
+  writer.writeLong(offsets[5], object.originDay);
 }
 
 BudgetModel _budgetModelDeserialize(
@@ -1072,8 +1078,8 @@ BudgetModel _budgetModelDeserialize(
     budgetDate: reader.readDateTimeOrNull(offsets[1]),
     budgetPeriod: reader.readLongOrNull(offsets[2]),
   );
-  object.originBalance = reader.readDoubleOrNull(offsets[3]);
-  object.originDay = reader.readLongOrNull(offsets[4]);
+  object.originBalance = reader.readDoubleOrNull(offsets[4]);
+  object.originDay = reader.readLongOrNull(offsets[5]);
   return object;
 }
 
@@ -1091,8 +1097,10 @@ P _budgetModelDeserializeProp<P>(
     case 2:
       return (reader.readLongOrNull(offset)) as P;
     case 3:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 5:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1326,6 +1334,16 @@ extension BudgetModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<BudgetModel, BudgetModel, QAfterFilterCondition> isExistEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isExist',
+        value: value,
       ));
     });
   }

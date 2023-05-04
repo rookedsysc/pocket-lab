@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/common/view/loading_view.dart';
 import 'package:pocket_lab/common/view/root_tab.dart';
 import 'package:pocket_lab/utils/app_init.dart';
 
@@ -36,11 +37,7 @@ class _InitScreenState extends ConsumerState<InitScreen> {
   Widget build(BuildContext context) {
     // _isInitialized가 false일 때는 Splash Screen을 보여줌
     if (!isInitialized) {
-      return Scaffold(
-        body: Center(
-          child: Text("Loading..."),
-        ),
-      );
+      return LoadingView();
     }
 
     // _isInitialized가 true일 때는 RootTab()을 보여줌

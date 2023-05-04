@@ -32,6 +32,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _focusedDay = ref.watch(calendarProvider).focusedDay;
+
     return SafeArea(
       top: true,
       child: ListView(

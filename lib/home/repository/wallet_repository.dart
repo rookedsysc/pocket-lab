@@ -76,7 +76,7 @@ class WalletRepository extends StateNotifier<Wallet> {
   Future setIsSelectedWallet(int newWalletId) async {
     final isar = await ref.read(isarProvieder.future);
     //: 이전에 선택된 지갑의 isSelected를 false로 변경
-    isar.wallets
+    await isar.wallets
         .where()
         .filter()
         .isSelectedEqualTo(true)
@@ -91,7 +91,7 @@ class WalletRepository extends StateNotifier<Wallet> {
     });
 
     //: 선택된 지갑의 isSelected를 true로 변경
-    getSpecificWallet(newWalletId).then((value) async {
+    await getSpecificWallet(newWalletId).then((value) async {
       await isar.writeTxn(() async {
         if (value != null) {
           value.isSelected = true;

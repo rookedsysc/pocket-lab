@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:pocket_lab/chart/model/category_trend_chart_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

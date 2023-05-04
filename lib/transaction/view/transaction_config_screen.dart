@@ -84,14 +84,12 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   Widget build(BuildContext context) {
     _renderAppbarColor();
     // _renderCategories(categories);
-    return Scaffold(
-      body: InputModalScreen(
-          scrollController: ref.watch(transactionScrollControllerProvider),
-          isEdit: widget.isEdit,
-          formKey: _formKey,
-          inputTile: _inputTileList(ref),
-          onSavePressed: _onSavedPress()),
-    );
+    return InputModalScreen(
+        scrollController: ref.watch(transactionScrollControllerProvider),
+        isEdit: widget.isEdit,
+        formKey: _formKey,
+        inputTile: _inputTileList(ref),
+        onSavePressed: _onSavedPress());
   }
 
   List<InputTile> _inputTileList(WidgetRef ref) {

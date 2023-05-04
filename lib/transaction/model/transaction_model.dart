@@ -1,8 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
-import 'package:pocket_lab/transaction/model/category_model.dart';
-
 part 'transaction_model.g.dart';
 
 @Collection()
@@ -24,6 +21,8 @@ class Transaction {
   int walletId;
   //: 송금 받는 지갑
   int? toWallet;
+  //: 목표 달성 여부
+  bool goalAchieved = false;
 
   Transaction({
     required this.transactionType,

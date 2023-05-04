@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -13,7 +12,7 @@ import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/goal/view/goal_config_screen.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 class GoalListView extends ConsumerStatefulWidget {
   const GoalListView({super.key});
@@ -52,7 +51,6 @@ class _GoalListViewState extends ConsumerState<GoalListView> {
   Widget build(BuildContext context) {
     return goals.length == 0
         ?
-
         ///# 목표 없을 경우
         Container(
             child: _emtyGoalsView(context),

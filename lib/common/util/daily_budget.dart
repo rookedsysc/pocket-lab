@@ -76,7 +76,7 @@ class DailyBudget {
       final DateTime _budgetDate = budget.budgetDate!;
       //: 최초 예산 입력인 경우
       if (lastDailyBudgetDate == null) {
-        //: 최초 예산인데 오늘 날짜가 예산일보다 이전인 경우
+        //: 최초 예산인데 오늘 날짜가 예산만료일보다 이전인 경우
         if (DateTime.now().isBefore(_budgetDate)) {
           int _diffDays =
               CustomDateUtils().diffDays(budget.budgetDate!, DateTime.now());
@@ -171,8 +171,6 @@ class DailyBudget {
             title: dailyBudget,
             walletId: wallet.id));
 
-    ref.read(walletRepositoryProvider.notifier).configWallet(wallet);
+    await ref.read(walletRepositoryProvider.notifier).configWallet(wallet);
   }
 }
-
-

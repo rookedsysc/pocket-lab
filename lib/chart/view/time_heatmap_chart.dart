@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_lab/chart/model/time_heatmap_chart_model.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
+import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 
 class TimeHeatmapChart extends StatelessWidget {
@@ -71,7 +72,7 @@ class TimeHeatmapChart extends StatelessWidget {
 
   void _convertHeatmapModel() {
     for (Transaction t in transactions) {
-      if (chartData.hourlyData[t.date.hour] != null) {
+      if (chartData.hourlyData[t.date.hour] != null && t.transactionType == TransactionType.expenditure) {
         chartData.hourlyData[t.date.hour] =
             chartData.hourlyData[t.date.hour]! + t.amount;
       }

@@ -32,24 +32,29 @@ const TransactionSchema = CollectionSchema(
       name: r'date',
       type: IsarType.dateTime,
     ),
-    r'title': PropertySchema(
+    r'goalAchieved': PropertySchema(
       id: 3,
+      name: r'goalAchieved',
+      type: IsarType.bool,
+    ),
+    r'title': PropertySchema(
+      id: 4,
       name: r'title',
       type: IsarType.string,
     ),
     r'toWallet': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'toWallet',
       type: IsarType.long,
     ),
     r'transactionType': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'transactionType',
       type: IsarType.string,
       enumMap: _TransactiontransactionTypeEnumValueMap,
     ),
     r'walletId': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'walletId',
       type: IsarType.long,
     )
@@ -88,10 +93,11 @@ void _transactionSerialize(
   writer.writeDouble(offsets[0], object.amount);
   writer.writeLong(offsets[1], object.categoryId);
   writer.writeDateTime(offsets[2], object.date);
-  writer.writeString(offsets[3], object.title);
-  writer.writeLong(offsets[4], object.toWallet);
-  writer.writeString(offsets[5], object.transactionType.name);
-  writer.writeLong(offsets[6], object.walletId);
+  writer.writeBool(offsets[3], object.goalAchieved);
+  writer.writeString(offsets[4], object.title);
+  writer.writeLong(offsets[5], object.toWallet);
+  writer.writeString(offsets[6], object.transactionType.name);
+  writer.writeLong(offsets[7], object.walletId);
 }
 
 Transaction _transactionDeserialize(
@@ -104,13 +110,14 @@ Transaction _transactionDeserialize(
     amount: reader.readDouble(offsets[0]),
     categoryId: reader.readLongOrNull(offsets[1]),
     date: reader.readDateTime(offsets[2]),
-    title: reader.readString(offsets[3]),
-    toWallet: reader.readLongOrNull(offsets[4]),
+    title: reader.readString(offsets[4]),
+    toWallet: reader.readLongOrNull(offsets[5]),
     transactionType: _TransactiontransactionTypeValueEnumMap[
-            reader.readStringOrNull(offsets[5])] ??
+            reader.readStringOrNull(offsets[6])] ??
         TransactionType.remittance,
-    walletId: reader.readLong(offsets[6]),
+    walletId: reader.readLong(offsets[7]),
   );
+  object.goalAchieved = reader.readBool(offsets[3]);
   object.id = id;
   return object;
 }
@@ -129,14 +136,16 @@ P _transactionDeserializeProp<P>(
     case 2:
       return (reader.readDateTime(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 5:
+      return (reader.readLongOrNull(offset)) as P;
+    case 6:
       return (_TransactiontransactionTypeValueEnumMap[
               reader.readStringOrNull(offset)] ??
           TransactionType.remittance) as P;
-    case 6:
+    case 7:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -433,6 +442,16 @@ extension TransactionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Transaction, Transaction, QAfterFilterCondition>
+      goalAchievedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'goalAchieved',
+        value: value,
       ));
     });
   }
@@ -931,6 +950,19 @@ extension TransactionQuerySortBy
     });
   }
 
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByGoalAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'goalAchieved', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Transaction, Transaction, QAfterSortBy>
+      sortByGoalAchievedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'goalAchieved', Sort.desc);
+    });
+  }
+
   QueryBuilder<Transaction, Transaction, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -1019,6 +1051,19 @@ extension TransactionQuerySortThenBy
     });
   }
 
+  QueryBuilder<Transaction, Transaction, QAfterSortBy> thenByGoalAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'goalAchieved', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Transaction, Transaction, QAfterSortBy>
+      thenByGoalAchievedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'goalAchieved', Sort.desc);
+    });
+  }
+
   QueryBuilder<Transaction, Transaction, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1101,6 +1146,12 @@ extension TransactionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Transaction, Transaction, QDistinct> distinctByGoalAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'goalAchieved');
+    });
+  }
+
   QueryBuilder<Transaction, Transaction, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1152,6 +1203,12 @@ extension TransactionQueryProperty
   QueryBuilder<Transaction, DateTime, QQueryOperations> dateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'date');
+    });
+  }
+
+  QueryBuilder<Transaction, bool, QQueryOperations> goalAchievedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'goalAchieved');
     });
   }
 

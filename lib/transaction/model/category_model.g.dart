@@ -27,6 +27,11 @@ const TransactionCategorySchema = CollectionSchema(
       id: 1,
       name: r'name',
       type: IsarType.string,
+    ),
+    r'order': PropertySchema(
+      id: 2,
+      name: r'order',
+      type: IsarType.long,
     )
   },
   estimateSize: _transactionCategoryEstimateSize,
@@ -62,6 +67,7 @@ void _transactionCategorySerialize(
 ) {
   writer.writeString(offsets[0], object.color);
   writer.writeString(offsets[1], object.name);
+  writer.writeLong(offsets[2], object.order);
 }
 
 TransactionCategory _transactionCategoryDeserialize(
@@ -75,6 +81,7 @@ TransactionCategory _transactionCategoryDeserialize(
     id: id,
     name: reader.readString(offsets[1]),
   );
+  object.order = reader.readLong(offsets[2]);
   return object;
 }
 
@@ -89,6 +96,8 @@ P _transactionCategoryDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -517,6 +526,62 @@ extension TransactionCategoryQueryFilter on QueryBuilder<TransactionCategory,
       ));
     });
   }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterFilterCondition>
+      orderEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'order',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterFilterCondition>
+      orderGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'order',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterFilterCondition>
+      orderLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'order',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterFilterCondition>
+      orderBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'order',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension TransactionCategoryQueryObject on QueryBuilder<TransactionCategory,
@@ -552,6 +617,20 @@ extension TransactionCategoryQuerySortBy
       sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterSortBy>
+      sortByOrder() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'order', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterSortBy>
+      sortByOrderDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'order', Sort.desc);
     });
   }
 }
@@ -599,6 +678,20 @@ extension TransactionCategoryQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterSortBy>
+      thenByOrder() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'order', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QAfterSortBy>
+      thenByOrderDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'order', Sort.desc);
+    });
+  }
 }
 
 extension TransactionCategoryQueryWhereDistinct
@@ -614,6 +707,13 @@ extension TransactionCategoryQueryWhereDistinct
       distinctByName({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TransactionCategory, TransactionCategory, QDistinct>
+      distinctByOrder() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'order');
     });
   }
 }
@@ -635,6 +735,12 @@ extension TransactionCategoryQueryProperty
   QueryBuilder<TransactionCategory, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<TransactionCategory, int, QQueryOperations> orderProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'order');
     });
   }
 }

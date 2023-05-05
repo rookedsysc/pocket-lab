@@ -49,13 +49,6 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     WalletCardSlider(),
                     TransactionButtons(),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: CategoryChart(isHome: true,)),
                   ],
                 ),
               ),

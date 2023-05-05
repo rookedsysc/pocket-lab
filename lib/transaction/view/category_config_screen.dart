@@ -43,53 +43,12 @@ class _CategoryConfigScreenState extends ConsumerState<CategoryConfigScreen> {
   @override
   Widget build(BuildContext context) {
     return 
-    // Scaffold(
-    //   appBar: AppBar(
-    //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-    //     elevation: 0,
-    //     leading: IconButton(
-    //       icon: Icon(
-    //         Icons.arrow_back_ios,
-    //         color: Theme.of(context).iconTheme.color,
-    //       ),
-    //       onPressed: () {
-    //         Navigator.of(context).pop();
-    //       },
-    //     ),
-    //     title: Text(
-    //       "Select Category",
-    //       style: Theme.of(context).textTheme.bodyLarge,
-    //     ),
-    //   ),
-    //   body: 
       Material(
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              // Expanded(
-              //   child: ListView.builder(
-              //       itemBuilder: (context, index) {
-              //         return Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Container(
-              //             height: 50,
-              //             decoration: BoxDecoration(
-              //               color: Theme.of(context).cardColor,
-              //               borderRadius: BorderRadius.circular(8),
-              //             ),
-              //             child: Row(
-              //               children: [
-              //                 Text(categories[index].name),
-              //               ],
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //       itemCount: categories.length),
-
-              // ),
               _topButton(context),
 
               Expanded(

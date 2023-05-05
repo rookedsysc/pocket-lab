@@ -1,16 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/view/loading_view.dart';
+import 'package:pocket_lab/home/view/home_screen/category_input_modal_screen.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:sheet/route.dart';
 
-class CategoryConfigView extends ConsumerWidget {
+class CategoryList extends ConsumerWidget {
   List<TransactionCategory> _categories = [];
-  CategoryConfigView({super.key});
+  CategoryList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,6 +25,7 @@ class CategoryConfigView extends ConsumerWidget {
             .watch(categoryRepositoryProvider.notifier)
             .allCategoriesStream(),
         builder: (context, snapshot) {
+
           if (snapshot.data == null) {
             return Center(child: const CircularProgressIndicator(),);
           }
@@ -42,7 +49,7 @@ class CategoryConfigView extends ConsumerWidget {
                     childAspectRatio: 5,
                     onReorder: ((oldIndex, newIndex) => null),
                     children: List.generate(_categories.length + 1, (index) {
-                      if (_categories.length == index) {
+                      if (index == _categories.length) {
                         return _addItem(context);
                       }
 
@@ -58,11 +65,21 @@ class CategoryConfigView extends ConsumerWidget {
 
   Widget _addItem(BuildContext context) {
     return InkWell(
+      key: ValueKey("add"),
       onTap: () {
-        CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => );
+        Navigator.of(context).push(
+          CupertinoSheetRoute(
+            initialStop: 0.6,
+            stops: <double>[0, 0.6, 1],
+            // Screen은 이동할 스크린
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            builder: (context) => CategoryInputModalScreen(
+              isEdit: false,
+            ),
+          ),
+        );
       },
       child: Container(
-        key: ValueKey('add'),
         child: Center(
             child: Icon(
           Icons.add,

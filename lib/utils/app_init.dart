@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
-import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
@@ -38,22 +36,22 @@ class AppInit {
 
   Future<void> categoryInit() async {
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
-    categoryRepository.allCategoriesStream().listen((event) {
-      if (event.isEmpty) {
-        categoryRepository.configCategory(TransactionCategory(
-            id: 1, name: "For Chart", color: "FFFFFF")); //: 갈색
-        categoryRepository.configCategory(TransactionCategory(
-            id: 2, name: "No Element", color: "000000")); //: 갈색
-        categoryRepository.configCategory(TransactionCategory(
-            name: "Living Expense", color: "964B00")); //: 갈색
-        categoryRepository.configCategory(
-            TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
-        categoryRepository.configCategory(
-            TransactionCategory(name: "Hobby", color: "ff0000")); //: 빨간색
-        categoryRepository.configCategory(
-            TransactionCategory(name: "Etc", color: "808080")); //: 빨간색
-      }
-    });
+    List<TransactionCategory> categories =
+        await categoryRepository.getAllCategories();
+    if (categories.isEmpty) {
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "For Chart", color: "FFFFFF")); //: 갈색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "No Element", color: "000000")); //: 갈색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Living Expense", color: "964B00")); //: 갈색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Hobby", color: "ff0000")); //: 빨간색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Etc", color: "808080")); //: 빨간색
+    }
     ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
   }
 

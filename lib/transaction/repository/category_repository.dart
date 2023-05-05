@@ -17,7 +17,7 @@ final categoryRepositoryProvider =
 class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   final Ref ref;
   CategoryRepository(this.ref)
-      : super([TransactionCategory(name: "", color: "##000000")]);
+      : super([]);
 
   //# 모든 카테고리
   Stream<List<TransactionCategory>> allCategoriesStream() async* {
@@ -38,23 +38,20 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   //# 카테고리 추가
   Future<void> configCategory(TransactionCategory category) async {
     final Isar isar = await ref.read(isarProvieder.future);
-    int order = await _getNextOrder();
+    int order = _getNextOrder();
     category.order = order;
-    
-    isar.writeTxn(() async {
+    await isar.writeTxn(() async {
       await isar.transactionCategorys.put(category);
     });
-    syncCategoryCache();
+    await syncCategoryCache();
   }
 
   //: Category 추가할 때 다음 순서를 가져옴
-  Future<int> _getNextOrder() async {
-    List<TransactionCategory> categories = await getAllCategories();
+  int _getNextOrder() {
+    if (state.isEmpty) return 0;
 
-    if(categories.isEmpty) return 0;
-
-    categories.sort((a, b) => a.order.compareTo(b.order));
-    return categories.last.order + 1;
+    state.sort((a, b) => a.order.compareTo(b.order));
+    return state.last.order + 1;
   }
 
   ///# category id로 카테고리 가져오기
@@ -70,7 +67,7 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
     isar.writeTxn(() async {
       await isar.transactionCategorys.delete(category.id);
     });
-    syncCategoryCache();
+    await syncCategoryCache();
   }
 
   //# DB <===> Local Cache 동기화

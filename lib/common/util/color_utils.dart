@@ -5,6 +5,10 @@ class ColorUtils {
     return Color(int.parse("FF$stringColor", radix: 16));
   }
 
+  static String colorToHexString(Color color) {
+    return '${color.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+  }
+
   static bool isBlackShade(String stringColor) {
     final color = stringToColor(stringColor);
     final int threshold = 50;

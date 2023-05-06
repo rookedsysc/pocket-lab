@@ -88,29 +88,37 @@ class _NumberTypeTextFormFieldState
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
-  @override
+
+@override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    double value = 0;
-
-    try {
-      value = double.parse(newValue.text);
-    } catch (e) {
-      print("Error Message : $e \n newValue : ${newValue.text}");
-      value = 0;
-      return newValue.copyWith(text: "");
-    }
+    final newText = newValue.text.replaceAll(',', '');
+    final int value = int.tryParse(newText) ?? 0;
 
     if (value == 0) {
-      return newValue.copyWith(text: "");
+      return newValue.copyWith(text: '');
     }
 
-    final formatter = NumberFormat.simpleCurrency();
-
-    String newText = formatter.format(value);
+    final formattedText = _formatNumber(newText);
 
     return newValue.copyWith(
-        text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
+        text: formattedText,
+        selection: TextSelection.collapsed(offset: formattedText.length));
+  }
+
+  String _formatNumber(String text) {
+    final buffer = StringBuffer();
+    int count = 0;
+
+    for (int i = text.length - 1; i >= 0; i--) {
+      count++;
+      buffer.write(text[i]);
+      if (count == 3 && i != 0) {
+        buffer.write(',');
+        count = 0;
+      }
+    }
+
+    return buffer.toString().split('').reversed.join('');
   }
 }

@@ -39,22 +39,7 @@ class CategoryList extends ConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderCollection(headerType: HeaderType.categoryList),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      isEdit = true;
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    label: Text("Edit"),
-                  )
-                ],
-              ),
+              HeaderCollection(headerType: HeaderType.categoryList),
               SizedBox(
                 height: 8.0,
               ),

@@ -24,7 +24,7 @@ class CategoryTrendChartNotifier
   ///# 새로운 Transaction을 생성할 때 호출
   ///# 해당 Transaction의 Category 외의 다른 Category에도 동일한 일자에
   ///# 데이터를 넣어줌
-  Future<void> syncCategory(Transaction transaction) async {
+ Future<void> syncCategory(Transaction transaction) async {
     final Isar isar = await ref.read(isarProvieder.future);
     await ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
     List<TransactionCategory> categories =

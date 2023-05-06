@@ -69,6 +69,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   void didChangeDependencies() {
     _transaction.transactionType = widget.transactionType;
     _getWallet();
+    _transaction.categoryId = ref.read(categoryRepositoryProvider).first.id;
     super.didChangeDependencies();
   }
 
@@ -295,7 +296,8 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
             String _initialValue;
             try {
               _initialValue = categories
-                  .firstWhere((element) => element.id == _transaction.categoryId)
+                  .firstWhere(
+                      (element) => element.id == _transaction.categoryId)
                   .name;
             } catch (e) {
               _initialValue = categories.first.name;
@@ -457,14 +459,4 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         break;
     }
   }
-
-  // void _renderCategories(List<RecordCategoryData> categories) async {
-  //   for (RecordCategoryData category in categories) {
-  //     _categorieNames.add(category.category);
-
-  //   }
-  //   if (_selectedCategory.length == 0) {
-  //       _selectedCategory = _categorieNames.first;
-  //     }
-  // }
 }

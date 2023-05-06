@@ -25,7 +25,7 @@ class CustomDateUtils {
     return dateTimes.last;
   }
 
-  ///* 년, 월, 일만 return 
+  ///* 년, 월, 일만 return
   DateTime onlyDate(DateTime date) {
     return DateTime(date.year, date.month, date.day);
   }
@@ -214,7 +214,11 @@ class CustomDateUtils {
     }
   }
 
-  String getStringLabel(DateTime date, WidgetRef ref) {
+  String getStringLabel(
+      {required DateTime date, required WidgetRef ref, bool isHome = false}) {
+    if (isHome) {
+      return CustomDateUtils().dateToFyyyyMMdd(date);
+    }
     switch (ref.watch(chartRangeProvider)) {
       //: 일별
       case ChartRangeType.daily:

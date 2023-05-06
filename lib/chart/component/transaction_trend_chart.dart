@@ -73,7 +73,7 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
       } catch (e) {}
       if (temp == null) {
         temp = TransactionTrendChartDataModel(amount: 0, date: model.date);
-        temp.setLabel = CustomDateUtils().getStringLabel(model.date, ref);
+        temp.setLabel = CustomDateUtils().getStringLabel(date: model.date, ref: ref);
         _expenseData.add(temp);
       }
     }
@@ -86,7 +86,7 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
       } catch (e) {}
       if (temp == null) {
         temp = TransactionTrendChartDataModel(amount: 0, date: model.date);
-        temp.setLabel = CustomDateUtils().getStringLabel(model.date, ref);
+        temp.setLabel = CustomDateUtils().getStringLabel(date: model.date, ref: ref);
         _incomeData.add(temp);
       }
     }

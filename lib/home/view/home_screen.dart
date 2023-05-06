@@ -14,6 +14,7 @@ import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
+import 'package:pocket_lab/home/view/widget/category_list.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -47,15 +48,12 @@ class HomeScreen extends ConsumerWidget {
                     SizedBox(
                       height: 8.0,
                     ),
-                    WalletCardSlider(),
-                    TransactionButtons(),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: CategoryChart(isHome: true,)),
+                    WalletCardSlider(), TransactionButtons(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 16.0, left: 16.0, bottom: 16.0),
+                      child: CategoryList(),
+                    )
                   ],
                 ),
               ),

@@ -19,12 +19,19 @@ class InputModalScreen extends ConsumerStatefulWidget {
   ///: 스크롤 컨트롤러
   final ScrollController scrollController;
 
-  const InputModalScreen(
+  //: 삭제 버튼
+  bool? isDelButton;
+  //: 삭제 버튼을 눌렀을 경우
+  VoidCallback? onDelPressed;
+
+  InputModalScreen(
       {required this.scrollController,
       required this.isEdit,
       required this.formKey,
       required this.inputTile,
       required this.onSavePressed,
+      this.isDelButton,
+      this.onDelPressed,
       super.key});
 
   @override
@@ -74,13 +81,16 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
     return SizedBox(
       height: 50.0,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: widget.isDelButton == true
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               icon: Icon(Icons.arrow_back_ios)),
+          widget.isDelButton == true ? Expanded(child: SizedBox()) : SizedBox(),
           TextButton(
             onPressed: widget.onSavePressed,
             child: Text(
@@ -89,6 +99,15 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
               //     ?.copyWith(color: Theme.of(context).iconTheme.color),
             ),
           ),
+          //: 삭제 버튼
+          if (widget.isDelButton == true)
+            TextButton(
+              onPressed: widget.onDelPressed,
+              child: Text(
+                "DEL",
+                style: TextStyle(color: Colors.red),
+              ),
+            )
         ],
       ),
     );

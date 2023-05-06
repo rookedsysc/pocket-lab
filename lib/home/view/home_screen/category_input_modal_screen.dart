@@ -24,14 +24,22 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
   @override
   void didChangeDependencies() {
     if (widget.category == null) {
-      widget.category = TransactionCategory(color: '', name: '');
-    }
+      widget.category = TransactionCategory(color: 'ffffff', name: '');
+    } 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return InputModalScreen(
+        isDelButton: widget.isEdit,
+        onDelPressed: () async {
+          await ref
+              .read(categoryRepositoryProvider.notifier)
+              .deleteCategory(widget.category!);
+
+          Navigator.pop(context);
+        },
         scrollController: _scrollController,
         isEdit: widget.isEdit,
         formKey: _formKey,
@@ -42,7 +50,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
   List<InputTile> _inputTileList() {
     return [
       _categoryNameInputTile(),
-      _colorPickerInputTile()
+      _colorPickerInputTile(),
     ];
   }
 
@@ -73,7 +81,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
         onSaved: (newValue) {
           widget.category!.name = newValue!;
         },
-        validator: (value) {
+        validator: widget.isEdit ? null :  (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
           }

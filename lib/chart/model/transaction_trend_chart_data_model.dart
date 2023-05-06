@@ -26,7 +26,7 @@ class TransactionTrendChartDataModel {
         TransactionTrendChartDataModel _trendChartDataModel =
             TransactionTrendChartDataModel(
                 amount: transaction.amount, date: transaction.date);
-        String label = CustomDateUtils().getStringLabel(transaction.date, ref);
+        String label = CustomDateUtils().getStringLabel(date: transaction.date, ref: ref);
         _trendChartDataModel.setLabel = label;
         try {
           chartData.firstWhere((element) => element.label == label).amount +=

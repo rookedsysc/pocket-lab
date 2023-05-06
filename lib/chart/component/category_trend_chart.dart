@@ -62,7 +62,7 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
     List<CategoryTrendChartDataModel> _willDell = [];
     for (CategoryTrendChartDataModel model in _chartDataModels) {
       if (model.categoryId == category.id) {
-        model.label = CustomDateUtils().getStringLabel(model.date, ref);
+        model.label = CustomDateUtils().getStringLabel(date: model.date, ref: ref);
         try {
           _chartData
               .firstWhere((element) => element.label == model.label)

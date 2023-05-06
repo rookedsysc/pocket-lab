@@ -40,12 +40,9 @@ class TrendChartDataModel {
     for (var trend in trends) {
       TrendChartDataModel _trendChartDataModel =
           TrendChartDataModel(trend.walletName, trend.date, trend.amount);
-      if (isHome) {
-        ref.read(chartRangeProvider.notifier).state = ChartRangeType.daily;
-      }
       _trendChartDataModel.setLabel =
-          CustomDateUtils().getStringLabel(trend.date, ref);
-      String label = CustomDateUtils().getStringLabel(trend.date, ref);
+          CustomDateUtils().getStringLabel(date: trend.date, ref: ref);
+      String label = CustomDateUtils().getStringLabel(date: trend.date, ref: ref, isHome: isHome);
       if (trendMap.containsKey(label)) {
         trendMap[label]!.add(_trendChartDataModel);
       } else {
@@ -66,7 +63,7 @@ class TrendChartDataModel {
         TrendChartDataModel result = TrendChartDataModel(
             trendChartList.last.name, trendChartList.last.date, average);
         result.setLabel =
-            CustomDateUtils().getStringLabel(trendChartList[0].date, ref);
+            CustomDateUtils().getStringLabel(date: trendChartList[0].date, ref: ref);
         chartData.add(result);
       }
     }

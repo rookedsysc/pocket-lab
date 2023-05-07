@@ -35,14 +35,15 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
       body: Scaffold(
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                widget.title,
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
+            if (widget.title.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  widget.title,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
@@ -117,8 +118,7 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
       String _colorString; 
 
       try {
-        _colorString = ref.read(categoryRepositoryProvider.notifier).state.firstWhere((element) => element.id == transaction.categoryId).color;
-
+        _colorString = ref.read(categoryRepositoryProvider).firstWhere((element) => element.id == transaction.categoryId).color;
       } catch (e) {
         // 없으면 빨간색 넣기
         _colorString = ColorUtils.colorToHexString(Colors.red);
@@ -136,4 +136,3 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
   }
 
 } 
-  

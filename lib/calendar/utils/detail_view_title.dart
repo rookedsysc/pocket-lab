@@ -13,3 +13,5 @@ class MonthDetailTitle implements DetailViewTitle {
     return result;
   }
 }
+
+

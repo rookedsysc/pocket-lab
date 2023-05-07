@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
+import 'package:pocket_lab/calendar/view/transaction_detail_view.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -71,25 +73,35 @@ class WeekHeader extends ConsumerWidget {
             }
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (totalIncome != 0)
-                  Text(
-                    '+${CustomNumberUtils.formatNumber(totalIncome)}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontSize: 12),
-                  ),
-                if (totalExpenditure != 0)
-                  Text(
-                    "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                    style: TextStyle(color: Colors.red, fontSize: 12.0),
-                  ),
-              ],
+          return InkWell(
+            onTap: () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return TransactionDetailView(
+                        title: _indexToWeek(), transactions: snapshot.data!);
+                  });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (totalIncome != 0)
+                    Text(
+                      '+${CustomNumberUtils.formatNumber(totalIncome)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 12),
+                    ),
+                  if (totalExpenditure != 0)
+                    Text(
+                      "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
+                      style: TextStyle(color: Colors.red, fontSize: 12.0),
+                    ),
+                ],
+              ),
             ),
           );
         });

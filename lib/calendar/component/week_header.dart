@@ -58,6 +58,7 @@ class WeekHeader extends ConsumerWidget {
             .watch(transactionRepositoryProvider.notifier)
             .getTransactionByPeriod(week.firstDayOfWeek, week.lastDayOfWeek),
         builder: (context, snapshot) {
+          
           if (snapshot.data == null || snapshot.data!.isEmpty) {
             return _isLoading(textTheme);
           }
@@ -78,8 +79,17 @@ class WeekHeader extends ConsumerWidget {
               CupertinoScaffold.showCupertinoModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return TransactionDetailView(
-                        title: _indexToWeek(), transactions: snapshot.data!);
+                    return Consumer(
+                      builder: (context, _consumerRef, child) {
+                        return TransactionDetailView(
+                            stream: _consumerRef   
+                                .watch(transactionRepositoryProvider.notifier)
+                                .getTransactionByPeriod(
+                                    week.firstDayOfWeek, week.lastDayOfWeek),
+                            title: _indexToWeek(),
+                            );
+                      }
+                    );
                   });
             },
             child: Padding(

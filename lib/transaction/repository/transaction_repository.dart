@@ -8,6 +8,7 @@ import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
@@ -245,6 +246,56 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
             .read(categoryTrendChartProvider.notifier)
             .createCategoryTrend(_randomTransaction);
       }
+    }
+  }
+
+  Future<void> delete(Transaction transaction) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    await _updateCategoryTrend(transaction);
+    await _modifyWalletBalance(transaction);
+
+    await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
+    return isar.writeTxn(() async {
+      await isar.transactions.delete(transaction.id);
+    });
+  }
+
+  Future<void> _updateCategoryTrend(Transaction transaction) async {
+        if (transaction.transactionType == TransactionType.expenditure) {
+      await ref
+          .read(categoryTrendChartProvider.notifier)
+          .subtractData(transaction);
+    }
+  }
+
+  Future<void> _modifyWalletBalance(Transaction transaction) async {
+    final Wallet? fromWallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.walletId);
+
+
+    if (fromWallet != null) {
+      if (transaction.transactionType == TransactionType.expenditure) {
+        fromWallet.balance += transaction.amount;
+      } else if (transaction.transactionType == TransactionType.income) {
+        fromWallet.balance -= transaction.amount;
+      } else if (transaction.toWallet != null) {
+              final Wallet? toWallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.toWallet!);
+
+
+        fromWallet.balance -= transaction.amount;
+        toWallet!.balance += transaction.amount;
+        await ref
+            .read(walletRepositoryProvider.notifier)
+            .configWallet(toWallet);
+      }
+
+      await ref
+          .read(walletRepositoryProvider.notifier)
+          .configWallet(fromWallet);
     }
   }
 

@@ -190,6 +190,8 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
         .watch(transactionRepositoryProvider.notifier)
         .getTransactionByPeriod(widget.date, widget.date);
     transactionSubscription = transactionStream.listen((events) {
+      totalExpenditure = 0;
+      totalIncome = 0;
       _transaction = events;
       for (Transaction event in events) {
         if (event.transactionType == TransactionType.income) {
@@ -218,9 +220,15 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
           ? () {
               CupertinoScaffold.showCupertinoModalBottomSheet(
                 context: context,
-                builder: (context) => TransactionDetailView(
-                  title: "",
-                  transactions: _transaction,
+                builder: (context) => Consumer(
+                  builder: (context, _consumerRef, child) {
+                    return TransactionDetailView(
+                      stream: _consumerRef 
+        .watch(transactionRepositoryProvider.notifier)
+        .getTransactionByPeriod(widget.date, widget.date),
+                      title: "",
+                    );
+                  }
                 ),
               );
             }

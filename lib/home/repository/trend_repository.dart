@@ -97,6 +97,17 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     });
   }
 
+  ///* 모든 Wallet의 잔액을 Trend에 저장
+  Future<void> allWalletsSync() async {
+    final wallets =
+        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+    List<Future> futures = [];
+    for (Wallet wallet in wallets) {
+      futures.add(syncTrend(wallet.id));
+    }
+    await Future.wait(futures);
+  }
+
   ///* Wallet의 잔액을 Trend에 저장
   Future<void> syncTrend(int walletId) async {
     final isar = await ref.read(isarProvieder.future);

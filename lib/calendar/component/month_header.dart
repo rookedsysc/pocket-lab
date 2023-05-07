@@ -55,9 +55,19 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
                       onPressed: () {
                         CupertinoScaffold.showCupertinoModalBottomSheet(
                             context: context,
-                            builder: (context) => TransactionDetailView(
-                                title: MonthDetailTitle().get(_focusedDate),
-                                transactions: snapshot.data!));
+                            builder: (context) =>
+                                //# 부분적으로 다른 Context에 있는 Ref를 쓰고 싶을 때
+                                Consumer(builder: (context, _consumerRef, child) {
+                                  return TransactionDetailView(
+                                      stream: _consumerRef
+                                          .watch(transactionRepositoryProvider
+                                              .notifier)
+                                          .getSelectMonthTransactions(
+                                              _focusedDate),
+                                      title:
+                                          MonthDetailTitle().get(_focusedDate),
+                                      );
+                                }));
                       },
                       icon: Icon(Icons.receipt,
                           color: Theme.of(context).primaryColor)),

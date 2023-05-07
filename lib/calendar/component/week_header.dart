@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
+import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
@@ -38,61 +39,75 @@ class WeekHeader extends ConsumerWidget {
 
     return Stack(
       children: [
-        Container(
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(_indexToWeek()),
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: Colors.blue,
-          ),
-        ),
-        StreamBuilder<List<Transaction>>(
-            stream: ref
-                .watch(transactionRepositoryProvider.notifier)
-                .getTransactionByPeriod(
-                    week.firstDayOfWeek, week.lastDayOfWeek),
-            builder: (context, snapshot) {
-              if (snapshot.data == null || snapshot.data!.isEmpty) {
-                return _isLoading(textTheme);
-              }
-
-              totalIncome = 0;
-              totalExpenditure = 0;
-
-              for (Transaction event in snapshot.data!) {
-                if (event.transactionType == TransactionType.income) {
-                  totalIncome += event.amount;
-                } else if (event.transactionType ==
-                    TransactionType.expenditure) {
-                  totalExpenditure += event.amount;
-                }
-              }
-
-              return Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (totalIncome != 0)
-                      Text(
-                        '+${CustomNumberUtils.formatNumber(totalIncome)}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontSize: 12),
-                      ),
-                    if (totalExpenditure != 0)
-                      Text(
-                        "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                        style: TextStyle(color: Colors.red, fontSize: 12.0),
-                      ),
-                  ],
-                ),
-              );
-            }),
+        _badge(textTheme),
+        _amount(ref, week, textTheme, totalIncome, totalExpenditure),
       ],
+    );
+  }
+
+  StreamBuilder<List<Transaction>> _amount(
+      WidgetRef ref,
+      CalendarWeekModel week,
+      TextTheme textTheme,
+      double totalIncome,
+      double totalExpenditure) {
+    return StreamBuilder<List<Transaction>>(
+        stream: ref
+            .watch(transactionRepositoryProvider.notifier)
+            .getTransactionByPeriod(week.firstDayOfWeek, week.lastDayOfWeek),
+        builder: (context, snapshot) {
+          if (snapshot.data == null || snapshot.data!.isEmpty) {
+            return _isLoading(textTheme);
+          }
+
+          totalIncome = 0;
+          totalExpenditure = 0;
+
+          for (Transaction event in snapshot.data!) {
+            if (event.transactionType == TransactionType.income) {
+              totalIncome += event.amount;
+            } else if (event.transactionType == TransactionType.expenditure) {
+              totalExpenditure += event.amount;
+            }
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (totalIncome != 0)
+                  Text(
+                    '+${CustomNumberUtils.formatNumber(totalIncome)}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontSize: 12),
+                  ),
+                if (totalExpenditure != 0)
+                  Text(
+                    "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
+                    style: TextStyle(color: Colors.red, fontSize: 12.0),
+                  ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Container _badge(TextTheme textTheme) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text(_indexToWeek(),
+            style: textTheme.bodyMedium!.copyWith(
+                color: ColorUtils.getComplementaryColor(
+                    textTheme.bodyLarge!.color!))),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: textTheme.bodyMedium!.color,
+      ),
     );
   }
 

@@ -134,7 +134,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
-  ///# 해당 월 지출 Stream으로 가져오기
+  ///# 해당 월 모든 종류의 거래내역 Stream으로 가져오기
   Stream<List<Transaction>> getSelectMonthExpenditureByCategory(
       DateTime date, int categoryId) async* {
     final Isar isar = await ref.read(isarProvieder.future);
@@ -228,7 +228,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
     for (Wallet _wallet in _wallets) {
       for (int i = 0; i < 100; i++) {
-        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, 4, Random().nextInt(60));
+        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, Random().nextInt(24), Random().nextInt(60));
         int _categoryId =
             _categoryIds[Random().nextInt(_categoryIds.length)].id;
                       Transaction _randomTransaction = Transaction(

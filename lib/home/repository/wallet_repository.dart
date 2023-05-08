@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
-import 'package:pocket_lab/goal/model/goal_model.dart';
-import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 
 final walletRepositoryProvider =
@@ -126,7 +124,7 @@ class WalletRepository extends StateNotifier<Wallet> {
     return walletCount == 0;
   }
 
-  // 지갑 id로 지갑 이름 가져오기
+  ///# 지갑 id로 지갑 이름 가져오기
   Future<String> getWalletName(int walletId) async {
     final isar = await ref.read(isarProvieder.future);
     final wallet = await isar.wallets.get(walletId);

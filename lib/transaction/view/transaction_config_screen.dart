@@ -118,7 +118,8 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     return () async {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        if (!_getCustomValidatorCheck()) {
+
+        if (!_getCustomValidatorCheck() && widget.transaction == null) {
           return null;
         }
 
@@ -161,6 +162,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     if (_wallet == null) {
       return;
     }
+    if (widget.transaction != null) {
+      _verifyAndUndoChanges(transaction, _wallet, _toWallet);
+    }
+
 
     switch (widget.transactionType) {
       case TransactionType.expenditure:
@@ -181,6 +186,35 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
         ref.read(walletRepositoryProvider.notifier).configWallet(_toWallet);
         break;
+    }
+  }
+
+  Future<void> _verifyAndUndoChanges(
+      Transaction transaction, Wallet _wallet, Wallet? _toWallet) async {
+    try {
+      Transaction? _transaction = await ref
+          .read(transactionRepositoryProvider.notifier)
+          .getSpecificTransaction(transaction.id);
+      bool _isNotNull(Transaction? tr) {
+        return tr != null;
+      }
+
+      if (_isNotNull(_transaction) &&
+          _transaction!.transactionType == TransactionType.income) {
+        _wallet.balance -= _transaction.amount;
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+      } else if (_isNotNull(_transaction) &&
+          _transaction!.transactionType == TransactionType.expenditure) {
+        _wallet.balance += _transaction.amount;
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+      } else {
+        _wallet.balance += _transaction!.amount;
+        _toWallet!.balance -= transaction.amount;
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 
@@ -221,6 +255,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     String _selectedWalletName;
     String _fieldName;
 
+
     if (widget.transactionType == TransactionType.remittance) {
       _fieldName = "from Wallet";
     } else {
@@ -233,6 +268,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       _selectedWalletName = _selectWallet.name;
       debugPrint(_selectedWalletName);
     }
+
     return InputTile(
         hint: _selectWalletInputTileHint,
         fieldName: _fieldName,
@@ -299,6 +335,13 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                   .firstWhere(
                       (element) => element.id == _transaction.categoryId)
                   .name;
+
+              if (widget.transaction != null) {
+                _initialValue = categories
+                    .firstWhere((element) =>
+                        element.id == widget.transaction!.categoryId)
+                    .name;
+              }
             } catch (e) {
               _initialValue = categories.first.name;
             }
@@ -342,10 +385,12 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   InputTile _transactionTitleInputTile() {
     return InputTile(
         fieldName: "Transaction Title",
+
         inputField: TextTypeTextFormField(
+                  hintText: widget.transaction?.title,
           onTap: _onTap(ref),
           onSaved: _transactionTitleOnSaved(),
-          validator: _transactionTiltleValidator(),
+          validator: widget.transaction == null ? _transactionTiltleValidator() : null,
         ));
   }
 
@@ -361,7 +406,9 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   FormFieldSetter _transactionTitleOnSaved() {
     return (value) {
       _transaction.title = value;
-      widget.transaction?.title = value;
+      if (value.isNotEmpty) {
+        widget.transaction?.title = value;
+      }
     };
   }
 
@@ -380,8 +427,9 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     return InputTile(
         fieldName: "Amount",
         inputField: NumberTypeTextFormField(
+          hintText: widget.transaction?.amount.toString(),
           onTap: () {},
-          validator: _amountValidator(),
+          validator: widget.transaction == null ? _amountValidator() : null,
           onSaved: _amountOnSaved(),
         ));
   }
@@ -400,8 +448,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       /// newValue가 ₩50,000와 같은 형태로 들어오기 때문에
       /// 숫자만 추출하여 double로 변환
       String _amountOnlyDigit = CustomNumberUtils.getNumberFromString(value);
-      widget.transaction?.amount = double.parse(_amountOnlyDigit);
-      _transaction.amount = double.parse(_amountOnlyDigit);
+      if (_amountOnlyDigit.isNotEmpty) {
+        widget.transaction?.amount = double.parse(_amountOnlyDigit);
+        _transaction.amount = double.parse(_amountOnlyDigit);
+      }
     };
   }
 

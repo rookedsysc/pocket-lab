@@ -97,6 +97,13 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
+  ///# 받아온 ID에 해당되는 Transaction return
+  Future<Transaction?> getSpecificTransaction(int id) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return await isar.transactions.get(id);
+  }
+
   //* 모든 거래 내역 Stream으로 가져오기
   //: Category 별로 Map<int(카테고리 ID), List<Transaction>> 형태로 가져옴
   Stream<Map<int, List<Transaction>>> getTransactionsByCategory() async* {
@@ -215,7 +222,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     return lastDailyTransactions;
   }
 
-  //* 랜덤 트랜잭션 생덤
+  //* 랜덤 트랜잭션 생성
   Future<void> createRandomTransaction() async {
     final Isar isar = await ref.read(isarProvieder.future);
     List<TransactionCategory> _categoryIds =

@@ -88,8 +88,7 @@ class _NumberTypeTextFormFieldState
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
-
-@override
+  @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     final newText = newValue.text.replaceAll(',', '');

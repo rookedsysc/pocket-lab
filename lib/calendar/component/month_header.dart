@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/calendar/model/calendar_model.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
+import 'package:pocket_lab/calendar/utils/detail_view_title.dart';
+import 'package:pocket_lab/calendar/view/transaction_detail_view.dart';
 import 'package:pocket_lab/chart/component/category_chart.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -47,6 +44,30 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (_totalIncome != 0 || _totalExpense != 0)
+                  IconButton(
+                      onPressed: () {
+                        CupertinoScaffold.showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) =>
+                                //# 부분적으로 다른 Context에 있는 Ref를 쓰고 싶을 때
+                                Consumer(builder: (context, _consumerRef, child) {
+                                  return TransactionDetailView(
+                                      stream: _consumerRef
+                                          .watch(transactionRepositoryProvider
+                                              .notifier)
+                                          .getSelectMonthTransactions(
+                                              _focusedDate),
+                                      title:
+                                          MonthDetailTitle().get(_focusedDate),
+                                      );
+                                }));
+                      },
+                      icon: Icon(Icons.receipt,
+                          color: Theme.of(context).primaryColor)),
+                SizedBox(
+                  width: 16.0,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

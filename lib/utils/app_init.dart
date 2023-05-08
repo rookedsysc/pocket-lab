@@ -39,12 +39,8 @@ class AppInit {
     List<TransactionCategory> categories =
         await categoryRepository.getAllCategories();
     if (categories.isEmpty) {
-      await categoryRepository.configCategory(
-          TransactionCategory(name: "For Chart", color: "FFFFFF")); //: 갈색
-      await categoryRepository.configCategory(
-          TransactionCategory(name: "No Element", color: "000000")); //: 갈색
-      await categoryRepository.configCategory(
-          TransactionCategory(name: "Living Expense", color: "964B00")); //: 갈색
+      await categoryRepository.configCategory(TransactionCategory(
+          name: "Category not specified", color: "D3D3D3")); //: 연한 흰색
       await categoryRepository.configCategory(
           TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
       await categoryRepository.configCategory(

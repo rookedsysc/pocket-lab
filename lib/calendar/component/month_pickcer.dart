@@ -122,7 +122,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
                     setState(() {});
                   }
                 },
-                icon: Icon(Icons.navigate_before_rounded),
+                icon: Icon(Icons.navigate_before_rounded, color: Colors.blue,),
               ),
               //# 선택된 년도
               Expanded(
@@ -148,7 +148,7 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
                     setState(() {});
                   }
                 },
-                icon: const Icon(Icons.navigate_next_rounded),
+                icon: const Icon(Icons.navigate_next_rounded, color: Colors.blue,),
               ),
             ],
           ),

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/component/calendar.dart';
 import 'package:pocket_lab/calendar/component/month_header.dart';
 import 'package:pocket_lab/calendar/component/month_pickcer.dart';
-import 'package:pocket_lab/calendar/component/week_header.dart';
 import 'package:pocket_lab/calendar/layout/week_header_layout.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
-import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
-
 
 class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
@@ -34,15 +30,21 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Widget build(BuildContext context) {
     _focusedDay = ref.watch(calendarProvider).focusedDay;
 
-    return SafeArea(
-      top: true,
-      child: ListView(
-        children: [
-          MonthPicker(),
-          MonthHeader(),
-          WeekHeaderLayOut(focusedDay: _focusedDay),
-          Calendar()
-        ],
+    return Material(
+      child: CupertinoScaffold(
+        body: Scaffold(
+          body:  SafeArea(
+              top: true,
+              child: ListView(
+                children: [
+                  MonthPicker(),
+                  MonthHeader(),
+                  WeekHeaderLayOut(focusedDay: _focusedDay),
+                  Calendar()
+                ],
+              ),
+            ),
+          ),
       ),
     );
   }

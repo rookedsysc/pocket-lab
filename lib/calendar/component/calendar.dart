@@ -6,12 +6,14 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/component/month_header.dart';
 import 'package:pocket_lab/calendar/component/week_header.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
 import 'package:pocket_lab/calendar/view/calendar_screen.dart';
+import 'package:pocket_lab/calendar/view/transaction_detail_view.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -179,6 +181,7 @@ class _CalendarBox extends ConsumerStatefulWidget {
 class _CalendarBoxState extends ConsumerState<_CalendarBox> {
   double totalIncome = 0;
   double totalExpenditure = 0;
+  List<Transaction> _transaction = [];
   late StreamSubscription transactionSubscription;
 
   @override
@@ -187,6 +190,9 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
         .watch(transactionRepositoryProvider.notifier)
         .getTransactionByPeriod(widget.date, widget.date);
     transactionSubscription = transactionStream.listen((events) {
+      totalExpenditure = 0;
+      totalIncome = 0;
+      _transaction = events;
       for (Transaction event in events) {
         if (event.transactionType == TransactionType.income) {
           totalIncome += event.amount;
@@ -209,43 +215,73 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            widget.date.day.toString(),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: widget.textColor ??
-                      Theme.of(context).textTheme.bodyMedium?.color,
+    return InkWell(
+      onTap: _transaction.isNotEmpty
+          ? () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                context: context,
+                builder: (context) => Consumer(
+                  builder: (context, _consumerRef, child) {
+                    return TransactionDetailView(
+                      stream: _consumerRef 
+        .watch(transactionRepositoryProvider.notifier)
+        .getTransactionByPeriod(widget.date, widget.date),
+                      title: "",
+                    );
+                  }
                 ),
-            textAlign: TextAlign.center,
+              );
+            }
+          : null,
+      child: Container(
+        margin: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.2),
           ),
-
-          //: 오늘 수입/지출
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (totalIncome != 0)
-                  Text(
-                    "+${CustomNumberUtils.formatNumber(totalIncome)}",
-                    style: TextStyle(
-                        fontSize: 9,
-                        color: Theme.of(context).textTheme.bodyLarge?.color),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        width: MediaQuery.of(context).size.width / 7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              widget.date.day.toString(),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: widget.textColor ??
+                        Theme.of(context).textTheme.bodyMedium?.color,
                   ),
-                if (totalExpenditure != 0)
-                  Text(
-                    "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                    style: TextStyle(fontSize: 9, color: Colors.red),
-                  ),
-              ],
+              textAlign: TextAlign.center,
             ),
-          )
-        ],
+
+            //: 오늘 수입/지출
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (totalIncome != 0)
+                    Text(
+                      "+${CustomNumberUtils.formatNumber(totalIncome)}",
+                      style: TextStyle(
+                          fontSize: 9,
+                          color: Theme.of(context).textTheme.bodyLarge?.color),
+                    ),
+                  SizedBox(
+                    height: 4.0,
+                  ),
+                  if (totalExpenditure != 0)
+                    Text(
+                      "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
+                      style: TextStyle(fontSize: 9, color: Colors.red),
+                    ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

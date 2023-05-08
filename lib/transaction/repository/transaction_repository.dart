@@ -8,6 +8,7 @@ import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
@@ -96,6 +97,13 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
+  ///# 받아온 ID에 해당되는 Transaction return
+  Future<Transaction?> getSpecificTransaction(int id) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    return await isar.transactions.get(id);
+  }
+
   //* 모든 거래 내역 Stream으로 가져오기
   //: Category 별로 Map<int(카테고리 ID), List<Transaction>> 형태로 가져옴
   Stream<Map<int, List<Transaction>>> getTransactionsByCategory() async* {
@@ -134,7 +142,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .asBroadcastStream();
   }
 
-  ///# 해당 월 지출 Stream으로 가져오기
+  ///# 해당 월 모든 종류의 거래내역 Stream으로 가져오기
   Stream<List<Transaction>> getSelectMonthExpenditureByCategory(
       DateTime date, int categoryId) async* {
     final Isar isar = await ref.read(isarProvieder.future);
@@ -214,7 +222,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     return lastDailyTransactions;
   }
 
-  //* 랜덤 트랜잭션 생덤
+  //* 랜덤 트랜잭션 생성
   Future<void> createRandomTransaction() async {
     final Isar isar = await ref.read(isarProvieder.future);
     List<TransactionCategory> _categoryIds =
@@ -228,7 +236,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
     for (Wallet _wallet in _wallets) {
       for (int i = 0; i < 100; i++) {
-        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, 4, Random().nextInt(60));
+        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, Random().nextInt(24), Random().nextInt(60));
         int _categoryId =
             _categoryIds[Random().nextInt(_categoryIds.length)].id;
                       Transaction _randomTransaction = Transaction(
@@ -245,6 +253,56 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
             .read(categoryTrendChartProvider.notifier)
             .createCategoryTrend(_randomTransaction);
       }
+    }
+  }
+
+  Future<void> delete(Transaction transaction) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    await _updateCategoryTrend(transaction);
+    await _modifyWalletBalance(transaction);
+
+    await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
+    return isar.writeTxn(() async {
+      await isar.transactions.delete(transaction.id);
+    });
+  }
+
+  Future<void> _updateCategoryTrend(Transaction transaction) async {
+        if (transaction.transactionType == TransactionType.expenditure) {
+      await ref
+          .read(categoryTrendChartProvider.notifier)
+          .subtractData(transaction);
+    }
+  }
+
+  Future<void> _modifyWalletBalance(Transaction transaction) async {
+    final Wallet? fromWallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.walletId);
+
+
+    if (fromWallet != null) {
+      if (transaction.transactionType == TransactionType.expenditure) {
+        fromWallet.balance += transaction.amount;
+      } else if (transaction.transactionType == TransactionType.income) {
+        fromWallet.balance -= transaction.amount;
+      } else if (transaction.toWallet != null) {
+              final Wallet? toWallet = await ref
+        .read(walletRepositoryProvider.notifier)
+        .getSpecificWallet(transaction.toWallet!);
+
+
+        fromWallet.balance -= transaction.amount;
+        toWallet!.balance += transaction.amount;
+        await ref
+            .read(walletRepositoryProvider.notifier)
+            .configWallet(toWallet);
+      }
+
+      await ref
+          .read(walletRepositoryProvider.notifier)
+          .configWallet(fromWallet);
     }
   }
 

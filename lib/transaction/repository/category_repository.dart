@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
+import 'package:pocket_lab/transaction/model/transaction_model.dart';
 
 // final categoryRepositoryProvider =
 //     FutureProvider<CategoryRepository>((ref) async {
@@ -16,8 +17,7 @@ final categoryRepositoryProvider =
 
 class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   final Ref ref;
-  CategoryRepository(this.ref)
-      : super([]);
+  CategoryRepository(this.ref) : super([]);
 
   //# 모든 카테고리
   Stream<List<TransactionCategory>> allCategoriesStream() async* {
@@ -27,6 +27,23 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
         .where()
         .watch(fireImmediately: true)
         .asBroadcastStream();
+  }
+
+  ///# Category 순서 변경
+  Future<void> reorderCatregory(
+      {required List<TransactionCategory> temp}) async {
+        final Isar isar = await ref.read(isarProvieder.future);
+        int index = 0;
+
+    while (index < temp.length) {
+      temp[index].order = index;
+      index++;
+    }
+
+    await isar.writeTxn(() async {
+      await isar.transactionCategorys.putAll(temp);
+    });
+    await syncCategoryCache();
   }
 
   //# 모든 카테고리
@@ -46,7 +63,7 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
     await syncCategoryCache();
   }
 
-  //: Category 추가할 때 다음 순서를 가져옴
+  ///# Category 추가할 때 다음 순서를 가져옴
   int _getNextOrder() {
     if (state.isEmpty) return 0;
 

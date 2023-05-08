@@ -38,7 +38,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
         await ref
             .read(walletRepositoryProvider.notifier)
             .setIsSelectedWallet(widget.wallet.id);
-            await DailyBudget().add( ref);
+        await DailyBudget().add(ref);
 
         zoomDrawerController.toggle!();
       },

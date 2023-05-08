@@ -1,21 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_zoom_drawer/config.dart';
-import 'package:pocket_lab/chart/component/category_chart.dart';
-import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
-import 'package:pocket_lab/home/component/home_screen/home_card_chart.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/component/home_screen/wallet_card_slider.dart';
 import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
-import 'package:pocket_lab/home/model/wallet_model.dart';
-import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
-import 'package:pocket_lab/home/view/widget/category_list.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:pocket_lab/home/view/widget/category_editable_list.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const routeName = 'home_screen';
@@ -23,7 +14,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Scaffold(
@@ -52,7 +42,7 @@ class HomeScreen extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           right: 16.0, left: 16.0, bottom: 16.0),
-                      child: CategoryList(),
+                      child: CategoryEditableList(),
                     )
                   ],
                 ),
@@ -81,8 +71,3 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
-
-
-
-
-

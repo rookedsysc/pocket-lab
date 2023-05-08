@@ -89,10 +89,10 @@ class MyApp extends ConsumerWidget {
 
     //# 텍스트 색상
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white, fontSize: 16),
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 20),
       //: 보통 글귀
-      bodyMedium: TextStyle(color: Colors.white, fontSize: 12),
-      bodySmall: TextStyle(color: Colors.white, fontSize: 10),
+      bodyMedium: TextStyle(color: Colors.white, fontSize: 14),
+      bodySmall: TextStyle(color: Colors.white, fontSize: 12),
     ),
 
     cardColor: const Color.fromRGBO(30, 30, 30, 1),

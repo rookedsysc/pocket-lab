@@ -12,13 +12,14 @@ import 'package:pocket_lab/home/view/home_screen/category_input_modal_screen.dar
 import 'package:pocket_lab/home/view/widget/color_picker_alert_dialog.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
+import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:sheet/route.dart';
 
-class CategoryList extends ConsumerWidget {
+class CategoryEditableList extends ConsumerWidget {
   bool isEdit = false;
   List<TransactionCategory> _categories = [];
-  CategoryList({super.key});
+  CategoryEditableList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +51,13 @@ class CategoryList extends ConsumerWidget {
                     crossAxisSpacing: 4,
                     mainAxisSpacing: 4,
                     childAspectRatio: 5,
-                    onReorder: ((oldIndex, newIndex) => null),
+                    onReorder: ((oldIndex, newIndex) async {
+                      List<TransactionCategory> _temp = _categories;
+                      final item = _temp.removeAt(oldIndex);
+                      _temp.insert(newIndex, item);
+
+                      await ref.read(categoryRepositoryProvider.notifier).reorderCatregory(temp: _temp);
+                    }),
                     children: List.generate(_categories.length + 1, (index) {
                       if (index == _categories.length) {
                         return _addItem(context);
@@ -108,6 +115,7 @@ class CategoryList extends ConsumerWidget {
     return InkWell(
       key: ValueKey(category.id),
       onTap: () {
+        if (category.id == 1) return; // 지정되지 않음 카테고리는 수정 불가
         ref
             .read(colorProvider.notifier)
             .update((state) => ColorUtils.stringToColor(category.color));
@@ -129,7 +137,9 @@ class CategoryList extends ConsumerWidget {
         child: Center(
           child: Text(
             category.name,
-            style: textTheme.copyWith(color: _textColor),
+            style: textTheme.copyWith(
+              color: _textColor,
+            ),
           ),
         ),
       ),

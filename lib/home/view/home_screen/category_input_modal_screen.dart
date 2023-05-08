@@ -67,8 +67,8 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
             "Color Picker",
             style: Theme.of(context)
                 .textTheme
-                .bodyMedium!
-                .copyWith(color: ref.watch(colorProvider.notifier).state),
+                .bodyLarge!
+                .copyWith(color: ref.watch(colorProvider.notifier).state, ),
           ),
         ));
   }

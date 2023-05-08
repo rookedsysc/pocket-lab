@@ -94,14 +94,15 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
   // List Item
   Widget _transactionItem(Transaction transaction) {
     String? _transactionCategory;
-    if(transaction.transactionType == TransactionType.expenditure) {
+    if (transaction.transactionType == TransactionType.expenditure) {
       try {
-              _transactionCategory = ref.watch(categoryRepositoryProvider).firstWhere((element) => element.id == transaction.walletId).name;
-
-      }catch(e) {
+        _transactionCategory = ref
+            .watch(categoryRepositoryProvider)
+            .firstWhere((element) => element.id == transaction.walletId)
+            .name;
+      } catch (e) {
         _transactionCategory = "카테고리 없음";
       }
-
     }
 
     return Slidable(
@@ -126,7 +127,12 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
                       transaction.title,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    if(transaction.transactionType == TransactionType.expenditure) Text(_transactionCategory!,style: Theme.of(context).textTheme.bodySmall,)
+                    if (transaction.transactionType ==
+                        TransactionType.expenditure)
+                      Text(
+                        _transactionCategory!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      )
                   ],
                 ),
                 Text(

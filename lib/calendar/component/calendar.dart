@@ -1,18 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/calendar/component/month_header.dart';
-import 'package:pocket_lab/calendar/component/week_header.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/calendar/utils/calendar_utils.dart';
-import 'package:pocket_lab/calendar/view/calendar_screen.dart';
 import 'package:pocket_lab/calendar/view/transaction_detail_view.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
@@ -234,7 +228,7 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
             }
           : null,
       child: Container(
-        margin: EdgeInsets.all(2.0),
+        margin: EdgeInsets.all(3.0),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           border: Border.all(

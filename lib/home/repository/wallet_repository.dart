@@ -112,6 +112,8 @@ class WalletRepository extends StateNotifier<Wallet> {
   Future<void> deleteWallet(Wallet wallet) async {
     final isar = await ref.read(isarProvieder.future);
 
+    
+
     await isar.writeTxn(() async {
       await isar.wallets.delete(wallet.id);
     });

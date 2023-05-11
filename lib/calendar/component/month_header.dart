@@ -36,7 +36,7 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
           setData(snapshot.data!);
 
           return Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            margin: EdgeInsets.symmetric(horizontal: 8.0),
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,

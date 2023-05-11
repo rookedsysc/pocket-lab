@@ -7,6 +7,7 @@ import 'package:pocket_lab/common/view/input_modal_screen.dart';
 import 'package:pocket_lab/home/view/widget/color_picker_alert_dialog.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
+import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -37,6 +38,10 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           await ref
               .read(categoryRepositoryProvider.notifier)
               .deleteCategory(widget.category!);
+          await ref
+              .read(transactionRepositoryProvider.notifier)
+              .handleDeletedCategoryInTransactions(
+                  CategoryId: widget.category!.id);
 
           Navigator.pop(context);
         },
@@ -65,10 +70,10 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           },
           child: Text(
             "Color Picker",
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: ref.watch(colorProvider.notifier).state, ),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: ref.watch(colorProvider.notifier).state,
+                fontWeight: FontWeight.bold),
           ),
         ));
   }

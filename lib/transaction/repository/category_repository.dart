@@ -2,13 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
-import 'package:pocket_lab/transaction/model/transaction_model.dart';
-
-// final categoryRepositoryProvider =
-//     FutureProvider<CategoryRepository>((ref) async {
-//   final isar = ref.watch(isarProvieder.future);
-//   return CategoryRepository(await isar);
-// });
 
 final categoryRepositoryProvider =
     StateNotifierProvider<CategoryRepository, List<TransactionCategory>>((ref) {
@@ -32,8 +25,8 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   ///# Category 순서 변경
   Future<void> reorderCatregory(
       {required List<TransactionCategory> temp}) async {
-        final Isar isar = await ref.read(isarProvieder.future);
-        int index = 0;
+    final Isar isar = await ref.read(isarProvieder.future);
+    int index = 0;
 
     while (index < temp.length) {
       temp[index].order = index;

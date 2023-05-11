@@ -256,6 +256,29 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     }
   }
 
+  ///# 카테고리 삭제시 해당하는 카테고리를 가지고 있는 Transaction에 대해
+  ///# Category ID를 1로 변경
+  Future<void> handleDeletedCategoryInTransactions(
+      {required int CategoryId}) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+
+    List<Transaction> _transaction = await isar.transactions
+        .filter()
+        .categoryIdEqualTo(CategoryId)
+        .findAll();
+    List<Transaction> _temp = [];
+
+    // 모든 Transaction의 Category ID를 1로 변경
+    for (Transaction _transaction in _transaction) {
+      _transaction.categoryId = 1;
+      _temp.add(_transaction);
+    }
+
+    isar.writeTxn(() async {
+      await isar.transactions.putAll(_temp);
+    });
+  }
+
   Future<void> delete(Transaction transaction) async {
     final Isar isar = await ref.read(isarProvieder.future);
 

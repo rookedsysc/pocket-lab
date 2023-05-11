@@ -31,9 +31,9 @@ class WeekHeaderLayOut extends ConsumerWidget {
 
   EdgeInsets getPadding(int index) {
     if (index == 0) {
-      return EdgeInsets.only(left: 16.0);
+      return EdgeInsets.only(left: 8.0);
     } else if (CalendarUtils().getWeeksInMonth(focusedDay) == index + 1) {
-      return EdgeInsets.only(left: 4, right: 16.0);
+      return EdgeInsets.only(left: 4, right: 8.0);
     }
     return EdgeInsets.only(left: 4);
   }

@@ -40,7 +40,7 @@ class AppInit {
         await categoryRepository.getAllCategories();
     if (categories.isEmpty) {
       await categoryRepository.configCategory(TransactionCategory(
-          name: "Category not specified", color: "D3D3D3")); //: 연한 흰색
+          name: "Unclassified", color: "D3D3D3")); //: 연한 흰색
       await categoryRepository.configCategory(
           TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
       await categoryRepository.configCategory(

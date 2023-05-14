@@ -65,11 +65,15 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   String? _toWalletInputTileHint;
   String? _categoryInputTileHint;
 
+  GlobalKey _transactionTitleFormFieldKey = GlobalKey();
+  GlobalKey _amountFormFieldKey = GlobalKey();
+
   @override
   void didChangeDependencies() {
     _transaction.transactionType = widget.transactionType;
     _getWallet();
     _transaction.categoryId = ref.read(categoryRepositoryProvider).first.id;
+
     super.didChangeDependencies();
   }
 
@@ -83,10 +87,8 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _renderAppbarColor();
-    // _renderCategories(categories);
     return InputModalScreen(
-        scrollController: ref.watch(transactionScrollControllerProvider),
+        scrollController: ref.read(transactionScrollControllerProvider),
         isEdit: widget.isEdit,
         formKey: _formKey,
         inputTile: _inputTileList(ref),
@@ -165,7 +167,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     if (widget.transaction != null) {
       _verifyAndUndoChanges(transaction, _wallet, _toWallet);
     }
-
 
     switch (widget.transactionType) {
       case TransactionType.expenditure:
@@ -255,7 +256,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     String _selectedWalletName;
     String _fieldName;
 
-
     if (widget.transactionType == TransactionType.remittance) {
       _fieldName = "from Wallet";
     } else {
@@ -270,19 +270,21 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     }
 
     return InputTile(
-        hint: _selectWalletInputTileHint,
-        fieldName: _fieldName,
-        inputField: TextButton(
-            onPressed: () => showCupertinoModalBottomSheet(
-                expand: false,
-                context: context,
-                builder: (context) => WalletSelectScreen(
-                      selectWalletType:
-                          TransactionType.remittance == widget.transactionType
-                              ? SelectWalletType.from
-                              : SelectWalletType.select,
-                    )),
-            child: Text(_selectedWalletName)));
+      hint: _selectWalletInputTileHint,
+      fieldName: _fieldName,
+      inputField: TextButton(
+        onPressed: () => showCupertinoModalBottomSheet(
+            expand: false,
+            context: context,
+            builder: (context) => WalletSelectScreen(
+                  selectWalletType:
+                      TransactionType.remittance == widget.transactionType
+                          ? SelectWalletType.from
+                          : SelectWalletType.select,
+                )),
+        child: Text(_selectedWalletName),
+      ),
+    );
   }
 
   InputTile _toWalletInputTile(WidgetRef ref) {
@@ -316,8 +318,9 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       hint: _categoryInputTileHint,
       fieldName: "Select Category",
       inputField: StreamBuilder<List<TransactionCategory>>(
-          stream:
-              ref.watch(categoryRepositoryProvider.notifier).allCategoriesStream(),
+          stream: ref
+              .watch(categoryRepositoryProvider.notifier)
+              .allCategoriesStream(),
           builder: (context, snapshot) {
             if (snapshot.data == null || snapshot.data!.isEmpty) {
               return Center(
@@ -362,7 +365,10 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
                               Icon(Icons.circle,
                                   color: ColorUtils.stringToColor(e.color)),
                               SizedBox(width: 8),
-                              Text(e.name, style: Theme.of(context).textTheme.bodyMedium,),
+                              Text(
+                                e.name,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ],
                           )),
                     )
@@ -384,13 +390,14 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   InputTile _transactionTitleInputTile() {
     return InputTile(
+      formFieldKey: _transactionTitleFormFieldKey,
         fieldName: "Transaction Title",
-
         inputField: TextTypeTextFormField(
-                  hintText: widget.transaction?.title,
-          onTap: _onTap(ref),
+          hintText: widget.transaction?.title,
+          onTap: _onTap(ref, _transactionTitleFormFieldKey),
           onSaved: _transactionTitleOnSaved(),
-          validator: widget.transaction == null ? _transactionTiltleValidator() : null,
+          validator:
+              widget.transaction == null ? _transactionTiltleValidator() : null,
         ));
   }
 
@@ -412,23 +419,33 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     };
   }
 
-  GestureTapCallback _onTap(WidgetRef ref) {
+  GestureTapCallback _onTap(WidgetRef ref, GlobalKey key) {
     return () {
-      final scrollController = ref.watch(transactionScrollControllerProvider);
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      final ScrollController scrollController =
+          ref.read(transactionScrollControllerProvider);
+      final keyContext = key.currentContext;
+
+      if (keyContext != null) {
+        debugPrint("keyContext : ${keyContext.size}");
+        // 위치를 얻습니다.
+        final box = keyContext.findRenderObject() as RenderBox;
+        scrollController.animateTo(
+          box.localToGlobal(Offset.zero).dy,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     };
   }
 
   InputTile _amountInputTile() {
     return InputTile(
         fieldName: "Amount",
+                  formFieldKey: _amountFormFieldKey,
         inputField: NumberTypeTextFormField(
+
           hintText: widget.transaction?.amount.toString(),
-          onTap: () {},
+          onTap: _onTap(ref, _amountFormFieldKey),
           validator: widget.transaction == null ? _amountValidator() : null,
           onSaved: _amountOnSaved(),
         ));
@@ -494,19 +511,5 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         ),
       ),
     );
-  }
-
-  void _renderAppbarColor() {
-    switch (widget.transactionType) {
-      case TransactionType.remittance:
-        appbarColor = Colors.blue;
-        break;
-      case TransactionType.income:
-        appbarColor = Colors.green;
-        break;
-      case TransactionType.expenditure:
-        appbarColor = Colors.red;
-        break;
-    }
   }
 }

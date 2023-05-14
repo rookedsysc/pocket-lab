@@ -188,16 +188,14 @@ class _MenuTileState extends ConsumerState<WalletTile> {
 
   SlidableActionCallback _onEditPressed() {
     return (_) {
-      Navigator.of(context).push(CupertinoSheetRoute<void>(
-        initialStop: 0.7,
-        stops: <double>[0, 0.7, 1],
-        //: Screen은 이동할 스크린
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        builder: (BuildContext context) => WalletConfigScreen(
-          wallet: widget.wallet,
-          isEdit: true,
-        ),
-      ));
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return WalletConfigScreen(
+              wallet: widget.wallet,
+              isEdit: true,
+            );
+          });
     };
   }
 }

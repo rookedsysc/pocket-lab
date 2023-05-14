@@ -172,7 +172,7 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
       onPressed: (context) async {
         await _syncSelectedWalletByTransaction(transaction);
 
-        CupertinoScaffold.showCupertinoModalBottomSheet(
+        showModalBottomSheet(
             context: context,
             builder: (context) {
               return TransactionConfigScreen(

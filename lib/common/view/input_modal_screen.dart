@@ -21,6 +21,7 @@ class InputModalScreen extends ConsumerStatefulWidget {
 
   //: 삭제 버튼
   bool? isDelButton;
+
   //: 삭제 버튼을 눌렀을 경우
   VoidCallback? onDelPressed;
 
@@ -39,14 +40,17 @@ class InputModalScreen extends ConsumerStatefulWidget {
 }
 
 class _InputModalScreenState extends ConsumerState<InputModalScreen> {
+  double _bottomInsets = 0; 
+
   @override
   Widget build(BuildContext context) {
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-    return Material(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: SingleChildScrollView(
-        controller: widget.scrollController,
-        child: Column(
+    _bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    // debugPrint(_bottomInsets.toString());
+    return Scaffold(
+      body: Material(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: ListView(
+          controller: widget.scrollController,
           children: [
             ///# 상단 버튼 (cancel, add)
             _topButton(context),
@@ -66,11 +70,6 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
                 ),
               ),
             ),
-
-            ///# 키보드 올라왔을 때, 키보드 높이만큼 여백
-            SizedBox(
-              height: bottomInsets,
-            ),
           ],
         ),
       ),
@@ -89,7 +88,10 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_ios)),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.blue,
+              )),
           widget.isDelButton == true ? Expanded(child: SizedBox()) : SizedBox(),
           TextButton(
             onPressed: widget.onSavePressed,

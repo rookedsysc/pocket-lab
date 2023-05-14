@@ -68,15 +68,11 @@ class MenuScreen extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(CupertinoSheetRoute<void>(
-              initialStop: 0.7,
-              stops: <double>[0, 0.7, 1],
-              //: Screen은 이동할 스크린
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              builder: (BuildContext context) => WalletConfigScreen(
+            showModalBottomSheet(context: context, builder: (context) {
+              return WalletConfigScreen(
                 isEdit: false,
-              ),
-            ));
+              );
+            });
           },
           icon: Icon(
             Icons.add,

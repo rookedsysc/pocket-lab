@@ -79,17 +79,13 @@ class CategoryEditableList extends ConsumerWidget {
     return InkWell(
       key: ValueKey("add"),
       onTap: () {
-        Navigator.of(context).push(
-          CupertinoSheetRoute(
-            initialStop: 0.3,
-            stops: <double>[0, 0.3, 1],
-            // Screen은 이동할 스크린
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            builder: (context) => CategoryInputModalScreen(
-              isEdit: false,
-            ),
-          ),
-        );
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return CategoryInputModalScreen(
+                isEdit: false,
+              );
+            });
       },
       child: Container(
         child: Center(
@@ -119,18 +115,14 @@ class CategoryEditableList extends ConsumerWidget {
         ref
             .read(colorProvider.notifier)
             .update((state) => ColorUtils.stringToColor(category.color));
-        Navigator.of(context).push(
-          CupertinoSheetRoute(
-            initialStop: 0.3,
-            stops: <double>[0, 0.3, 1],
-            // Screen은 이동할 스크린
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            builder: (context) => CategoryInputModalScreen(
-              category: category,
-              isEdit: true,
-            ),
-          ),
-        );
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return CategoryInputModalScreen(
+                category: category,
+                isEdit: true,
+              );
+            });
       },
       child: Container(
         color: ColorUtils.stringToColor(category.color),

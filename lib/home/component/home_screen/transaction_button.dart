@@ -78,17 +78,15 @@ class TransactionButton extends StatelessWidget {
     }
 
     return cardButton(
-      icon: _icon,
-      onPressed: () => Navigator.of(context).push(CupertinoSheetRoute(
-          initialStop: 0.6,
-          stops: <double>[0, 0.6, 1],
-          // Screen은 이동할 스크린
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          builder: (context) => TransactionConfigScreen(
+        icon: _icon,
+        onPressed: () => showModalBottomSheet(
+            context: context,
+            builder: (context) {
+          return TransactionConfigScreen(
             isEdit: false,
             transactionType: transactionType,
-          ),
-        ),
+          );
+        },
       ),
     );
   }

@@ -20,6 +20,7 @@ class WalletSelectScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.65,
         child: Column(

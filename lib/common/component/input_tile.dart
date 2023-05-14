@@ -4,9 +4,11 @@ class InputTile extends StatelessWidget {
   final String fieldName;
   final Widget inputField;
   final String? hint;
+    final Key? formFieldKey;
 
   const InputTile(
       {this.hint,
+      this.formFieldKey,
       required this.fieldName,
       required this.inputField,
       super.key});
@@ -16,6 +18,7 @@ class InputTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
+        key: formFieldKey,
         height: hint == null ? 70.0 : 50.0,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

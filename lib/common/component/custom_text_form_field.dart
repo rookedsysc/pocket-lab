@@ -1,8 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 
@@ -11,6 +8,7 @@ class TextTypeTextFormField extends StatelessWidget {
   FormFieldValidator<String?>? validator;
   FormFieldSetter<String>? onSaved;
   final GestureTapCallback onTap;
+
 
   TextTypeTextFormField(
       {required this.onTap,

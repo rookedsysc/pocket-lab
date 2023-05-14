@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocket_lab/diary/view/test_screen.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
@@ -27,6 +28,18 @@ class DiaryScreen extends ConsumerWidget {
               _deleteAllTransaction(ref);
             },
             child: Text("Delete All Transaction")),
+                    ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return TestScreen();
+                  },
+                ),
+              );
+            },
+            child: Text("Text Form Field Test Screen")),
+
       ],
     );
   }

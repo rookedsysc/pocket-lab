@@ -76,20 +76,18 @@ class WeekHeader extends ConsumerWidget {
 
           return InkWell(
             onTap: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
+              showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return Consumer(
-                      builder: (context, _consumerRef, child) {
-                        return TransactionDetailView(
-                            stream: _consumerRef   
-                                .watch(transactionRepositoryProvider.notifier)
-                                .getTransactionByPeriod(
-                                    week.firstDayOfWeek, week.lastDayOfWeek),
-                            title: _indexToWeek(),
-                            );
-                      }
-                    );
+                    return Consumer(builder: (context, _consumerRef, child) {
+                      return TransactionDetailView(
+                        stream: _consumerRef
+                            .watch(transactionRepositoryProvider.notifier)
+                            .getTransactionByPeriod(
+                                week.firstDayOfWeek, week.lastDayOfWeek),
+                        title: _indexToWeek(),
+                      );
+                    });
                   });
             },
             child: Padding(

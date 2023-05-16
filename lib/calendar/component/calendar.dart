@@ -216,13 +216,12 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
                 context: context,
                 builder: (context) => Consumer(
                   builder: (context, _consumerRef, child) {
-                    return TransactionDetailView(
-                      stream: _consumerRef 
-        .watch(transactionRepositoryProvider.notifier)
-        .getTransactionByPeriod(widget.date, widget.date),
-                      title: "",
-                    );
-                  }
+                  return TransactionDetailView(
+                    startDate: widget.date,
+                    endDate: widget.date,
+                    title: "",
+                  );
+                }
                 ),
               );
             }

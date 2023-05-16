@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
-import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -16,9 +15,14 @@ import 'package:pocket_lab/transaction/view/wallet_select_screen.dart';
 
 class TransactionDetailView extends ConsumerStatefulWidget {
   final String title;
-  final Stream<List<Transaction>> stream;
+  final DateTime startDate;
+  final DateTime endDate;
+
   const TransactionDetailView(
-      {required this.stream, required this.title, super.key});
+      {required this.startDate,
+      required this.endDate,
+      required this.title,
+      super.key});
 
   @override
   ConsumerState<TransactionDetailView> createState() =>
@@ -38,7 +42,9 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
     return CupertinoScaffold(
       body: Scaffold(
         body: StreamBuilder<List<Transaction>>(
-            stream: widget.stream,
+            stream: ref
+                .watch(transactionRepositoryProvider.notifier)
+                .getTransactionByPeriod(widget.startDate, widget.endDate),
             builder: (context, snapshot) {
               if (snapshot.data == null) {
                 return Center(child: CircularProgressIndicator());
@@ -59,6 +65,11 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         Transaction _transaction = snapshot.data![index];
+
+                        if (_transaction.title == "#DAILY_BUDGET") {
+                          return SizedBox();
+                        }
+
                         if (!(CustomDateUtils()
                             .isSameDay(_transaction.date, _currentDate))) {
                           _currentDate = _transaction.date;

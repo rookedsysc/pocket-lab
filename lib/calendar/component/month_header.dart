@@ -24,6 +24,8 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
   @override
   Widget build(BuildContext context) {
     DateTime _focusedDate = ref.watch(calendarProvider).focusedDay;
+    DateTime _firstDate = DateTime(_focusedDate.year, _focusedDate.month, 1);
+    DateTime _lastDate = DateTime(_focusedDate.year, _focusedDate.month + 1, 0);
     return StreamBuilder<List<Transaction>>(
         stream: ref
             .watch(transactionRepositoryProvider.notifier)
@@ -51,17 +53,12 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
                             context: context,
                             builder: (context) =>
                                 //# 부분적으로 다른 Context에 있는 Ref를 쓰고 싶을 때
-                                Consumer(builder: (context, _consumerRef, child) {
-                                  return TransactionDetailView(
-                                      stream: _consumerRef
-                                          .watch(transactionRepositoryProvider
-                                              .notifier)
-                                          .getSelectMonthTransactions(
-                                              _focusedDate),
-                                      title:
-                                          MonthDetailTitle().get(_focusedDate),
-                                      );
-                                }));
+                              TransactionDetailView(
+                            startDate: _firstDate,
+                            endDate: _lastDate,
+                            title: MonthDetailTitle().get(_focusedDate),
+                          ),
+                        );
                       },
                       icon: Icon(Icons.receipt,
                           color: Theme.of(context).primaryColor)),

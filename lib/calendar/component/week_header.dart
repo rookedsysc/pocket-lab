@@ -79,15 +79,11 @@ class WeekHeader extends ConsumerWidget {
               showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return Consumer(builder: (context, _consumerRef, child) {
-                      return TransactionDetailView(
-                        stream: _consumerRef
-                            .watch(transactionRepositoryProvider.notifier)
-                            .getTransactionByPeriod(
-                                week.firstDayOfWeek, week.lastDayOfWeek),
-                        title: _indexToWeek(),
-                      );
-                    });
+                    return TransactionDetailView(
+                      startDate: week.firstDayOfWeek,
+                      endDate: week.lastDayOfWeek,
+                      title: _indexToWeek(),
+                    );
                   });
             },
             child: Padding(

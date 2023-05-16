@@ -93,7 +93,7 @@ class WeekHeader extends ConsumerWidget {
                 children: [
                   if (totalIncome != 0)
                     Text(
-                      '+${CustomNumberUtils.formatNumber(totalIncome)}',
+                      '${CustomNumberUtils.formatNumber(totalIncome)}',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium

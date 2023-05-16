@@ -71,7 +71,7 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
                     children: [
                       if (_totalIncome != 0)
                         Text(
-                          "+ ${CustomNumberUtils.formatCurrency(_totalIncome)}",
+                          "${CustomNumberUtils.formatCurrency(_totalIncome)}",
                           textAlign: TextAlign.start,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),

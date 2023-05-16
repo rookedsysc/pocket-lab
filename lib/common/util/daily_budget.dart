@@ -50,7 +50,6 @@ class DailyBudget {
       }
       final double _budgetAmount =
           await _getBudgetAmount(wallet: wallet, ref: ref);
-      //: 해당 wallet이 dontSet 모드 인 경우
 
       //: 입력할 예산이 없는 경우 loop를 빠져나감
       if (_budgetAmount == 0 || _budgetAmount.isNaN) {
@@ -125,6 +124,7 @@ class DailyBudget {
 
   //# 얼마의 예산을 넣을지 계산
   Future<double> _getBudgetAmount(
+    
       {required Wallet wallet, required WidgetRef ref}) async {
     final Transaction? _lastDailyBudget = await ref
         .read(transactionRepositoryProvider.notifier)
@@ -141,7 +141,8 @@ class DailyBudget {
           "마지막 예산이 입력된 날 : ${CustomDateUtils().stringToDate(_lastDailyBudget.date.toString())}");
       debugPrint("현재 날짜 : ${DateTime.now()}");
       noDialyWidgetDays =
-          DateTime.now().difference(_lastDailyBudget.date).inDays;
+          CustomDateUtils().diffDays(DateTime.now(), _lastDailyBudget.date);
+      debugPrint("오늘 날짜 : ${DateTime.now()}");
       debugPrint("Daily 예산이 입력되지 않은 일 수 : ${noDialyWidgetDays.toString()}");
     }
 
@@ -162,12 +163,13 @@ class DailyBudget {
       required double amount,
       required WidgetRef ref}) async {
     wallet.balance += amount;
+    DateTime _now = DateTime.now();
     await ref.read(transactionRepositoryProvider.notifier).configTransaction(
         Transaction(
             transactionType: TransactionType.income,
             categoryId: null,
             amount: amount,
-            date: DateTime.now(),
+            date: DateTime(_now.year, _now.month, _now.day, 0, 0, 0),
             title: dailyBudget,
             walletId: wallet.id));
 

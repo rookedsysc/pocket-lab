@@ -257,7 +257,7 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
                 children: [
                   if (totalIncome != 0)
                     Text(
-                      "+${CustomNumberUtils.formatNumber(totalIncome)}",
+                      "${CustomNumberUtils.formatNumber(totalIncome)}",
                       style: TextStyle(
                           fontSize: 9,
                           color: Theme.of(context).textTheme.bodyLarge?.color),

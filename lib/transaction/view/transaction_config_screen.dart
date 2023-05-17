@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
+import 'package:pocket_lab/common/provider/date_picker_time_provider.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -19,6 +20,7 @@ import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 import 'package:pocket_lab/transaction/view/wallet_select_screen.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey(debugLabel: 'formState');
 
@@ -91,11 +93,11 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         scrollController: ref.read(transactionScrollControllerProvider),
         isEdit: widget.isEdit,
         formKey: _formKey,
-        inputTile: _inputTileList(ref),
+        inputTile: _inputTileList(ref: ref),
         onSavePressed: _onSavedPress());
   }
 
-  List<InputTile> _inputTileList(WidgetRef ref) {
+  List<InputTile> _inputTileList({required WidgetRef ref}) {
     return [
       //: Wallet Select Screen에서 riverpod으로 전달
       _selectWalletInputTile(ref),
@@ -109,7 +111,60 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       if (widget.transactionType == TransactionType.expenditure)
         _categoryInputTile(), //: check
       _selectDateInputTile(), //: check
+      _selectTimeInputTile(),
     ];
+  }
+
+  InputTile _selectTimeInputTile() {
+    return InputTile(
+      fieldName: "Select Time",
+      inputField: TextButton(
+        onPressed: () {
+          showCupertinoModalPopup(
+              context: context,
+              builder: (context) {
+                return Material(
+                  child: Container(
+                    height: 300,
+                    child: CupertinoTheme(
+                      data: CupertinoThemeData(
+                        textTheme: CupertinoTextThemeData(
+                          dateTimePickerTextStyle: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      child: CupertinoDatePicker(
+                        use24hFormat: true,
+                        initialDateTime:
+                            widget.transaction?.date ?? _transaction.date,
+                        onDateTimeChanged: (time) {
+                          if (widget.transaction != null) {
+                            widget.transaction!.date = CustomDateUtils()
+                                .mergeDateAndTime(
+                                    date: widget.transaction!.date, time: time);
+                          }
+                          _transaction.date = CustomDateUtils().mergeDateAndTime(
+                              date: _transaction.date, time: time);
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                        mode: CupertinoDatePickerMode.time,
+                      ),
+                    ),
+                  ),
+                );
+              });
+        },
+        child: Text(
+          DateFormat('HH:mm')
+              .format(widget.transaction?.date ?? _transaction.date),
+        ),
+      ),
+    );
   }
 
   VoidCallback _onSavedPress() {
@@ -225,7 +280,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     final Wallet? _toWallet = ref.watch(toWalletProvider.notifier).state;
     //: 선택한 지갑 없으면 _check를 false로
     if (_fromWallet == null) {
-      debugPrint("Check1");
       _selectWalletInputTileHint = "Select Wallet";
       _check = false;
     }
@@ -233,7 +287,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     //: 송금이면서 선택한 지갑이 없다면 snackBar 호출 후 함수 종료
     if (widget.transactionType == TransactionType.remittance &&
         _toWallet == null) {
-      debugPrint("Check2");
       _toWalletInputTileHint = "Select To Wallet";
       _check = false;
     }
@@ -242,7 +295,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     if (widget.transactionType == TransactionType.expenditure &&
         widget.transaction?.categoryId == null &&
         widget.isEdit) {
-      debugPrint("Check3");
       _categoryInputTileHint = "Select Category";
       _check = false;
     }
@@ -266,7 +318,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       _selectedWalletName = "Select Wallet";
     } else {
       _selectedWalletName = _selectWallet.name;
-      debugPrint(_selectedWalletName);
     }
 
     return InputTile(
@@ -297,7 +348,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       _selectedWalletName = "from Wallet";
     } else {
       _selectedWalletName = _toWallet.name;
-      debugPrint(_selectedWalletName);
     }
 
     return InputTile(
@@ -390,7 +440,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   InputTile _transactionTitleInputTile() {
     return InputTile(
-      formFieldKey: _transactionTitleFormFieldKey,
+        formFieldKey: _transactionTitleFormFieldKey,
         fieldName: "Transaction Title",
         inputField: TextTypeTextFormField(
           hintText: widget.transaction?.title,
@@ -426,7 +476,6 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       final keyContext = key.currentContext;
 
       if (keyContext != null) {
-        debugPrint("keyContext : ${keyContext.size}");
         // 위치를 얻습니다.
         final box = keyContext.findRenderObject() as RenderBox;
         scrollController.animateTo(
@@ -441,9 +490,8 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   InputTile _amountInputTile() {
     return InputTile(
         fieldName: "Amount",
-                  formFieldKey: _amountFormFieldKey,
+        formFieldKey: _amountFormFieldKey,
         inputField: NumberTypeTextFormField(
-
           hintText: widget.transaction?.amount.toString(),
           onTap: _onTap(ref, _amountFormFieldKey),
           validator: widget.transaction == null ? _amountValidator() : null,
@@ -491,23 +539,39 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         onPressed: () => showCupertinoModalPopup(
           context: context,
           builder: (context) => Material(
-            child: CalendarDatePicker2(
-              onValueChanged: (value) {
-                if (value[0] != null) {
-                  widget.transaction?.date = value[0]!;
-                  _transaction.date = value[0]!;
+              child: Container(
+            height: 400,
+            child: SfDateRangePicker(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              initialSelectedDate: widget.transaction == null
+                  ? _transaction.date
+                  : widget.transaction!.date,
+              selectionMode: DateRangePickerSelectionMode.single,
+              headerStyle: DateRangePickerHeaderStyle(
+                  textStyle: Theme.of(context).textTheme.bodyLarge),
+              monthCellStyle: DateRangePickerMonthCellStyle(
+                  textStyle: Theme.of(context).textTheme.bodyMedium),
+              yearCellStyle: DateRangePickerYearCellStyle(
+                  textStyle: Theme.of(context).textTheme.bodyMedium),
+              monthViewSettings: DateRangePickerMonthViewSettings(
+                viewHeaderStyle: DateRangePickerViewHeaderStyle(
+                    textStyle: Theme.of(context).textTheme.bodySmall),
+              ),
+              onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                ref.refresh(datePickerTimeProvider.notifier).state = args.value;
+                final DateTime selectedDate = args.value;
+                print(selectedDate); // Do something with selectedDate
+                if (args.value != null) {
+                  widget.transaction?.date = args.value;
+                  _transaction.date = args.value;
                   if (mounted) {
                     setState(() {});
                   }
                 }
                 Navigator.of(context).pop();
               },
-              config: CalendarDatePicker2Config(
-                calendarType: CalendarDatePicker2Type.single,
-              ),
-              initialValue: [DateTime.now()],
             ),
-          ),
+          )),
         ),
       ),
     );

@@ -262,6 +262,12 @@ class CustomDateUtils {
         return date;
     }
   }
+
+  ///* 시간을 각각 날짜, 시간에 해당 되는 두 개의 DateTime으로 받아서
+  /// 하나의 DateTime으로 즉 DateA의 날짜 DateB의 시간으로 합쳐서 return 
+  DateTime mergeDateAndTime({required DateTime date, required DateTime time}) {
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute, time.second);
+  }
 }
 
 class DateTimeDateUtils {

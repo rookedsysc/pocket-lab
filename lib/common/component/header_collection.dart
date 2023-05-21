@@ -1,6 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 enum HeaderType {
   wallet,
@@ -32,23 +31,23 @@ class HeaderCollection extends StatelessWidget {
   String _getHeaderName(HeaderType headerType) {
     switch (headerType) {
       case HeaderType.wallet:
-        return "Wallet List";
+        return "header name.Wallet List".tr();
       case HeaderType.categoryList:
-        return "Category List";
+        return "header name.Category List".tr();
       case HeaderType.goal:
-        return "Goal";
+        return "header name.Goal".tr();
       case HeaderType.total:
-        return "Total Balance";
+        return "header name.Total Balance";
       case HeaderType.trendChart:
-        return "Trend Chart";
+        return "header name.Trend Chart".tr();
       case HeaderType.categoryChart:
-        return "Category Chart";
+        return "header name.Category Chart".tr();
       case HeaderType.categoryTrendChart:
-        return "Category Trend Chart";
+        return "header name.Category Trend Chart".tr();
       case HeaderType.averageGrowth:
-        return "Average Growth";
+        return "header name.Average Growth".tr();
       case HeaderType.transactionTrendChart:
-        return "Transaction Trend Chart";
+        return "header name.Transaction Trend Chart".tr();
     }
   }
 }

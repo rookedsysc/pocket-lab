@@ -13,7 +13,7 @@ class TransactionTrendChartSeries {
       yValueMapper: (data, _) => data.amount,
       initialSelectedDataIndexes: [chartData.length - 1],
       name: seriesName,
-      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: textStyle)
+      dataLabelSettings: DataLabelSettings(isVisible: false, textStyle: textStyle)
     );
   }
 }

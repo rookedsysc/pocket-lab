@@ -93,7 +93,7 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
       color: ColorUtils.stringToColor(category.color),
       markerSettings: MarkerSettings(isVisible: true),
       dataLabelSettings: DataLabelSettings(
-          isVisible: true, textStyle: Theme.of(context).textTheme.bodySmall!,
+          isVisible: false, textStyle: Theme.of(context).textTheme.bodySmall!,
           ),
     );
   }

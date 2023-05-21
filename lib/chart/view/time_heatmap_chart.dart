@@ -43,9 +43,9 @@ class TimeHeatmapChart extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                     child: Text(
-                      DateFormat('HH').format(DateTime(2023, 4, 17, index)),
+                      "${DateFormat('h a').format(DateTime(2023, 4, 17, index))}",
                       textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black, fontWeight: FontWeight.w900),
                     ),
                   ),
                   Expanded(
@@ -57,8 +57,11 @@ class TimeHeatmapChart extends StatelessWidget {
                       CustomNumberUtils.formatCurrency(
                           chartData.hourlyData[index]!),
                       textAlign: TextAlign.end,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black),
-                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: Colors.black, fontSize: 10),
+                      overflow: TextOverflow.fade,
                     ),
                   )
                 ],

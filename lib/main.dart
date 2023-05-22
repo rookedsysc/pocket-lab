@@ -5,9 +5,12 @@ import 'package:pocket_lab/common/constant/init_screen.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:sheet/route.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  
   await EasyLocalization.ensureInitialized();
 
   runApp(ProviderScope(

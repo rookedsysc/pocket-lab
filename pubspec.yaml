@@ -60,6 +60,7 @@ dependencies:
   skeletons: ^0.0.3
   reorderable_grid_view: ^2.2.6
   flutter_colorpicker: ^1.0.3
+  google_native_mobile_ads: ^1.0.3
   flutter:
     sdk: flutter
 

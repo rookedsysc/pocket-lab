@@ -46,6 +46,8 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<key>Pocket Lab</key>
+	<string>ca-app-pub-2767008024281414~7598071182</string>
 	<true/>
 </dict>
 </plist>

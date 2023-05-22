@@ -7,6 +7,7 @@ import 'package:pocket_lab/home/component/home_screen/wallet_card_slider.dart';
 import 'package:pocket_lab/home/component/home_screen/wallet_section.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/widget/category_editable_list.dart';
+import 'package:pocket_lab/home/widget/home_banner_ads.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const routeName = 'home_screen';
@@ -39,6 +40,7 @@ class HomeScreen extends ConsumerWidget {
                       height: 8.0,
                     ),
                     WalletCardSlider(), TransactionButtons(),
+                    HomeBannerAds(),
                     Padding(
                       padding: const EdgeInsets.only(
                           right: 16.0, left: 16.0, bottom: 16.0),

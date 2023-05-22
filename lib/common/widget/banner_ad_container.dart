@@ -5,14 +5,15 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class HomeBannerAds extends StatefulWidget {
-  HomeBannerAds({super.key});
+class BannerAdContainer extends StatefulWidget {
+  final String adUnitId;
+  BannerAdContainer({required this.adUnitId, super.key});
 
   @override
-  State<HomeBannerAds> createState() => _HomeBannerAdsState();
+  State<BannerAdContainer> createState() => _BannerAdContainerState();
 }
 
-class _HomeBannerAdsState extends State<HomeBannerAds> {
+class _BannerAdContainerState extends State<BannerAdContainer> {
   late final BannerAd _myBanner;
   late final BannerAdListener _listener;
   late final _adWidget;
@@ -63,7 +64,7 @@ class _HomeBannerAdsState extends State<HomeBannerAds> {
 
   void _initializeBanner() {
     _myBanner = BannerAd(
-      adUnitId: 'ca-app-pub-2767008024281414/8488768373',
+      adUnitId: widget.adUnitId,
       size: AdSize.banner,
       request: AdRequest(),
       listener: _listener,

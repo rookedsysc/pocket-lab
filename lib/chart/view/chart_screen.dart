@@ -56,34 +56,41 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
       return LoadingView();
     }
 
-    return Material(
-      child: CupertinoPageScaffold(
-        child: SafeArea(
-          child: Column(
-            children: [
-              BannerAdContainer(
-                  adUnitId: Platform.isAndroid
-                      ? CHART_PAGE_BANNER_AOS
-                      : CHART_PAGE_BANNER_IOS),
-              SizedBox(
-                height: 8,
-              ),
-              ChartTypeSegement(
-                onValueChanged: _onValueChanged(),
-              ),
-              Expanded(
-                child: TabBarView(
-                  // 좌우로 스크롤 안되게 해줌
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: controller,
-                  children: [
-                    TrendChartView(),
-                    CategoryChartView(),
-                    TimeHeatMapChartView()
-                  ],
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      body: Material(
+        child: CupertinoPageScaffold(
+          child: SafeArea(
+            child: Column(
+              children: [
+                BannerAdContainer(
+                    adUnitId: Platform.isAndroid
+                        ? CHART_PAGE_BANNER_AOS
+                        : CHART_PAGE_BANNER_IOS),
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-            ],
+                ChartTypeSegement(
+                  onValueChanged: _onValueChanged(),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    // 좌우로 스크롤 안되게 해줌
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: controller,
+                    children: [
+                      TrendChartView(),
+                      CategoryChartView(),
+                      TimeHeatMapChartView()
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

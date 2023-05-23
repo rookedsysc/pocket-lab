@@ -86,8 +86,8 @@ class WeekHeader extends ConsumerWidget {
                     );
                   });
             },
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8 , left: 4, right: 4),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

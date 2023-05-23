@@ -45,40 +45,52 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
           return _chartSkeleton(width: _width);
         }
 
-        return SfCircularChart(
-            //# 카테고리 목록
-            legend: Legend(
-              textStyle: Theme.of(context).textTheme.bodySmall,
-                overflowMode: LegendItemOverflowMode.wrap,
-                isVisible: widget.isHome,
-                position: LegendPosition.bottom),
-            series: <CircularSeries>[
-              // Renders doughnut chart
-              DoughnutSeries<CategoryChartData, String>(
-                dataSource: chartData,
-                pointColorMapper: (CategoryChartData data, _) => data.color,
-                xValueMapper: (CategoryChartData data, _) => data.name,
-                yValueMapper: (CategoryChartData data, _) => data.amount,
-    
-                //# 라벨 설정
-                dataLabelSettings: widget.isHome ? DataLabelSettings(
-                    // overflowMode: OverflowMode.trim,
-                    // labelPosition: ChartDataLabelPosition.outside,
-                    isVisible: true,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontWeight: FontWeight.bold)) : null,
-                dataLabelMapper: widget.isHome ? (data, _) =>
-                    "${CustomNumberUtils.formatCurrency(data.amount)}" : null,
-              ),
-            ]);
+        return _sfCircularChart(context);
       }
     );
   }
 
+  SfCircularChart _sfCircularChart(BuildContext context) {
+    return SfCircularChart(
+          //# 카테고리 목록
+          legend: Legend(
+            textStyle: Theme.of(context).textTheme.bodySmall,
+              overflowMode: LegendItemOverflowMode.wrap,
+              isVisible: widget.isHome,
+              position: LegendPosition.bottom),
+          series: <CircularSeries>[
+            // Renders doughnut chart
+            DoughnutSeries<CategoryChartData, String>(
+              dataSource: chartData,
+              pointColorMapper: (CategoryChartData data, _) => data.color,
+              xValueMapper: (CategoryChartData data, _) => data.name,
+              yValueMapper: (CategoryChartData data, _) => data.amount,
+  
+              //# 라벨 설정
+              dataLabelSettings: widget.isHome ? DataLabelSettings(
+                  // overflowMode: OverflowMode.trim,
+                  // labelPosition: ChartDataLabelPosition.outside,
+                  isVisible: true,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.bold)) : null,
+              dataLabelMapper: widget.isHome ? (data, _) =>
+                  "${CustomNumberUtils.formatCurrency(data.amount)}" : null,
+            ),
+          ]);
+  }
+
   Widget _chartSkeleton({double? width}) {
-    return CustomSkeletone().circle(width: width, height: width);
+    return Container(
+      height: width == null ? width : width * 4/7,
+      width: width,
+      margin: EdgeInsets.all(16.0),
+      child: Padding(
+        padding: widget.isHome ? const EdgeInsets.symmetric(horizontal: 12, vertical: 12): const EdgeInsets.all(0),
+        child: CustomSkeletone().circle(),
+      ),
+    );
   }
 
   void _getChartData(

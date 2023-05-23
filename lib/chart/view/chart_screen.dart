@@ -6,9 +6,11 @@ import 'package:pocket_lab/chart/constant/chart_type.dart';
 import 'package:pocket_lab/chart/view/category_chart_view.dart';
 import 'package:pocket_lab/chart/view/time_heatmap_chart_view.dart';
 import 'package:pocket_lab/chart/view/trend_chart_view.dart';
+import 'package:pocket_lab/common/constant/ad_unit_id.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/common/view/loading_view.dart';
-import 'package:pocket_lab/home/repository/trend_repository.dart';
+import 'package:pocket_lab/common/widget/banner_ad_container.dart';
+import 'dart:io' show Platform;
 
 class ChartScreen extends ConsumerStatefulWidget {
   const ChartScreen({super.key});
@@ -59,10 +61,19 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
         child: SafeArea(
           child: Column(
             children: [
-              ChartTypeSegement(onValueChanged: _onValueChanged(),),
+              BannerAdContainer(
+                  adUnitId: Platform.isAndroid
+                      ? CHART_PAGE_BANNER_AOS
+                      : CHART_PAGE_BANNER_IOS),
+              SizedBox(
+                height: 8,
+              ),
+              ChartTypeSegement(
+                onValueChanged: _onValueChanged(),
+              ),
               Expanded(
                 child: TabBarView(
-                    // 좌우로 스크롤 안되게 해줌
+                  // 좌우로 스크롤 안되게 해줌
                   physics: NeverScrollableScrollPhysics(),
                   controller: controller,
                   children: [

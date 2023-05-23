@@ -1,10 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
+import 'package:pocket_lab/common/constant/ad_unit_id.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
+import 'package:pocket_lab/common/widget/banner_ad_container.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
@@ -12,6 +15,7 @@ import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 import 'package:pocket_lab/transaction/view/transaction_config_screen.dart';
 import 'package:pocket_lab/transaction/view/wallet_select_screen.dart';
+import 'dart:io' show Platform;
 
 class TransactionDetailView extends ConsumerStatefulWidget {
   final String title;
@@ -52,6 +56,12 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
               snapshot.data!.sort((a, b) => a.date.compareTo(b.date));
               return Column(
                 children: [
+                  SizedBox(height: 16,),
+                  BannerAdContainer(adUnitId: Platform.isAndroid
+                      ? TRANSACTION_LIST_BANNER_AOS
+                      : TRANSACTION_LIST_BANNER_IOS),
+                  
+
                   if (widget.title.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -61,10 +71,12 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        Transaction _transaction = snapshot.data![index];
+                  _isOnlyDailyBudgetLeft(snapshot.data!)
+                      ? _emptyList()
+                      : Expanded(
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              Transaction _transaction = snapshot.data![index];
 
                         if (_transaction.title == "#DAILY_BUDGET") {
                           return SizedBox();
@@ -99,6 +111,31 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
               );
             }),
       ),
+    );
+  }
+
+  bool _isOnlyDailyBudgetLeft(List<Transaction> transactions) {
+    List<Transaction> tmp = [];
+    for (Transaction transaction in transactions) {
+      if (transaction.title != "#DAILY_BUDGET") {
+        tmp.add(transaction);
+      }
+    }
+
+    return tmp.length == 0;
+  }
+
+  Widget _emptyList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.height * 0.4,),
+        Text(
+          
+          "No records found".tr(),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge,),
+      ],
     );
   }
 

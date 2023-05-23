@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pocket_lab/common/constant/ad_unit_id.dart';
 import 'package:pocket_lab/common/widget/banner_ad_container.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -12,8 +13,6 @@ import 'package:pocket_lab/home/view/home_screen/subscribe_screen.dart';
 import 'package:pocket_lab/home/view/widget/category_editable_list.dart';
 import 'dart:io' show Platform;
 
-const MAIN_PAGE_BANNER_AOS = "ca-app-pub-2767008024281414/8488768373";
-const MAIN_PAGE_BANNER_IOS = "ca-app-pub-2767008024281414/4903395514";
 
 class HomeScreen extends ConsumerWidget {
   static const routeName = 'home_screen';

@@ -15,5 +15,17 @@
     "fifthWeek" : "Fifth Week",
     "sixthWeek" : "Sixth Week"
   },
-  "not enough data" : "Not enough data."
+  "not enough data" : "Not enough data.",
+  "header name" : {
+    "Wallet List" : "Wallet List",
+    "Category List" : "Category List",
+    "Goal" : "Goal",
+    "Total Balance" : "Total Balance",
+    "Trend Chart" : "Trend Chart",
+    "Category Chart" : "Category Chart",
+    "Category Trend Chart" : "Category Trend Chart",
+    "Average Growth" : "Average Growth",
+    "Transaction Trend Chart" : "Transaction Trend Chart"
+  },
+  "No records found" : "No records found"
 }

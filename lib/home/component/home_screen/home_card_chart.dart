@@ -91,9 +91,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
 
   NumericAxis _primaryYAxis() {
     return NumericAxis(
-        //: y축 안보이게 설정
-        minimum: _getMinimumValue(),
-        // maximum: _getMaximumValue(),
+      minimum: _getMinimumValue(),
         isVisible: false,
         rangePadding: ChartRangePadding.round);
   }
@@ -113,6 +111,13 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
         borderWidth: 4,
         animationDuration: 0,
         dataSource: chartData,
+        gradient: LinearGradient(
+          colors: [Colors.blue, Colors.transparent],
+          begin: Alignment.topCenter,
+          stops: [0.0, 10.0],
+          end: Alignment.bottomCenter,
+
+        ),
         xValueMapper: (TrendChartDataModel data, _) => data.date,
         yValueMapper: (TrendChartDataModel data, _) => data.amount);
   }
@@ -130,6 +135,13 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
         minimum = data.amount;
       }
     }
+
+    if(minimum > 0) {
+      minimum = 0;
+    } else {
+      minimum = minimum * 2;
+    }
+
     return minimum;
   }
 }

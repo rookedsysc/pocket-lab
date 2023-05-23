@@ -53,9 +53,9 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
       child: SfCartesianChart(
         legend: widget.legend,
           primaryXAxis: widget.xAxis,
-          primaryYAxis: NumericAxis(
-              //: Y축에 표시되는 값에 Format 적용
-              numberFormat: NumberFormat.simpleCurrency()),
+          // primaryYAxis: NumericAxis(
+          //     //: Y축에 표시되는 값에 Format 적용
+          //     numberFormat: NumberFormat.simpleCurrency()),
           ///# 스크롤 가능하게 설정
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,

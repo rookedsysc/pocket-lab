@@ -5,6 +5,7 @@ import 'package:pocket_lab/goal/model/goal_model.dart';
 import 'package:pocket_lab/goal/provider/goal_list_provider.dart';
 import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
@@ -14,13 +15,14 @@ class AppInit {
   AppInit(this.ref);
 
   Future<void> main() async {
-    await walletInit();
-    await syncIsarWithLocalGoalList();
-    await categoryInit();
+    await _walletInit();
+    await _syncIsarWithLocalGoalList();
+    await _categoryInit();
     await DailyBudget().add(ref);
+    await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
   }
 
-  Future<void> walletInit() async {
+  Future<void> _walletInit() async {
     final walletCount =
         await ref.read(walletRepositoryProvider.notifier).getWalletCount();
 
@@ -34,7 +36,7 @@ class AppInit {
     }
   }
 
-  Future<void> categoryInit() async {
+  Future<void> _categoryInit() async {
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
     List<TransactionCategory> categories =
         await categoryRepository.getAllCategories();
@@ -52,7 +54,7 @@ class AppInit {
   }
 
   //: 처음에 시작할 때 db에 있는 목표 목록 불러오기
-  Future<void> syncIsarWithLocalGoalList() async {
+  Future<void> _syncIsarWithLocalGoalList() async {
     final _goalRepositoryProvider =
         await ref.read(goalRepositoryProvider.future);
     List<Goal> goals = await _goalRepositoryProvider.getAllGoalsFuture();

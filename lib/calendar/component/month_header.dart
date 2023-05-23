@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
-import 'package:pocket_lab/calendar/utils/detail_view_title.dart';
 import 'package:pocket_lab/calendar/view/transaction_detail_view.dart';
 import 'package:pocket_lab/chart/component/category_chart.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
@@ -56,7 +56,7 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
                               TransactionDetailView(
                             startDate: _firstDate,
                             endDate: _lastDate,
-                            title: MonthDetailTitle().get(_focusedDate),
+                            title: _getTitle(_focusedDate),
                           ),
                         );
                       },
@@ -97,6 +97,13 @@ class _MonthHeaderState extends ConsumerState<MonthHeader> {
             ),
           );
         });
+  }
+
+  String _getTitle(DateTime date) {
+    DateTime date = DateTime(2023, 3);
+    String formattedDate = DateFormat('yyyy-03').format(date);
+    String result = '$formattedDate Transactions';
+    return result;
   }
 
   void setData(List<Transaction> transactions) {

@@ -15,5 +15,17 @@
     "fifthWeek" : "다섯째 주",
     "sixthWeek" : "여섯째 주"
   } ,
-  "not enough data" : "충분한 데이터가 모이지 않았습니다."
+  "not enough data" : "충분한 데이터가 모이지 않았습니다.",
+  "header name" : {
+    "Wallet List" : "지갑 목록",
+    "Category List" : "카테고리 목록",
+    "Goal" : "목표",
+    "Total Balance" : "전체 잔고",
+    "Trend Chart" : "추세 그래프",
+    "Category Chart" : "카테고리 그래프",
+    "Category Trend Chart" : "카테고리 추세 그래프",
+    "Average Growth" : "평균 증가량",
+    "Transaction Trend Chart" : "거래 추세 그래프"
+  },
+  "No records found" : "내역이 없습니다."
 }

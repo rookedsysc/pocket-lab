@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/calendar/utils/detail_view_title.dart';
 import 'package:pocket_lab/diary/view/test_screen.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DiaryScreen extends ConsumerWidget {
   const DiaryScreen({super.key});

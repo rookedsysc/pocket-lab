@@ -19,7 +19,7 @@ class TrendChartSeries {
       //   textStyle: TextStyle(color: color),
       //   isVisible: true),
       //
-      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: textStyle)
+      dataLabelSettings: DataLabelSettings(isVisible: false, textStyle: textStyle)
     );
   }
 }

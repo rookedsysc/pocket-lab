@@ -98,14 +98,17 @@ flutter:
     - asset/translations/
     - asset/img/illustration/
 
-  fonts:
-    - family: Dongle 
-      fonts:
-        - asset: asset/fonts/Dongle-Bold.ttf
-          weight: 900
-        - asset: asset/fonts/Dongle-Regular.ttf
+  fonts: 
+    - family: Korail
+      fonts: 
+        - asset: asset/fonts/Korail_Round_Gothic_Bold.ttf
+          weight: 700
+        - asset: asset/fonts/Korail_Round_Gothic_Medium.ttf
           weight: 500
-        - asset: asset/fonts/Dongle-Light.ttf
+        - asset: asset/fonts/Korail_Round_Gothic_Light.ttf
+          weight: 100
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

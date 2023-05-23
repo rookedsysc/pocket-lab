@@ -57,7 +57,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
           //: container  바깥 여백
           margin: EdgeInsets.only(left: 8, right: 8, bottom: 4),
           //: container 안 여백
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             //: isSelected인 타일 색상 primaryColor로
@@ -75,10 +75,16 @@ class _MenuTileState extends ConsumerState<WalletTile> {
                 children: [
                   _walletNameAndIcon(context),
                   //: 지갑 잔액
-                  _walletBalnce(context),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _walletBalnce(context),
+                      _budgetAmountPerPerioid(context)
+                    ],
+                  ),
                 ],
               ),
-              _budgetAmountPerPerioid(context)
+
             ],
           ),
         ),
@@ -118,8 +124,8 @@ class _MenuTileState extends ConsumerState<WalletTile> {
       _amountPerPeriod,
       style: Theme.of(context)
           .textTheme
-          .bodyMedium
-          ?.copyWith(color: Colors.grey, fontSize: 10.0),
+          .bodySmall
+          ?.copyWith(color: Colors.grey),
     );
   }
 

@@ -63,17 +63,20 @@ class MyApp extends ConsumerWidget {
       canvasColor: const Color.fromRGBO(236, 237, 240, 1),
       iconTheme: const IconThemeData(color: Colors.black),
 
+
       //# 메인 색상
       primaryColor: Color.fromRGBO(52, 120, 246, 1),
       primaryColorLight: Color.fromRGBO(89, 171, 225, 1),
+      
 
       //# 텍스트 색상
+      fontFamily: 'Korail',
       textTheme: const TextTheme(
         bodyLarge: TextStyle(
-            color: Colors.black, fontSize: 20, fontWeight: FontWeight.w900),
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.w900),
         //: 보통 글귀
         bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
-        bodySmall: TextStyle(color: Colors.black, fontSize: 12),
+        bodySmall: TextStyle(color: Colors.black, fontSize: 10),
       ),
       cardColor: Colors.white);
 
@@ -89,11 +92,12 @@ class MyApp extends ConsumerWidget {
     primaryColorLight: Color.fromRGBO(89, 171, 225, 1),
 
     //# 텍스트 색상
+    fontFamily: 'Korail',
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white, fontSize: 20),
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 32),
       //: 보통 글귀
-      bodyMedium: TextStyle(color: Colors.white, fontSize: 14),
-      bodySmall: TextStyle(color: Colors.white, fontSize: 12),
+      bodyMedium: TextStyle(color: Colors.white, fontSize: 24),
+      bodySmall: TextStyle(color: Colors.white, fontSize: 16),
     ),
 
     cardColor: const Color.fromRGBO(30, 30, 30, 1),

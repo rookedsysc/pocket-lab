@@ -41,7 +41,7 @@ class WalletSection extends ConsumerWidget {
                   "total balance"
                       .tr(args: [CustomNumberUtils.formatCurrency(total)]),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: 24, color: Theme.of(context).primaryColor),
+                      color: Theme.of(context).primaryColor),
                 )
               ],
             ),
@@ -70,7 +70,7 @@ class WalletSection extends ConsumerWidget {
           ),
           Text(
             "Loading data".tr(),
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w900),
           )
         ],
       ),

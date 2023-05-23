@@ -258,9 +258,7 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
                   if (totalIncome != 0)
                     Text(
                       "${CustomNumberUtils.formatNumber(totalIncome)}",
-                      style: TextStyle(
-                          fontSize: 9,
-                          color: Theme.of(context).textTheme.bodyLarge?.color),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   SizedBox(
                     height: 4.0,
@@ -268,7 +266,9 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
                   if (totalExpenditure != 0)
                     Text(
                       "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                      style: TextStyle(fontSize: 9, color: Colors.red),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Colors.red
+                      ),
                     ),
                 ],
               ),

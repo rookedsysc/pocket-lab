@@ -23,8 +23,8 @@ class HeaderCollection extends StatelessWidget {
       _getHeaderName(headerType),
       style: Theme.of(context)
           .textTheme
-          .bodyMedium
-          ?.copyWith(fontSize: 20.0, fontWeight: FontWeight.w900),
+          .bodyLarge
+          ?.copyWith(fontSize: 20, fontWeight: FontWeight.w900),
     );
   }
 

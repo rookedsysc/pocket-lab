@@ -96,13 +96,12 @@ class WeekHeader extends ConsumerWidget {
                       '${CustomNumberUtils.formatNumber(totalIncome)}',
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: 12),
+                          .bodySmall
                     ),
                   if (totalExpenditure != 0)
                     Text(
                       "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                      style: TextStyle(color: Colors.red, fontSize: 12.0),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.red),
                     ),
                 ],
               ),
@@ -115,10 +114,14 @@ class WeekHeader extends ConsumerWidget {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Text(_indexToWeek(),
-            style: textTheme.bodyMedium!.copyWith(
-                color: ColorUtils.getComplementaryColor(
-                    textTheme.bodyLarge!.color!))),
+        child: Text(
+          _indexToWeek(),
+          style: textTheme.bodyMedium!.copyWith(
+            color: ColorUtils.getComplementaryColor(
+              textTheme.bodyLarge!.color!,
+            ),
+          ),
+        ),
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),

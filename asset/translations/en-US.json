@@ -1,7 +1,7 @@
 {
   "Set a goal" : "Set a goal.",
   "Input Value" : "Input Value.",
-  "Loading data" : "Loading data...",
+  "LoaAing data" : "Loading data...",
   "total balance" : "Total {}",
   "no expend data" : "There is no spending history for the past month.",
   "asset grownth nagative mention" : "The target date cannot be predicted because the average asset growth is negative.",
@@ -27,5 +27,22 @@
     "Average Growth" : "Average Growth",
     "Transaction Trend Chart" : "Transaction Trend Chart"
   },
-  "No records found" : "No records found"
+  "No records found" : "No records found",
+  "bank name" : {
+    "citi" : "CITI",
+    "shinhan" : "Shinhan",
+    "hanhwa" : "Hanhwa",
+    "mirae asset" : "Mirae Asset",
+    "kakao" : "Kakao Bank",
+    "woori" : "Woori",
+    "toss" : "Toss",
+    "hana" : "Hana",
+    "samsung" : "Sam Sung",
+    "hyundai" : "Hyundai",
+    "nh" : "NH",
+    "kbank" : "K Bank",
+    "lotte" : "Lotte"
+    
+
+  }
 }

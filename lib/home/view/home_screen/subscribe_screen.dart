@@ -9,14 +9,28 @@ class SubscribeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(34,31, 59, 1),
-      body: Column(
+      body: Stack(
         children: [
-          
           Container(
-            child: Image.asset('asset/img/illustration/subscribe_image.png', fit: BoxFit.cover,)),
-            _text("I'm a developer who works all night long."),
-            _text("Please give me a dollar a month so that I can reach my dream."),
-            _text("Thank you for your support."),
+              child: Image.asset(
+            'asset/img/illustration/subscribe_image.png',
+            fit: BoxFit.cover,
+          )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _text("I'm a developer who works all night long."),
+              SizedBox(
+                height: 8,
+              ),
+              _text("Your support is very helpful for me to reach my dream."),
+              SizedBox(
+                height: 8,
+              ),
+              _text("Thank you for your support."),
+            ],
+          )
+
         ],
       ),
     );
@@ -27,7 +41,7 @@ class SubscribeScreen extends StatelessWidget {
     child: Text(
           text,
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
         ),
   );

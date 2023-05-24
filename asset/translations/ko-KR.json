@@ -27,5 +27,20 @@
     "Average Growth" : "평균 증가량",
     "Transaction Trend Chart" : "거래 추세 그래프"
   },
-  "No records found" : "내역이 없습니다."
+  "No records found" : "내역이 없습니다.",
+  "bank name" : {
+    "citi" : "씨티",
+    "shinhan" : "신한",
+    "hanhwa" : "한화",
+    "mirae asset" : "미래에셋",
+    "kakao" : "카카오 뱅크",
+    "woori" : "우리",
+    "toss" : "토스",
+    "hana" : "하나",
+    "samsung" : "삼성",
+    "hyundai" : "현대",
+    "nh" : "농협",
+    "kbank" : "케이뱅크",
+    "lotte" : "롯데"
+  }
 }

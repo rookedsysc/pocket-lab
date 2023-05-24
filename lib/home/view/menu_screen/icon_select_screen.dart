@@ -15,7 +15,7 @@ class IconSelectScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData _theme = Theme.of(context);
-    final bankIconKeys = bankIcon.keys.toList();
+    final bankIconKeys = koreanBankIcon.keys.toList();
     return Scaffold(
       appBar: AppBar(
         foregroundColor: _theme.textTheme.bodyLarge?.color,
@@ -43,7 +43,7 @@ class IconSelectScreen extends ConsumerWidget {
                   onTap: () {
                     try {
                       ref.read(selectedIconProvider.notifier).state =
-                          bankIcon[bankIconKeys[index]]!;
+                          koreanBankIcon[bankIconKeys[index]]!;
                     } catch (e) {
                       ref.read(selectedIconProvider.notifier).state =
                           "asset/img/bank/금융아이콘_PNG_토스.png";
@@ -62,7 +62,7 @@ class IconSelectScreen extends ConsumerWidget {
                       children: [
                         Container(
                             padding: EdgeInsets.all(12),
-                            child: Image.asset(bankIcon[bankIconKeys[index]]!)),
+                            child: Image.asset(koreanBankIcon[bankIconKeys[index]]!)),
                         Text(
                           bankIconKeys[index],
                           style: _theme.textTheme.bodySmall,

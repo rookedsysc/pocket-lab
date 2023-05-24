@@ -10,7 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  
+
   await EasyLocalization.ensureInitialized();
 
   runApp(ProviderScope(
@@ -63,11 +63,9 @@ class MyApp extends ConsumerWidget {
       canvasColor: const Color.fromRGBO(236, 237, 240, 1),
       iconTheme: const IconThemeData(color: Colors.black),
 
-
       //# 메인 색상
       primaryColor: Color.fromRGBO(52, 120, 246, 1),
       primaryColorLight: Color.fromRGBO(89, 171, 225, 1),
-      
 
       //# 텍스트 색상
       fontFamily: 'Korail',
@@ -94,10 +92,10 @@ class MyApp extends ConsumerWidget {
     //# 텍스트 색상
     fontFamily: 'Korail',
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white, fontSize: 32),
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 24),
       //: 보통 글귀
-      bodyMedium: TextStyle(color: Colors.white, fontSize: 24),
-      bodySmall: TextStyle(color: Colors.white, fontSize: 16),
+      bodyMedium: TextStyle(color: Colors.white, fontSize: 14),
+      bodySmall: TextStyle(color: Colors.white, fontSize: 10),
     ),
 
     cardColor: const Color.fromRGBO(30, 30, 30, 1),

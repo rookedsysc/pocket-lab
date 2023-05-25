@@ -65,29 +65,38 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
       body: Material(
         child: CupertinoPageScaffold(
           child: SafeArea(
-            child: Column(
+            child: Stack(
               children: [
-                BannerAdContainer(
-                    adUnitId: Platform.isAndroid
-                        ? CHART_PAGE_BANNER_AOS
-                        : CHART_PAGE_BANNER_IOS),
-                SizedBox(
-                  height: 8,
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 8,
+                    ),
+                    ChartTypeSegement(
+                      onValueChanged: _onValueChanged(),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        // 좌우로 스크롤 안되게 해줌
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: controller,
+                        children: [
+                          TrendChartView(),
+                          CategoryChartView(),
+                          TimeHeatMapChartView()
+                        ],
+                      ),
+                    ),
+                    //: banner 사이즈 
+                    SizedBox(height: 50,)
+                  ],
                 ),
-                ChartTypeSegement(
-                  onValueChanged: _onValueChanged(),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    // 좌우로 스크롤 안되게 해줌
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: controller,
-                    children: [
-                      TrendChartView(),
-                      CategoryChartView(),
-                      TimeHeatMapChartView()
-                    ],
-                  ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BannerAdContainer(
+                      adUnitId: Platform.isAndroid
+                          ? CHART_PAGE_BANNER_AOS
+                          : CHART_PAGE_BANNER_IOS),
                 ),
               ],
             ),

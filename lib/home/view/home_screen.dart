@@ -27,44 +27,48 @@ class HomeScreen extends ConsumerWidget {
         body: CupertinoPageScaffold(
           child: SafeArea(
             top: true,
-            child: SizedBox(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ///# 목표 Section
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 16.0, left: 16.0, bottom: 16.0),
-                      child: Center(child: GoalSection()),
-                    ),
-
-
-                    ///# 예산 목록 Section
-                    WalletSection(iconTheme: Theme.of(context).iconTheme),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-
-                    WalletCardSlider(), TransactionButtons(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 16, left: 16, right: 16),
-                      child: BannerAdContainer(
-                        adUnitId: Platform.isAndroid
-                            ? MAIN_PAGE_BANNER_AOS
-                            : MAIN_PAGE_BANNER_IOS,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ///# 목표 Section
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 16.0, left: 16.0, bottom: 16.0),
+                        child: Center(child: GoalSection()),
                       ),
-                    ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 16.0, left: 16.0, bottom: 16.0),
-                      child: CategoryEditableList(),
-                    ),
-                  ],
+
+                      ///# 예산 목록 Section
+                      WalletSection(iconTheme: Theme.of(context).iconTheme),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+
+                      WalletCardSlider(), TransactionButtons(),
+
+
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 16.0, left: 16.0, bottom: 16.0),
+                        child: CategoryEditableList(),
+                      ),
+                      //: banner 높이 
+                      SizedBox(height: 50,)
+                    ],
+                  ),
                 ),
-              ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BannerAdContainer(
+                    adUnitId: Platform.isAndroid
+                        ? MAIN_PAGE_BANNER_AOS
+                        : MAIN_PAGE_BANNER_IOS,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

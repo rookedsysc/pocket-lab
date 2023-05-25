@@ -115,9 +115,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
         gradient: LinearGradient(
           colors: [Colors.blue, Theme.of(context).cardColor],
           begin: Alignment.topCenter,
-          stops: [0.0, 10.0],
           end: Alignment.bottomCenter,
-
         ),
         xValueMapper: (TrendChartDataModel data, _) => data.date,
         yValueMapper: (TrendChartDataModel data, _) => data.amount);

@@ -444,7 +444,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         fieldName: "Transaction Title",
         inputField: TextTypeTextFormField(
           hintText: widget.transaction?.title,
-          onTap: _onTap(ref, _transactionTitleFormFieldKey),
+          onTap: _onTap,
           onSaved: _transactionTitleOnSaved(),
           validator:
               widget.transaction == null ? _transactionTiltleValidator() : null,
@@ -469,7 +469,17 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     };
   }
 
-  GestureTapCallback _onTap(WidgetRef ref, GlobalKey key) {
+  void _onTap() {
+    final scrollController = ref.watch(transactionScrollControllerProvider);
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  /* 
+    GestureTapCallback _onTap(WidgetRef ref, GlobalKey key) {
     return () {
       final ScrollController scrollController =
           ref.read(transactionScrollControllerProvider);
@@ -486,6 +496,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
       }
     };
   }
+  */
 
   InputTile _amountInputTile() {
     return InputTile(
@@ -493,7 +504,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
         formFieldKey: _amountFormFieldKey,
         inputField: NumberTypeTextFormField(
           hintText: widget.transaction?.amount.toString(),
-          onTap: _onTap(ref, _amountFormFieldKey),
+          onTap: _onTap,
           validator: widget.transaction == null ? _amountValidator() : null,
           onSaved: _amountOnSaved(),
         ));

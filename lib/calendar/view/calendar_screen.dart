@@ -20,6 +20,7 @@ class CalendarScreen extends ConsumerStatefulWidget {
 
 class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime _focusedDay = DateTime.now();
+  // ignore: unused_field
   DateTime? _selectedDay;
   late CalendarModel _calendarState;
 
@@ -43,24 +44,29 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             ),
             body: SafeArea(
               top: true,
-              child: ListView(
+              child: Stack(
                 children: [
-                  MonthPicker(),
-                  MonthHeader(),
-                  WeekHeaderLayOut(focusedDay: _focusedDay),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: BannerAdContainer(
-                        adUnitId: Platform.isAndroid
-                            ? CALENDAR_PAGE_BANNER_AOS
-                            : CALENDAR_PAGE_BANNER_IOS),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Calendar(),
-                  )
-                ],
-              ),
+                  ListView(
+                    children: [
+                      MonthPicker(),
+                      MonthHeader(),
+                      WeekHeaderLayOut(focusedDay: _focusedDay),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Calendar(),
+                      )
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BannerAdContainer(
+                      adUnitId: Platform.isAndroid
+                          ? CALENDAR_PAGE_BANNER_AOS
+                          : CALENDAR_PAGE_BANNER_IOS),
+                ),
+              ],
+            ),
             ),
           ),
         ),

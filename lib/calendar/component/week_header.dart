@@ -76,7 +76,7 @@ class WeekHeader extends ConsumerWidget {
 
           return InkWell(
             onTap: () {
-              showModalBottomSheet(
+              CupertinoScaffold.showCupertinoModalBottomSheet(
                   context: context,
                   builder: (context) {
                     return TransactionDetailView(

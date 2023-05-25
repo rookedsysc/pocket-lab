@@ -45,71 +45,86 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
   Widget build(BuildContext context) {
     return CupertinoScaffold(
       body: Scaffold(
-        body: StreamBuilder<List<Transaction>>(
-            stream: ref
-                .watch(transactionRepositoryProvider.notifier)
-                .getTransactionByPeriod(widget.startDate, widget.endDate),
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
-              }
-              snapshot.data!.sort((a, b) => a.date.compareTo(b.date));
-              return Column(
-                children: [
-                  SizedBox(height: 16,),
-                  BannerAdContainer(adUnitId: Platform.isAndroid
-                      ? TRANSACTION_LIST_BANNER_AOS
-                      : TRANSACTION_LIST_BANNER_IOS),
-                  
+        body: Stack(
+          children: [
+            StreamBuilder<List<Transaction>>(
+                stream: ref
+                    .watch(transactionRepositoryProvider.notifier)
+                    .getTransactionByPeriod(widget.startDate, widget.endDate),
+                builder: (context, snapshot) {
+                  if (snapshot.data == null) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  snapshot.data!.sort((a, b) => a.date.compareTo(b.date));
+                  return Column(
+                    children: [
+                      SizedBox(height: 16,),
 
-                  if (widget.title.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        widget.title,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
+                      
+
+                      if (widget.title.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            widget.title,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      _isOnlyDailyBudgetLeft(snapshot.data!)
+                          ? _emptyList()
+                          : Expanded(
+                              child: ListView.builder(
+                                itemBuilder: (context, index) {
+                                  Transaction _transaction = snapshot.data![index];
+
+                            if (_transaction.title == "#DAILY_BUDGET") {
+                              return SizedBox();
+                            }
+
+                            if (!(CustomDateUtils()
+                                .isSameDay(_transaction.date, _currentDate))) {
+                              _currentDate = _transaction.date;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      _transaction.date.toString().substring(0, 10),
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  _transactionItem(_transaction)
+                                ],
+                              );
+                            } else {
+                              return _transactionItem(_transaction);
+                            }
+                          },
+                          itemCount: snapshot.data!.length,
+                          shrinkWrap: true,
+                        ),
                       ),
-                    ),
-                  _isOnlyDailyBudgetLeft(snapshot.data!)
-                      ? _emptyList()
-                      : Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              Transaction _transaction = snapshot.data![index];
-
-                        if (_transaction.title == "#DAILY_BUDGET") {
-                          return SizedBox();
-                        }
-
-                        if (!(CustomDateUtils()
-                            .isSameDay(_transaction.date, _currentDate))) {
-                          _currentDate = _transaction.date;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  _transaction.date.toString().substring(0, 10),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              _transactionItem(_transaction)
-                            ],
-                          );
-                        } else {
-                          return _transactionItem(_transaction);
-                        }
-                      },
-                      itemCount: snapshot.data!.length,
-                      shrinkWrap: true,
-                    ),
-                  ),
-                ],
-              );
-            }),
+                      // banner 높이 (기본 높이 50 + 패딩 32)
+                      SizedBox(height: 82,)
+                    ],
+                  );
+              },
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: BannerAdContainer(
+                    adUnitId: Platform.isAndroid
+                        ? TRANSACTION_LIST_BANNER_AOS
+                        : TRANSACTION_LIST_BANNER_IOS),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

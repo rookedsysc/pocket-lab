@@ -1,4 +1,5 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -232,19 +233,27 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
       fieldName: "Budget Type",
       // hint: "none / perWeek / perMonth / perSpecificDate",
       inputField: DropdownButton<BudgetType>(
+        isExpanded: true,
+        padding: EdgeInsets.all(4),
+        iconSize: 16,
+        icon: Icon(Icons.arrow_circle_down),
+        iconEnabledColor: Colors.blue,
           underline: Container(
             height: 0,
             color: Theme.of(context).primaryColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          ),
           value: initialValue,
           isDense: true,
           items: BudgetType.values
               .map((item) => DropdownMenuItem<BudgetType>(
                     value: item,
                     child: Text(
-                      item.name,
+                      "budget type.${item.name}".tr(),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
                     ),
                   ))
               .toList(),

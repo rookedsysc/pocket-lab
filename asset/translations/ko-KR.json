@@ -42,5 +42,19 @@
     "nh" : "농협",
     "kbank" : "케이뱅크",
     "lotte" : "롯데"
+  },
+  "init category" : {
+    "unclassified" : "미분류",
+    "food" : "식비",
+    "cost of living" : "생활비",
+    "hobby" : "취미",
+    "fashion" : "패션",
+    "study" : "학습"
+  },
+  "budget type": {
+    "dontSet": "지정하지 않음",
+    "perWeek": "매주",
+    "perMonth": "매월",
+    "perSpecificDate": "특정일"
   }
 }

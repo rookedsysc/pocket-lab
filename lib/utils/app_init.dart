@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
@@ -42,17 +43,17 @@ class AppInit {
         await categoryRepository.getAllCategories();
     if (categories.isEmpty) {
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Unclassified", color: "D3D3D3")); //: 연한 흰색
+          TransactionCategory(name: "init category.unclassified".tr(), color: "D3D3D3")); //: 연한 흰색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
+          TransactionCategory(name: "init category.food".tr(), color: "0067A3")); //: 파랑
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Hobby", color: "ff0000")); //: 빨간색
+          TransactionCategory(name: "init category.hobby".tr(), color: "ff0000")); //: 빨간색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Living Expense", color: "ffff00")); //: 노란색
+          TransactionCategory(name: "init category.cost of living".tr(), color: "ffff00")); //: 노란색
       await categoryRepository.configCategory(TransactionCategory(
-          name: "Colthing Expense", color: "800080")); //: 보라색
+          name: "init category.fashion".tr(), color: "800080")); //: 보라색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Study", color: "008000")); //: 초록색
+          TransactionCategory(name: "init category.study".tr(), color: "008000")); //: 초록색
     }
     ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
   }

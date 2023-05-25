@@ -49,6 +49,7 @@ class _TrendChartState extends ConsumerState<TrendChart> {
     );
   }
 
+  // ignore: unused_element
   ChartActualRangeChangedCallback _onActualRangeChanged() {
     return (ActualRangeChangedArgs args) {
       args.visibleMin= _getMinimum().toInt();

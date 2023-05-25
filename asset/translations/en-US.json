@@ -42,5 +42,19 @@
     "nh" : "NH",
     "kbank" : "K Bank",
     "lotte" : "Lotte"
+  },
+  "init category" : {
+    "unclassified" : "Unclassified",
+    "food" : "Food",
+    "cost of living" : "Cost of Living",
+    "hobby" : "Hobby",
+    "fashion" : "Fashion",
+    "study" : "Study"
+  },
+  "budget type": {
+    "dontSet": "Don't Set",
+    "perWeek": "Per Week",
+    "perMonth": "Per Month",
+    "perSpecificDate": "Per Specific Date"
   }
 }

@@ -1,13 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/layout/trend_chart_layout.dart';
 import 'package:pocket_lab/chart/model/category_trend_chart_model.dart';
 import 'package:pocket_lab/chart/repository/category_trend_chart_repository.dart';
-import 'package:pocket_lab/chart/utils/category_trend_chart_series.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
-import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -42,7 +41,12 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
           _seriesList = categories.map((e) => _getChartSeries(e)).toList();
 
           if (_xAxisLength == 0) {
-            return const Center(child: Text("데이터가 없습니다."));
+            return Center(child: Column(
+              children: [
+                SizedBox(height: 100,),
+                Text("not enough data".tr()),
+              ],
+            ));
           }
 
           return TrendChartLayout(

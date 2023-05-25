@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/diary/view/test_screen.dart';
@@ -20,8 +19,13 @@ class DiaryScreen extends ConsumerWidget {
             },
             child: Text("Create Random Trend")),
         ElevatedButton(
-            onPressed: () {
-              _createRandomTransaction(ref);
+            onPressed: () async {
+              await _createRandomTransaction(ref);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("done"),
+                ),
+              );
             },
             child: Text("Create Random Transaction")),
         ElevatedButton(
@@ -53,6 +57,9 @@ class DiaryScreen extends ConsumerWidget {
     await ref
         .read(transactionRepositoryProvider.notifier)
         .createRandomTransaction();
+    await ref
+        .read(transactionRepositoryProvider.notifier)
+        .createRandomIncomeTransactions();
   }
 
   Future<void> _deleteAllTransaction(WidgetRef ref) async {

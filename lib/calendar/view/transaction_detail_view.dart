@@ -5,11 +5,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/constant/ad_unit_id.dart';
+import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/widget/banner_ad_container.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
+import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
@@ -48,69 +50,79 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
         body: Stack(
           children: [
             StreamBuilder<List<Transaction>>(
-                stream: ref
-                    .watch(transactionRepositoryProvider.notifier)
-                    .getTransactionByPeriod(widget.startDate, widget.endDate),
-                builder: (context, snapshot) {
-                  if (snapshot.data == null) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  snapshot.data!.sort((a, b) => a.date.compareTo(b.date));
-                  return Column(
-                    children: [
-                      SizedBox(height: 16,),
+              stream: ref
+                  .watch(transactionRepositoryProvider.notifier)
+                  .getTransactionByPeriod(widget.startDate, widget.endDate),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                snapshot.data!.sort((a, b) => a.date.compareTo(b.date));
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
 
-                      
-
-                      if (widget.title.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            widget.title,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      _isOnlyDailyBudgetLeft(snapshot.data!)
-                          ? _emptyList()
-                          : Expanded(
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  Transaction _transaction = snapshot.data![index];
-
-                            if (_transaction.title == "#DAILY_BUDGET") {
-                              return SizedBox();
-                            }
-
-                            if (!(CustomDateUtils()
-                                .isSameDay(_transaction.date, _currentDate))) {
-                              _currentDate = _transaction.date;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text(
-                                      _transaction.date.toString().substring(0, 10),
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                  _transactionItem(_transaction)
-                                ],
-                              );
-                            } else {
-                              return _transactionItem(_transaction);
-                            }
-                          },
-                          itemCount: snapshot.data!.length,
-                          shrinkWrap: true,
+                    if (widget.title.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          widget.title,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      // banner 높이 (기본 높이 50 + 패딩 32)
-                      SizedBox(height: 82,)
-                    ],
-                  );
+
+                    /// dailyBudget만 남아있는 경우 Empty List 반환
+                    _isOnlyDailyBudgetLeft(snapshot.data!)
+                        ? _emptyList()
+                        : Expanded(
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                Transaction _transaction =
+                                    snapshot.data![index];
+
+                                if (_transaction.title == "#DAILY_BUDGET") {
+                                  return SizedBox();
+                                }
+
+                                if (!(CustomDateUtils().isSameDay(
+                                    _transaction.date, _currentDate))) {
+                                  _currentDate = _transaction.date;
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Text(
+                                          _transaction.date
+                                              .toString()
+                                              .substring(0, 10),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                      _transactionItem(_transaction)
+                                    ],
+                                  );
+                                } else {
+                                  return _transactionItem(_transaction);
+                                }
+                              },
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                            ),
+                          ),
+                    // banner 높이 (기본 높이 50 + 패딩 32)
+                    SizedBox(
+                      height: 82,
+                    )
+                  ],
+                );
               },
             ),
             Align(
@@ -144,27 +156,32 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.4,),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.4,
+        ),
         Text(
-          
           "No records found".tr(),
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyLarge,),
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
       ],
     );
   }
 
   // List Item
   Widget _transactionItem(Transaction transaction) {
-    String? _transactionCategory;
+    String? _categoryName;
+    Color? _categoryColor;
     if (transaction.transactionType == TransactionType.expenditure) {
       try {
-        _transactionCategory = ref
+        TransactionCategory _transactionCategory = ref
             .watch(categoryRepositoryProvider)
-            .firstWhere((element) => element.id == transaction.walletId)
-            .name;
+            .firstWhere((element) => element.id == transaction.categoryId);
+        _categoryName = _transactionCategory.name;
+        _categoryColor = ColorUtils.stringToColor(_transactionCategory.color);
       } catch (e) {
-        _transactionCategory = "카테고리 없음";
+        _categoryName = "카테고리 없음";
+        _categoryColor = Colors.grey;
       }
     }
 
@@ -188,13 +205,16 @@ class _TransactionDetailViewState extends ConsumerState<TransactionDetailView> {
                   children: [
                     Text(
                       transaction.title,
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     if (transaction.transactionType ==
                         TransactionType.expenditure)
                       Text(
-                        _transactionCategory!,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        _categoryName!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: _categoryColor),
                       )
                   ],
                 ),

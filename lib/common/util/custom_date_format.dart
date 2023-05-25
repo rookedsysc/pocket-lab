@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';

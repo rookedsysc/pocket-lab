@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/chart/component/trend_chart.dart';
-import 'package:pocket_lab/chart/constant/chart_range_type.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/home/model/trend_model.dart';
 

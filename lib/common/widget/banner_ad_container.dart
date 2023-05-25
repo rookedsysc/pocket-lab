@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:pocket_lab/common/provider/payment_status_provider.dart';
 
-class BannerAdContainer extends StatefulWidget {
+class BannerAdContainer extends ConsumerStatefulWidget {
   final String adUnitId;
   BannerAdContainer({required this.adUnitId, super.key});
 
   @override
-  State<BannerAdContainer> createState() => _BannerAdContainerState();
+  ConsumerState<BannerAdContainer> createState() => _BannerAdContainerState();
 }
 
-class _BannerAdContainerState extends State<BannerAdContainer> {
+class _BannerAdContainerState extends ConsumerState<BannerAdContainer> {
   late final BannerAd _myBanner;
   late final BannerAdListener _listener;
   late final _adWidget;
@@ -31,6 +33,9 @@ class _BannerAdContainerState extends State<BannerAdContainer> {
 
   @override
   Widget build(BuildContext context) {
+    if (ref.watch(paymentStatusProvider)) {
+      return SizedBox();
+    }
     return Container(
       alignment: Alignment.center,
       child: _adWidget,

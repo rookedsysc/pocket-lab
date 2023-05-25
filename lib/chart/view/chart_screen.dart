@@ -7,6 +7,7 @@ import 'package:pocket_lab/chart/view/category_chart_view.dart';
 import 'package:pocket_lab/chart/view/time_heatmap_chart_view.dart';
 import 'package:pocket_lab/chart/view/trend_chart_view.dart';
 import 'package:pocket_lab/common/constant/ad_unit_id.dart';
+import 'package:pocket_lab/common/provider/payment_status_provider.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/common/view/loading_view.dart';
 import 'package:pocket_lab/common/widget/banner_ad_container.dart';
@@ -20,7 +21,7 @@ class ChartScreen extends ConsumerStatefulWidget {
 }
 
 class _ChartScreenState extends ConsumerState<ChartScreen>
-  with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late TabController controller;
   bool _trendUpdated = false;
   int index = 0;
@@ -28,7 +29,8 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = TabController(length: 3, vsync: this, initialIndex: ref.watch(chartTypeProvider));
+    controller = TabController(
+        length: 3, vsync: this, initialIndex: ref.watch(chartTypeProvider));
     controller.addListener(() {
       tabListner();
     });
@@ -51,8 +53,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
 
   @override
   Widget build(BuildContext context) {
-
-    if(!_trendUpdated){
+    if (!_trendUpdated) {
       return LoadingView();
     }
 
@@ -87,8 +88,11 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
                         ],
                       ),
                     ),
-                    //: banner 사이즈 
-                    SizedBox(height: 50,)
+                    //: banner 사이즈
+                    if (ref.watch(paymentStatusProvider))
+                      SizedBox(
+                        height: 50,
+                      )
                   ],
                 ),
                 Align(

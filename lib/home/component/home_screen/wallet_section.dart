@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
-import 'package:pocket_lab/goal/model/goal_model.dart';
-import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
-import 'package:pocket_lab/home/view/drawer_screen.dart';
 
 class WalletSection extends ConsumerWidget {
   const WalletSection({

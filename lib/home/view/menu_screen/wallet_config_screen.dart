@@ -153,7 +153,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
         // null인지 check
         //: edit mode일 경우 wallet의 결과가 null이 아니어서
         //: 값을 입력하지 않아도 해당 validator를 통과함
-        if (_amount == null || _amount.isEmpty) {
+        if (_amount.isEmpty) {
           return ('Input _amountue');
         }
 

@@ -1,9 +1,7 @@
-import 'dart:ffi';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/goal/model/goal_model.dart';
-import 'package:pocket_lab/home/model/wallet_model.dart';
 
 final goalRepositoryProvider = FutureProvider<GoalRepository>((ref) async {
   final isar = ref.watch(isarProvieder.future);

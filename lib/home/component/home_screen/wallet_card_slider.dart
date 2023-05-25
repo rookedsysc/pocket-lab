@@ -2,12 +2,7 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_zoom_drawer/config.dart';
-import 'package:pocket_lab/home/component/home_screen/wallet_card.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 

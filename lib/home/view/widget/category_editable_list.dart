@@ -1,20 +1,13 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/home/view/home_screen/category_input_modal_screen.dart';
 import 'package:pocket_lab/home/view/widget/color_picker_alert_dialog.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
-import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
-import 'package:sheet/route.dart';
 
 class CategoryEditableList extends ConsumerWidget {
   bool isEdit = false;

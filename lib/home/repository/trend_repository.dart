@@ -150,23 +150,33 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
   ///* 90일치 Random Trend 데이터 생성
   Future<void> createRandomTrend() async {
     final isar = await ref.read(isarProvieder.future);
-    final wallets =
-        await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+    double amount = 0; // Starting value
+    Random rand = Random();
+    DateTime date = DateTime.now().subtract(Duration(days: 90));
 
-    for (Wallet wallet in wallets) {
-      //: 90일치 데이터
-      for (int i = 0; i < 300; i++) {
-        await isar.writeTxn(() async {
-          Trend expend = Trend(
-              walletName: await ref
-                  .read(walletRepositoryProvider.notifier)
-                  .getWalletName(wallet.id),
-              walletId: wallet.id,
-              amount: Random().nextInt(100000).toDouble(),
-              date: DateTime.now().subtract(Duration(days: i)));
-          await isar.trends.put(expend);
-        });
+    for (int i = 0; i < 180; i++) {
+      // 4 years of data
+      amount += 10 + rand.nextInt(500);
+
+      if (DateUtils.isSameDay(date.add(Duration(days: 1)), DateTime.now())) {
+        Wallet? _wallet =
+            await ref.read(walletRepositoryProvider.notifier).getFirstWallet();
+
+        if (_wallet == null) {
+          return;
+        }
+
+        await ref
+            .read(walletRepositoryProvider.notifier)
+            .configWallet(_wallet..balance = amount);
       }
+
+      Trend trend =
+          Trend(walletId: 1, amount: amount, date: date.add(Duration(days: i)));
+
+      await isar.writeTxn(() async {
+        await isar.trends.put(trend);
+      });
     }
   }
 }

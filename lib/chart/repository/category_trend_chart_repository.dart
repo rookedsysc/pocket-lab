@@ -7,7 +7,6 @@ import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
-import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
 final categoryTrendChartProvider = StateNotifierProvider<
     CategoryTrendChartNotifier, CategoryTrendChartDataModel>((ref) {

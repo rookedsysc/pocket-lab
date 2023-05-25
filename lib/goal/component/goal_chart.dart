@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/chart/component/trend_chart.dart';
 import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';

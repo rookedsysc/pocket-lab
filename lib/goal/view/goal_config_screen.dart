@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';

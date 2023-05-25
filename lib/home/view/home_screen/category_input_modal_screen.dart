@@ -41,7 +41,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           await ref
               .read(transactionRepositoryProvider.notifier)
               .handleDeletedCategoryInTransactions(
-                  CategoryId: widget.category!.id);
+                  categoryId: widget.category!.id);
 
           Navigator.pop(context);
         },

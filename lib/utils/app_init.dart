@@ -41,14 +41,18 @@ class AppInit {
     List<TransactionCategory> categories =
         await categoryRepository.getAllCategories();
     if (categories.isEmpty) {
-      await categoryRepository.configCategory(TransactionCategory(
-          name: "Unclassified", color: "D3D3D3")); //: 연한 흰색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Unclassified", color: "D3D3D3")); //: 연한 흰색
       await categoryRepository.configCategory(
           TransactionCategory(name: "Food Expense", color: "0067A3")); //: 파랑
       await categoryRepository.configCategory(
           TransactionCategory(name: "Hobby", color: "ff0000")); //: 빨간색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "Etc", color: "808080")); //: 빨간색
+          TransactionCategory(name: "Living Expense", color: "ffff00")); //: 노란색
+      await categoryRepository.configCategory(TransactionCategory(
+          name: "Colthing Expense", color: "800080")); //: 보라색
+      await categoryRepository.configCategory(
+          TransactionCategory(name: "Study", color: "008000")); //: 초록색
     }
     ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
   }

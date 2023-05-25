@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_lab/common/util/color_utils.dart';
 import 'package:pocket_lab/home/model/trend_chart_data_model.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

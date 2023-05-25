@@ -1,7 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:pocket_lab/goal/repository.dart/goal_repository.dart';
-import 'package:uuid/uuid.dart';
 
 part 'goal_model.g.dart';
 

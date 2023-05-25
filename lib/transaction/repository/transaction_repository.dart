@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/chart/repository/category_trend_chart_repository.dart';
 import 'package:pocket_lab/common/constant/daily_budget.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
@@ -195,17 +194,24 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   //* 모든 지출내역 가져오기
-    Future<List<Transaction>> getAllExpenditures() async {
+  Future<List<Transaction>> getAllExpenditures() async {
     final Isar isar = await ref.read(isarProvieder.future);
 
-    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).findAll();
+    return isar.transactions
+        .filter()
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .findAll();
   }
 
   //* 특정 카테고리의 지출내역들 가져오기
   Future<List<Transaction>> getTransactionsByCategoryId(int id) async {
     final Isar isar = await ref.read(isarProvieder.future);
 
-    return isar.transactions.filter().transactionTypeEqualTo(TransactionType.expenditure).categoryIdEqualTo(id).findAll();
+    return isar.transactions
+        .filter()
+        .transactionTypeEqualTo(TransactionType.expenditure)
+        .categoryIdEqualTo(id)
+        .findAll();
   }
 
   ///# 해당 Wallet의 마지막 Daily Budget 가져오기
@@ -224,47 +230,164 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
   //* 랜덤 트랜잭션 생성
   Future<void> createRandomTransaction() async {
-    final Isar isar = await ref.read(isarProvieder.future);
     List<TransactionCategory> _categoryIds =
         await ref.read(categoryRepositoryProvider.notifier).getAllCategories();
     _categoryIds.removeAt(0);
     _categoryIds.removeAt(0);
-    //: categoryId 중에서 랜덤으로 하나 선택
 
     final List<Wallet> _wallets =
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
 
+    // Each category can have a different set of possible titles and amount ranges
+    Map<int, List<String>> possibleTitles = {
+      1: [
+        "Miscellaneous",
+        "Unexpected cost",
+        "Other",
+        "Non-categorized expense",
+        "Unknown"
+      ],
+      2: [
+        "Groceries",
+        "Dining out",
+        "Takeout food",
+        "Coffee shop",
+        "Supermarket",
+        "Lunch at work",
+        "Dinner expense",
+        "Brunch expense",
+        "Snack expense",
+        "Drink expense"
+      ],
+      3: [
+        "Movie ticket",
+        "Book",
+        "Concert ticket",
+        "Art supplies",
+        "Online gaming",
+        "Gym membership",
+        "Yoga class",
+        "Music lesson",
+        "Outdoor gear",
+        "Hobby club membership"
+      ],
+      4: [
+        "Electricity bill",
+        "Water bill",
+        "Internet bill",
+        "Heating cost",
+        "Groceries",
+        "Household items",
+        "Cleaning supplies",
+        "Public transport",
+        "Gasoline",
+        "Car maintenance"
+      ],
+      5: [
+        "Shirt purchase",
+        "Pants purchase",
+        "Dress purchase",
+        "Shoe purchase",
+        "Accessories",
+        "Jacket purchase",
+        "Suit purchase",
+        "Swimsuit purchase",
+        "Hat purchase",
+        "Underwear purchase"
+      ],
+      6: [
+        "Book purchase",
+        "Online course",
+        "Tutoring",
+        "Seminar fee",
+        "Stationery",
+        "Education software",
+        "Library fee",
+        "Exam fee",
+        "Scholarship donation",
+        "Study group expense"
+      ],
+    };
+
+    Map<int, List<double>> possibleAmounts = {
+      1: [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0],
+      2: [15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0, 95.0, 105.0],
+      3: [20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0],
+      4: [50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0, 120.0, 130.0, 140.0],
+      5: [30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0, 120.0],
+      6: [20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0],
+    };
+
     for (Wallet _wallet in _wallets) {
       for (int i = 0; i < 100; i++) {
-        DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - i, Random().nextInt(24), Random().nextInt(60));
-        int _categoryId =
-            _categoryIds[Random().nextInt(_categoryIds.length)].id;
-                      Transaction _randomTransaction = Transaction(
+        DateTime date = DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day - i, Random().nextInt(24), Random().nextInt(60));
+
+        int dailyTransactionCount = Random().nextInt(10) + 1;
+        for (int j = 0; j < dailyTransactionCount; j++) {
+          TransactionCategory _randomCategory =
+              _categoryIds[Random().nextInt(_categoryIds.length)];
+
+          // Select a random title and amount based on the category
+          String title = possibleTitles[_randomCategory.id]![
+              Random().nextInt(possibleTitles[_randomCategory.id]!.length)];
+          double amount = Random().nextDouble() *
+                  (possibleAmounts[_randomCategory.id]![1] -
+                      possibleAmounts[_randomCategory.id]![0]) +
+              possibleAmounts[_randomCategory.id]![0];
+
+          Transaction _randomTransaction = Transaction(
               transactionType: TransactionType.expenditure,
-              categoryId: _categoryId,
-              amount: Random().nextInt(100000).toDouble(),
+              categoryId: _randomCategory.id,
+              amount: amount,
               date: date,
-              title: "Test $i",
+              title: title,
               walletId: _wallet.id);
-        await isar.writeTxn(() async {
-          await isar.transactions.put(_randomTransaction);
-        });
-        await ref
-            .read(categoryTrendChartProvider.notifier)
-            .createCategoryTrend(_randomTransaction);
+              
+
+          await ref
+              .read(transactionRepositoryProvider.notifier)
+              .configTransaction(_randomTransaction);
+          await ref
+              .read(categoryTrendChartProvider.notifier)
+              .createCategoryTrend(_randomTransaction);
+        }
       }
     }
   }
 
+  Future<void> createRandomIncomeTransactions() async {
+    final isar = await ref.read(isarProvieder.future);
+    double minIncome = 100; // Minimum income in USD
+    double maxIncome = 5000; // Maximum income in USD
+    Random rand = Random();
+
+    for (int i = 0; i < 90; i++) {
+        double incomeAmount = minIncome + rand.nextDouble() * (maxIncome - minIncome);
+        
+        Transaction incomeTransaction = Transaction(
+            transactionType: TransactionType.income,
+            categoryId: null, // Income transactions typically don't have a category
+            amount: incomeAmount,
+            date: DateTime.now().subtract(Duration(days: i)),
+            title: "Income for day $i",
+            walletId: 1); // Assuming walletId 1
+
+        await isar.writeTxn(() async {
+            await isar.transactions.put(incomeTransaction);
+        });
+    }
+}
+
   ///# 카테고리 삭제시 해당하는 카테고리를 가지고 있는 Transaction에 대해
   ///# Category ID를 1로 변경
   Future<void> handleDeletedCategoryInTransactions(
-      {required int CategoryId}) async {
+      {required int categoryId}) async {
     final Isar isar = await ref.read(isarProvieder.future);
 
     List<Transaction> _transaction = await isar.transactions
         .filter()
-        .categoryIdEqualTo(CategoryId)
+        .categoryIdEqualTo(categoryId)
         .findAll();
     List<Transaction> _temp = [];
 
@@ -292,7 +415,7 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
   }
 
   Future<void> _updateCategoryTrend(Transaction transaction) async {
-        if (transaction.transactionType == TransactionType.expenditure) {
+    if (transaction.transactionType == TransactionType.expenditure) {
       await ref
           .read(categoryTrendChartProvider.notifier)
           .subtractData(transaction);
@@ -304,17 +427,15 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.walletId);
 
-
     if (fromWallet != null) {
       if (transaction.transactionType == TransactionType.expenditure) {
         fromWallet.balance += transaction.amount;
       } else if (transaction.transactionType == TransactionType.income) {
         fromWallet.balance -= transaction.amount;
       } else if (transaction.toWallet != null) {
-              final Wallet? toWallet = await ref
-        .read(walletRepositoryProvider.notifier)
-        .getSpecificWallet(transaction.toWallet!);
-
+        final Wallet? toWallet = await ref
+            .read(walletRepositoryProvider.notifier)
+            .getSpecificWallet(transaction.toWallet!);
 
         fromWallet.balance -= transaction.amount;
         toWallet!.balance += transaction.amount;
@@ -337,7 +458,9 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
     for (Transaction _transaction in _transactions) {
       _ids.add(_transaction.id);
-      await ref.read(categoryTrendChartProvider.notifier).subtractData(_transaction);
+      await ref
+          .read(categoryTrendChartProvider.notifier)
+          .subtractData(_transaction);
     }
 
     await isar.writeTxn(() async {

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/calendar/component/month_pickcer.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/chart/view/time_heatmap_chart.dart';
-import 'package:pocket_lab/common/component/custom_skeletone.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
 import 'package:pocket_lab/transaction/model/transaction_model.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';

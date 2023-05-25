@@ -21,7 +21,7 @@
     "Category List" : "Category List",
     "Goal" : "Goal",
     "Total Balance" : "Total Balance",
-    "Trend Chart" : "Trend Chart",
+    "Trend Chart" : "Asset Growth Chart",
     "Category Chart" : "Category Chart",
     "Category Trend Chart" : "Category Trend Chart",
     "Average Growth" : "Average Growth",
@@ -42,7 +42,5 @@
     "nh" : "NH",
     "kbank" : "K Bank",
     "lotte" : "Lotte"
-    
-
   }
 }

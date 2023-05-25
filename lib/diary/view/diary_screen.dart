@@ -21,11 +21,7 @@ class DiaryScreen extends ConsumerWidget {
         ElevatedButton(
             onPressed: () async {
               await _createRandomTransaction(ref);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("done"),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("done"),),);
             },
             child: Text("Create Random Transaction")),
         ElevatedButton(

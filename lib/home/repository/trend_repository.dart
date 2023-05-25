@@ -25,6 +25,7 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
         .filter()
         .walletIdEqualTo(walletId)
         .dateGreaterThan(DateTime.now().subtract(Duration(days: 31)))
+        .dateLessThan(DateTime.now().add(Duration(days: 1)))
         .watch(fireImmediately: true)
         .asBroadcastStream();
   }
@@ -154,27 +155,37 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
     Random rand = Random();
     DateTime date = DateTime.now().subtract(Duration(days: 90));
 
+    // Define the possible increments
+    List<double> possibleIncrements = [];
+    for (double i = 100; i <= 10000; i += 5000) {
+      possibleIncrements.add(i);
+    }
+
     for (int i = 0; i < 180; i++) {
       // 4 years of data
-      amount += 10 + rand.nextInt(500);
+      double increment =
+          possibleIncrements[rand.nextInt(possibleIncrements.length)];
+      amount += increment;
 
-      if (DateUtils.isSameDay(date.add(Duration(days: 1)), DateTime.now())) {
+      if (DateUtils.isSameDay(date.add(Duration(days: i)), DateTime.now())) {
         Wallet? _wallet =
             await ref.read(walletRepositoryProvider.notifier).getFirstWallet();
 
         if (_wallet == null) {
           return;
         }
+        _wallet.balance = amount;
 
-        await ref
-            .read(walletRepositoryProvider.notifier)
-            .configWallet(_wallet..balance = amount);
+        await ref.read(walletRepositoryProvider.notifier).configWallet(_wallet);
+
+        await allWalletsSync();
+        continue;
       }
 
       Trend trend =
           Trend(walletId: 1, amount: amount, date: date.add(Duration(days: i)));
 
-      await isar.writeTxn(() async {
+      isar.writeTxn(() async {
         await isar.trends.put(trend);
       });
     }

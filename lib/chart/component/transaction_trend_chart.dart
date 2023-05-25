@@ -104,8 +104,8 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
         ? _incomeData.length.toDouble()
         : _expenseData.length.toDouble();
 
-    if (_maximum > 10) {
-      _maximum = 10;
+    if (_maximum > 7) {
+      _maximum = 7;
     } else {
       _maximum = _maximum - 1;
     }
@@ -114,6 +114,7 @@ class _TransactionTrendChartState extends ConsumerState<TransactionTrendChart> {
         autoScrollingMode: AutoScrollingMode.end,
         visibleMaximum: _maximum,
         axisLine: AxisLine(width: 0),
+        majorGridLines: MajorGridLines(width: 0),
         //: x축 간격
         interval: 1,
         isInversed: true);

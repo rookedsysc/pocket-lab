@@ -84,7 +84,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
             max = data.amount > max ? data.amount : max;
           }
         }
-        args.visibleMax = max * 1.75;
+        args.visibleMax = max * 1.05;
       }
     };
   }
@@ -108,7 +108,7 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
     return SplineAreaSeries<TrendChartDataModel, DateTime>(
         color: Theme.of(context).primaryColor.withOpacity(0.5),
         borderColor: Theme.of(context).primaryColor,
-        borderWidth: 4,
+        borderWidth: 3,
         animationDuration: 0,
         dataSource: chartData,
         gradient: LinearGradient(
@@ -135,9 +135,9 @@ class _HomeCardChartState extends ConsumerState<HomeCardChart> {
     }
 
     if(minimum > 0) {
-      minimum = 0;
+      minimum /= 1.05;
     } else {
-      minimum = minimum * 2;
+      minimum = minimum * 1.05;
     }
 
     return minimum;

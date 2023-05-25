@@ -66,7 +66,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
               //# 라벨 설정
               dataLabelSettings: widget.isHome ? DataLabelSettings(
                   // overflowMode: OverflowMode.trim,
-                  // labelPosition: ChartDataLabelPosition.outside,
+                  labelPosition: ChartDataLabelPosition.outside,
                   isVisible: true,
                   textStyle: Theme.of(context)
                       .textTheme

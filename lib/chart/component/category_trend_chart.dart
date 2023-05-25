@@ -103,8 +103,8 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
   }
 
   CategoryAxis _xAxis() {
-    if (_xAxisLength > 10) {
-      _xAxisLength = 10;
+    if (_xAxisLength > 7) {
+      _xAxisLength = 7;
     } else {
       _xAxisLength -= 1;
     }
@@ -113,6 +113,7 @@ class _CategoryTrendChartState extends ConsumerState<CategoryTrendChart> {
         isInversed: true,
         autoScrollingMode: AutoScrollingMode.end,
         visibleMaximum: _xAxisLength.toDouble(),
+        majorGridLines: MajorGridLines(width: 0),
         axisLine: AxisLine(width: 0),
         //: x축 간격
         interval: 1);

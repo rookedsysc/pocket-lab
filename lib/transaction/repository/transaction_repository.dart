@@ -233,7 +233,6 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     List<TransactionCategory> _categoryIds =
         await ref.read(categoryRepositoryProvider.notifier).getAllCategories();
     _categoryIds.removeAt(0);
-    _categoryIds.removeAt(0);
 
     final List<Wallet> _wallets =
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
@@ -358,26 +357,43 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
 
   Future<void> createRandomIncomeTransactions() async {
     final isar = await ref.read(isarProvieder.future);
-    double minIncome = 100; // Minimum income in USD
-    double maxIncome = 5000; // Maximum income in USD
+    double minIncome = 50; // Minimum income in USD
+    double maxIncome = 500; // Maximum income in USD
     Random rand = Random();
 
-    for (int i = 0; i < 90; i++) {
-        double incomeAmount = minIncome + rand.nextDouble() * (maxIncome - minIncome);
-        
-        Transaction incomeTransaction = Transaction(
-            transactionType: TransactionType.income,
-            categoryId: null, // Income transactions typically don't have a category
-            amount: incomeAmount,
-            date: DateTime.now().subtract(Duration(days: i)),
-            title: "Income for day $i",
-            walletId: 1); // Assuming walletId 1
+    // Define a list of income sources
+    List<String> incomeSources = [
+      "Salary",
+      "Freelance",
+      "Investment Returns",
+      "Rent",
+      "Online Business",
+      "Gift",
+      //...add more if needed
+    ];
 
-        await isar.writeTxn(() async {
-            await isar.transactions.put(incomeTransaction);
-        });
+    for (int i = 0; i < 90; i++) {
+      double incomeAmount =
+          minIncome + rand.nextDouble() * (maxIncome - minIncome);
+
+      // Choose a random income source
+      String incomeSource = incomeSources[rand.nextInt(incomeSources.length)];
+
+      Transaction incomeTransaction = Transaction(
+          transactionType: TransactionType.income,
+          categoryId:
+              null, // Income transactions typically don't have a category
+          amount: incomeAmount,
+          date: DateTime.now().subtract(Duration(days: i)),
+          title:
+              "Income from $incomeSource", // Use the random income source as title
+          walletId: 1); // Assuming walletId 1
+
+      await isar.writeTxn(() async {
+        await isar.transactions.put(incomeTransaction);
+      });
     }
-}
+  }
 
   ///# 카테고리 삭제시 해당하는 카테고리를 가지고 있는 Transaction에 대해
   ///# Category ID를 1로 변경

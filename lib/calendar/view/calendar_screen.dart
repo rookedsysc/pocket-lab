@@ -51,9 +51,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       MonthPicker(),
                       MonthHeader(),
                       WeekHeaderLayOut(focusedDay: _focusedDay),
-
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.only(top: 24, right: 8, left: 8),
                         child: Calendar(),
                       )
                   ],

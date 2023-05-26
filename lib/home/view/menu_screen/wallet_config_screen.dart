@@ -15,6 +15,7 @@ import 'package:pocket_lab/home/provider/budget_type_provider.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/icon_select_screen.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 final walletConfigScrollProvider = Provider<ScrollController>((ref) {
   final ScrollController _scrollController = ScrollController();
@@ -74,7 +75,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
                   .read(trendRepositoryProvider.notifier)
                   .syncTrend(_wallet.id);
             }
-            await DailyBudget().add( ref);
+            await DailyBudget().add(ref);
 
             Navigator.of(context).pop();
           }
@@ -120,7 +121,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   InputTile _budgetAmountInputTile(bool isDontSetType) {
     return InputTile(
-      fieldName: "Budget Amount",
+      fieldName: "wallet config screen.budget amount".tr(),
       inputField: NumberTypeTextFormField(
         onTap: _onTap,
         onSaved: _amountInputTileOnSaved,
@@ -173,41 +174,19 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
           .dateToFyyyyMMdd(widget.wallet!.budget.budgetDate!);
     } else {
       _selectedDate = _wallet.budget.budgetDate == null
-          ? "Select Date"
+          ? "wallet config screen.select date".tr()
           : CustomDateUtils().dateToFyyyyMMdd(_wallet.budget.budgetDate!);
     }
     return InputTile(
-        fieldName: "Date",
+        fieldName: "wallet config screen.select date".tr(),
         inputField: TextButton(
             onPressed: () {
-              showCupertinoModalBottomSheet(
-                  context: context,
-                  builder: (context) => Material(
-                        child: CalendarDatePicker2(
-                          onValueChanged: (value) {
-                            if (widget.wallet == null) {
-                              _wallet.budget.budgetDate = value[0];
-                              _wallet.budget.originDay = value[0]!.day;
-                            }
-                            widget.wallet?.budget.budgetDate = value[0];
-                            widget.wallet?.budget.originDay = value[0]!.day;
-                            debugPrint(
-                                "[WalletConfigScreen]\n widget.wallet?.budget.budgetDate = ${widget.wallet?.budget.budgetDate}");
-                            if (mounted) {
-                              setState(() {});
-                            }
-
-                            Navigator.of(context).pop();
-                          },
-                          config: CalendarDatePicker2Config(
-                            firstDate: DateTime.now(),
-                            lastDate: CustomDateUtils().getNextBugdetDate(
-                                DateTime.now(), DateTime.now().day),
-                            calendarType: CalendarDatePicker2Type.single,
-                          ),
-                          initialValue: [DateTime.now()],
-                        ),
-                      ));
+              showCupertinoModalPopup(
+                context: context,
+                builder: (context) => Material(
+                  child: _datePicker(context),
+                ),
+              );
             },
 
             ///: 선택된 시간이 없으면 "Select Date"를 보여주고, 있으면 선택된 시간을 보여줌
@@ -215,6 +194,45 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               _selectedDate,
               textAlign: TextAlign.center,
             )));
+  }
+
+  Container _datePicker(BuildContext context) {
+    return Container(
+      height: 400,
+      child: SfDateRangePicker(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        initialSelectedDate: widget.wallet?.budget.budgetDate ?? DateTime.now(),
+        minDate: DateTime.now(),
+        maxDate: DateTime(
+            DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
+        selectionMode: DateRangePickerSelectionMode.single,
+        headerStyle: DateRangePickerHeaderStyle(
+            textStyle: Theme.of(context).textTheme.bodyLarge),
+        monthCellStyle: DateRangePickerMonthCellStyle(
+            textStyle: Theme.of(context).textTheme.bodyMedium),
+        yearCellStyle: DateRangePickerYearCellStyle(
+            textStyle: Theme.of(context).textTheme.bodyMedium),
+        monthViewSettings: DateRangePickerMonthViewSettings(
+          viewHeaderStyle: DateRangePickerViewHeaderStyle(
+              textStyle: Theme.of(context).textTheme.bodySmall),
+        ),
+        onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+          if (widget.wallet == null) {
+            _wallet.budget.budgetDate = args.value;
+            _wallet.budget.originDay = args.value.day;
+          }
+          widget.wallet?.budget.budgetDate = args.value;
+          widget.wallet?.budget.originDay = args.value.day;
+          debugPrint(
+              "[WalletConfigScreen]\n widget.wallet?.budget.budgetDate = ${widget.wallet?.budget.budgetDate}");
+          if (mounted) {
+            setState(() {});
+          }
+
+          Navigator.of(context).pop();
+        },
+      ),
+    );
   }
 
   InputTile _selectBudgetTypeInputTile() {
@@ -230,21 +248,20 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
     }
 
     return InputTile(
-      fieldName: "Budget Type",
+      fieldName: "wallet config screen.select budget type".tr(),
       // hint: "none / perWeek / perMonth / perSpecificDate",
       inputField: DropdownButton<BudgetType>(
-        isExpanded: true,
-        padding: EdgeInsets.all(4),
-        iconSize: 16,
-        icon: Icon(Icons.arrow_circle_down),
-        iconEnabledColor: Colors.blue,
+          isExpanded: true,
+          padding: EdgeInsets.all(4),
+          iconSize: 16,
+          icon: Icon(Icons.arrow_circle_down),
+          iconEnabledColor: Colors.blue,
           underline: Container(
             height: 0,
             color: Theme.of(context).primaryColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          ),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
           value: initialValue,
           isDense: true,
           items: BudgetType.values
@@ -272,25 +289,26 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   //# icon 선택
   InputTile _selectIconInputTile(BuildContext context) {
     return InputTile(
-        fieldName: "Icon",
-        inputField: GestureDetector(
-          onTap: () => showCupertinoModalPopup(
-              context: context, builder: (context) => IconSelectScreen()),
-          child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-            //: 선태된 이미지
-            child: Image.asset(
-              ref.watch(selectedIconProvider),
-              fit: BoxFit.fill,
-            ),
+      fieldName: "wallet config screen.icon".tr(),
+      inputField: GestureDetector(
+        onTap: () => showCupertinoModalBottomSheet(
+            context: context, builder: (_) => IconSelectScreen()),
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          //: 선태된 이미지
+          child: Image.asset(
+            ref.watch(selectedIconProvider),
+            fit: BoxFit.fill,
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   //# 지갑 이름
   InputTile _walletNameInputTile() {
     return InputTile(
-        fieldName: "Wallet Name",
+        fieldName: "wallet config screen.wallet name".tr(),
         inputField: TextTypeTextFormField(
             validator:
                 widget.wallet == null ? _walletNameInputTileValidator() : null,
@@ -329,7 +347,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   //# 계좌 잔고
   InputTile _balanceInputTile() {
     return InputTile(
-      fieldName: "Balance",
+      fieldName: "wallet config screen.balance".tr(),
       inputField: NumberTypeTextFormField(
         onTap: _onTap,
         onSaved: (_balanceInputTileOnSaved),

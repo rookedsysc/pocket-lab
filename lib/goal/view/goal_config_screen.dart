@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
@@ -31,7 +32,7 @@ class GoalConfigScreen extends ConsumerWidget {
     return [
       //# goal 이름 입력
       InputTile(
-          fieldName: "Goal Name",
+          fieldName: "goal config screen.goal name".tr(),
           inputField: TextTypeTextFormField(
             hintText: goal != null ? goal!.name : null,
             onTap: _onTap(ref),
@@ -41,7 +42,7 @@ class GoalConfigScreen extends ConsumerWidget {
           )),
       //# 목표액 입력
       InputTile(
-        fieldName: "Amount",
+        fieldName: "goal config screen.amount".tr(),
         inputField: NumberTypeTextFormField(
           hintText: goal != null ? goal!.amount.toString() : null,
           onTap: _onTap(ref),

@@ -56,5 +56,34 @@
     "perWeek": "Per Week",
     "perMonth": "Per Month",
     "perSpecificDate": "Per Specific Date"
-  }
+  },
+  "wallet config screen" : {
+    "wallet name" : "Wallet Name",
+    "icon" : "Icon",
+    "balance" : "Balance",
+    "select budget type" : "Select Budget Type",
+    "select date" : "Select Date",
+    "budget amount" : "Budget Amount"
+  },
+  "goal config screen" : {
+    "goal name" : "Goal Name",
+    "amount" : "Amount"
+  },
+  "transaction config screen" : {
+    "from wallet" : "From Wallet",
+    "select wallet" : "Select Wallet",
+    "to wallet" : "To Wallet",
+    "transaction title" : "Transaction Title",
+    "amount" : "Amount",
+    "select category" : "Select Category",
+    "date" : "Date",
+    "time" : "Time"
+  },
+  "category input modal screen" : {
+    "color picker" : "Color Picker",
+    "name" : "Name"
+  },
+  "EDIT" : "EDIT",
+  "ADD" : "ADD",
+  "DEL" : "DEL"
 }

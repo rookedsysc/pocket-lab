@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 
 class InputModalScreen extends ConsumerStatefulWidget {
@@ -49,28 +50,31 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
     return Scaffold(
       body: Material(
         color: Theme.of(context).scaffoldBackgroundColor,
-        child: ListView(
-          controller: widget.scrollController,
-          children: [
-            ///# 상단 버튼 (cancel, add)
-            _topButton(context),
-            SizedBox(
-              height: 16.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Form(
-                key: widget.formKey,
-                child: Column(
-                  ///# 입력 옵션
-                  children: <Widget>[
-                    ...List.generate(widget.inputTile.length,
-                        (index) => widget.inputTile[index])
-                  ],
+        child: CupertinoScaffold(
+          transitionBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: ListView(
+            controller: widget.scrollController,
+            children: [
+              ///# 상단 버튼 (cancel, add)
+              _topButton(context),
+              SizedBox(
+                height: 16.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Form(
+                  key: widget.formKey,
+                  child: Column(
+                    ///# 입력 옵션
+                    children: <Widget>[
+                      ...List.generate(widget.inputTile.length,
+                          (index) => widget.inputTile[index])
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

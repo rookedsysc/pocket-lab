@@ -418,6 +418,25 @@ class TransactionRepositoryNotifier extends StateNotifier<Transaction> {
     });
   }
 
+  Future<void> deleteByWalletId(int walletId) async {
+    final Isar isar = await ref.read(isarProvieder.future);
+    final List<Transaction> _transactions =
+        await isar.transactions.filter().walletIdEqualTo(walletId).findAll();
+    List<Future> _futures = [];
+
+    for (Transaction _transaction in _transactions) {
+      _futures.add(_updateCategoryTrend(_transaction));
+    }
+    await Future.wait(_futures);
+    final List<Id> idList =
+        (await isar.transactions.filter().walletIdEqualTo(walletId).findAll())
+            .map((e) => e.id)
+            .toList();
+    await isar.writeTxn(() async {
+      await isar.transactions.deleteAll(idList);
+    });
+  }
+
   Future<void> delete(Transaction transaction) async {
     final Isar isar = await ref.read(isarProvieder.future);
 

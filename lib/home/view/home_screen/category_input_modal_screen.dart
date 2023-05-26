@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
@@ -69,7 +70,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
                 builder: (context) => ColorPickerAlertDialog());
           },
           child: Text(
-            "Color Picker",
+            "category input modal screen.color picker".tr(),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: ref.watch(colorProvider.notifier).state,
@@ -80,7 +81,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
 
   InputTile _categoryNameInputTile() {
     return InputTile(
-      fieldName: "Category Name",
+      fieldName: "category input modal screen.name".tr(),
       inputField: TextTypeTextFormField(
         hintText: widget.isEdit == true ? widget.category!.name : null,
         onSaved: (newValue) {

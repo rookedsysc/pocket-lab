@@ -127,11 +127,26 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
                 child: GestureDetector(
                   onTap: switchPicker,
                   child: Center(
-                    child: Text(
-                      DateFormat('yyyy. MM.').format(_calendarState.focusedDay),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateFormat('yyyy. MM.').format(_calendarState.focusedDay),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Icon(
+                          _pickerOpen
+                              ? Icons.arrow_circle_up_rounded
+                              : Icons.arrow_circle_down_sharp,
+                          color: Theme.of(context).primaryColor,
+                          size: 18,
+                        )
+                      ],
                     ),
                   ),
                 ),

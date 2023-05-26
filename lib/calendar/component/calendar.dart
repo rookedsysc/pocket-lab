@@ -227,7 +227,7 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
             }
           : null,
       child: Container(
-        margin: EdgeInsets.all(3.0),
+        margin: EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           border: Border.all(
@@ -238,39 +238,49 @@ class _CalendarBoxState extends ConsumerState<_CalendarBox> {
         width: MediaQuery.of(context).size.width / 7,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              widget.date.day.toString(),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: widget.textColor ??
-                        Theme.of(context).textTheme.bodyMedium?.color,
-                  ),
-              textAlign: TextAlign.center,
+            SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                widget.date.day.toString(),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: widget.textColor ??
+                          Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                textAlign: TextAlign.left,
+              ),
             ),
 
             //: 오늘 수입/지출
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (totalIncome != 0)
-                    Text(
-                      "${CustomNumberUtils.formatNumber(totalIncome)}",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  SizedBox(
-                    height: 4.0,
-                  ),
-                  if (totalExpenditure != 0)
-                    Text(
-                      "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.red
+              child: Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (totalIncome != 0)
+                      Text(
+                        "${CustomNumberUtils.formatNumber(totalIncome)}",
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.right,
                       ),
+                    SizedBox(
+                      height: 4.0,
                     ),
-                ],
+                    if (totalExpenditure != 0)
+                      Text(
+                        "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
+                        textAlign: TextAlign.right,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.red
+                        ),
+                      ),
+                  ],
+                ),
               ),
             )
           ],

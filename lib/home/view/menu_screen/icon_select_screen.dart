@@ -21,10 +21,6 @@ class IconSelectScreen extends ConsumerWidget {
         foregroundColor: _theme.textTheme.bodyLarge?.color,
         elevation: 0,
         backgroundColor: _theme.scaffoldBackgroundColor,
-        title: Text(
-          "Select Icon",
-          style: _theme.textTheme.bodyLarge,
-        ),
       ),
       body: GridView(
         //# 행 갯수, 패딩, 가로 세로 비율

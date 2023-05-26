@@ -82,7 +82,7 @@ class CalendarUtils {
 
   double getCalendarHeight(DateTime date) {
     final int weeks = getWeeksInMonth(date);
-    return weeks * 90.0;
+    return weeks * 104;
   }
 
   ///# Type별 총 합을 반환

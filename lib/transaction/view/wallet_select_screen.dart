@@ -59,7 +59,7 @@ class WalletSelectScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Row(
+                                Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -71,7 +71,10 @@ class WalletSelectScreen extends ConsumerWidget {
                                       wallets[index].balance.toString(),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium,
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
                                       overflow: TextOverflow.ellipsis,
                                     )
                                   ],
@@ -163,7 +166,7 @@ class WalletSelectScreen extends ConsumerWidget {
         Text(
           wallet.name,
           style: Theme.of(context).textTheme.bodyMedium,
-          overflow: TextOverflow.fade,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

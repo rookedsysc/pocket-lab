@@ -56,5 +56,34 @@
     "perWeek": "매주",
     "perMonth": "매월",
     "perSpecificDate": "특정일"
-  }
+  },
+  "wallet config screen" : {
+    "wallet name" : "지갑 이름",
+    "icon" : "아이콘",
+    "balance" : "잔고",
+    "select budget type" : "예산 타입",
+    "select date" : "예산 날짜",
+    "budget amount" : "예산 금액"
+  },
+  "goal config screen" : {
+    "goal name" : "목표",
+    "amount" : "목표 금액"
+  },
+  "transaction config screen" : {
+    "from wallet" : "보내는 지갑",
+    "select wallet" : "지갑 선택",
+    "to wallet" : "받는 지갑",
+    "transaction title" : "거래명",
+    "amount" : "금액",
+    "select category" : "카테고리 선택",
+    "date" : "날짜",
+    "time" : "시간"
+  },
+  "category input modal screen" : {
+    "color picker" : "색상 선택",
+    "name" : "이름"
+  },
+  "EDIT" : "수정",
+  "ADD" : "추가",
+  "DEL" : "삭제"
 }

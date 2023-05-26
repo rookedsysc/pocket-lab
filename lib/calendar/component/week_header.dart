@@ -96,12 +96,12 @@ class WeekHeader extends ConsumerWidget {
                       '${CustomNumberUtils.formatNumber(totalIncome)}',
                       style: Theme.of(context)
                           .textTheme
-                          .bodySmall
+                          .bodyMedium
                     ),
                   if (totalExpenditure != 0)
                     Text(
                       "-${CustomNumberUtils.formatNumber(totalExpenditure)}",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.red),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                     ),
                 ],
               ),

@@ -10,6 +10,7 @@ import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:pocket_lab/home/view/menu_screen/wallet_config_screen.dart';
+import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
 class WalletTile extends ConsumerStatefulWidget {
   Wallet wallet;
@@ -167,6 +168,9 @@ class _MenuTileState extends ConsumerState<WalletTile> {
       await ref
           .read(trendRepositoryProvider.notifier)
           .deleteTrend(widget.wallet.id);
+      await ref
+          .read(transactionRepositoryProvider.notifier)
+          .deleteByWalletId(widget.wallet.id);
 
       //: 선택된 지갑이 삭제된 경우
       //: 다른 지갑 중 하나를 선택된 지갑으로 설정

@@ -49,22 +49,25 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: SfCartesianChart(
-        onActualRangeChanged: widget.onActualRangeChanged,
-        legend: widget.legend,
-          primaryXAxis: widget.xAxis,
-          primaryYAxis: NumericAxis(
-            //: Y축에 표시되는 값에 Format 적용
-            axisLine: AxisLine(width: 0),
-            majorGridLines: MajorGridLines(width: 0.25, color: Colors.grey.shade200),
-          ),
-
-          ///# 스크롤 가능하게 설정
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          tooltipBehavior: _tooltipBehavior,
-          series: widget.seriesList),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: SfCartesianChart(
+          onActualRangeChanged: widget.onActualRangeChanged,
+          legend: widget.legend,
+            primaryXAxis: widget.xAxis,
+            primaryYAxis: NumericAxis(
+              //: Y축에 표시되는 값에 Format 적용
+              axisLine: AxisLine(width: 0),
+              majorGridLines: MajorGridLines(width: 0.25, color: Colors.grey.shade200),
+            ),
+      
+            ///# 스크롤 가능하게 설정
+            zoomPanBehavior: ZoomPanBehavior(
+              enablePanning: true,
+            ),
+            tooltipBehavior: _tooltipBehavior,
+            series: widget.seriesList),
+      ),
     );
   }
 

@@ -48,14 +48,14 @@ class CategoryEditableList extends ConsumerWidget {
                       List<TransactionCategory> _temp = _categories;
                       final item = _temp.removeAt(oldIndex);
                       _temp.insert(newIndex, item);
-
+              
                       await ref.read(categoryRepositoryProvider.notifier).reorderCatregory(temp: _temp);
                     }),
                     children: List.generate(_categories.length + 1, (index) {
                       if (index == _categories.length) {
                         return _addItem(context);
                       }
-
+              
                       return _categoryItem(
                           context: context,
                           category: _categories[index],
@@ -81,6 +81,10 @@ class CategoryEditableList extends ConsumerWidget {
             });
       },
       child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         child: Center(
             child: Icon(
           Icons.add,
@@ -118,13 +122,25 @@ class CategoryEditableList extends ConsumerWidget {
             });
       },
       child: Container(
-        color: ColorUtils.stringToColor(category.color),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).cardColor,
+        ),
         child: Center(
-          child: Text(
-            category.name,
-            style: textTheme.copyWith(
-              color: _textColor,
-            ),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric
+                (horizontal: 4),
+                child: Icon(Icons.more_horiz,
+                    color: ColorUtils.stringToColor(category.color)),
+              ),
+              Text(
+                category.name,
+                style: textTheme,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ),
       ),

@@ -116,7 +116,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   InputTile _selectTimeInputTile() {
     return InputTile(
-      fieldName: "Select Time",
+      fieldName: "transaction config screen.time".tr(),
       inputField: TextButton(
         onPressed: () {
           showCupertinoModalPopup(
@@ -308,13 +308,13 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     String _fieldName;
 
     if (widget.transactionType == TransactionType.remittance) {
-      _fieldName = "from Wallet";
+      _fieldName = "transaction config screen.from wallet".tr();
     } else {
-      _fieldName = "Select Wallet";
+      _fieldName = "transaction config screen.select wallet".tr();
     }
 
     if (_selectWallet == null) {
-      _selectedWalletName = "Select Wallet";
+      _selectedWalletName = "transaction config screen.select wallet".tr();
     } else {
       _selectedWalletName = _selectWallet.name;
     }
@@ -342,9 +342,9 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     String _selectedWalletName;
     String _fieldName;
 
-    _fieldName = "to Wallet";
+    _fieldName = "transaction config screen.to wallet".tr();
     if (_toWallet == null) {
-      _selectedWalletName = "from Wallet";
+      _selectedWalletName = "transaction config screen.to wallet".tr();
     } else {
       _selectedWalletName = _toWallet.name;
     }
@@ -365,7 +365,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   InputTile _categoryInputTile() {
     return InputTile(
       hint: _categoryInputTileHint,
-      fieldName: "Select Category",
+      fieldName: "transaction config screen.select category".tr(),
       inputField: StreamBuilder<List<TransactionCategory>>(
           stream: ref
               .watch(categoryRepositoryProvider.notifier)
@@ -440,7 +440,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   InputTile _transactionTitleInputTile() {
     return InputTile(
         formFieldKey: _transactionTitleFormFieldKey,
-        fieldName: "Transaction Title",
+        fieldName: "transaction config screen.transaction title".tr(),
         inputField: TextTypeTextFormField(
           hintText: widget.transaction?.title,
           onTap: _onTap,
@@ -499,7 +499,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
   InputTile _amountInputTile() {
     return InputTile(
-        fieldName: "Amount",
+        fieldName: "transaction config screen.amount".tr(),
         formFieldKey: _amountFormFieldKey,
         inputField: NumberTypeTextFormField(
           hintText: widget.transaction?.amount.toString(),
@@ -539,7 +539,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
     }
 
     return InputTile(
-      fieldName: "Select Date",
+      fieldName: "transaction config screen.date".tr(),
       inputField: TextButton(
         child: Text(
           _buttonText,

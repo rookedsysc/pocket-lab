@@ -33,6 +33,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       ///* easy locaization init
       supportedLocales: context.supportedLocales,
+      debugShowCheckedModeBanner: false,
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
 

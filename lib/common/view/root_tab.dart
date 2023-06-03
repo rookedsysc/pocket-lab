@@ -18,13 +18,14 @@ class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int index = 1;
+  bool isTestMode = false;
 
   @override
   void initState() {
     super.initState();
 
     //TODO: length: 2 -> 2개의 탭.
-    _tabController = TabController(initialIndex: 1,length: 4, vsync: this);
+    _tabController = TabController(initialIndex: 1,length: isTestMode ? 4 : 3, vsync: this);
     _tabController.addListener(tabListner);
   }
 
@@ -71,7 +72,7 @@ class _RootTabState extends ConsumerState<RootTab>
                 : Icons.calendar_month_outlined),
             label: 'Calendar',
           ),
-          BottomNavigationBarItem(
+          if(isTestMode)BottomNavigationBarItem(
             icon: Icon(index == 3
                 ? Icons.account_balance_wallet
                 : Icons.account_balance_wallet_outlined),
@@ -99,7 +100,8 @@ class _RootTabState extends ConsumerState<RootTab>
       children: [
         //TODO: tab 추가시 수정
         ChartScreen(), CupertinoScaffold(body: DrawerScreen()),
-        CalendarScreen(), DiaryScreen()
+        CalendarScreen(),
+        if (isTestMode) DiaryScreen()
       ],
       physics: const NeverScrollableScrollPhysics(),
       controller: _tabController,

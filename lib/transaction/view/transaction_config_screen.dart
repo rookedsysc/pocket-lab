@@ -89,11 +89,22 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   @override
   Widget build(BuildContext context) {
     return InputModalScreen(
+        title: _getTitle(),
         scrollController: ref.read(transactionScrollControllerProvider),
         isEdit: widget.isEdit,
         formKey: _formKey,
         inputTile: _inputTileList(ref: ref),
         onSavePressed: _onSavedPress());
+  }
+
+  String _getTitle() {
+    if (widget.transactionType == TransactionType.expenditure) {
+      return "transaction config screen.expend".tr();
+    } else if (widget.transactionType == TransactionType.income) {
+      return "transaction config screen.income".tr();
+    } else {
+      return "transaction config screen.transfer".tr();
+    }
   }
 
   List<InputTile> _inputTileList({required WidgetRef ref}) {

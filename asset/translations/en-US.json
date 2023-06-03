@@ -77,7 +77,10 @@
     "amount" : "Amount",
     "select category" : "Select Category",
     "date" : "Date",
-    "time" : "Time"
+    "time" : "Time",
+    "income" : "Income",
+    "expend" : "Expend",
+    "transfer" : "Transfer"
   },
   "category input modal screen" : {
     "color picker" : "Color Picker",

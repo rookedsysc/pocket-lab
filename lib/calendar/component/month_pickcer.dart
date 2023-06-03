@@ -44,20 +44,23 @@ class _MonthPickerState extends ConsumerState<MonthPicker>
             );
           },
           //# 달을 누르면 달이 선택되고, 선택된 달이 있으면 그 달의 색깔을 보라색으로 표시
-          child: TextButton(
-            onPressed: () {
-              ref.refresh(calendarProvider.notifier).setFocusedDay(dateTime);
-              debugPrint(
-                  "[*] Month Picker Select Month : ${ref.read(calendarProvider).focusedDay}");
-              if (mounted) {
-                setState(() {});
-              }
-            },
-            style: TextButton.styleFrom(
-              shape: const CircleBorder(),
-            ),
-            child: Text(
-              DateFormat('MMM').format(dateTime),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 6,
+            child: TextButton(
+              onPressed: () {
+                ref.refresh(calendarProvider.notifier).setFocusedDay(dateTime);
+                debugPrint(
+                    "[*] Month Picker Select Month : ${ref.read(calendarProvider).focusedDay}");
+                if (mounted) {
+                  setState(() {});
+                }
+              },
+              style: TextButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: Text(
+                DateFormat('MMM').format(dateTime),
+              ),
             ),
           ),
         ),

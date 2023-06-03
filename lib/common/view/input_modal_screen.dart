@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
 
 class InputModalScreen extends ConsumerStatefulWidget {
-  ///: 외부에서 입력 옵션 받아와서 사이즈는 여기서 정
+  ///: 외부에서 입력 옵션 받아와서 사이즈는 여기서 정함
   final List<InputTile> inputTile;
 
   ///: textField 등에 적용할 formkey
@@ -26,6 +27,8 @@ class InputModalScreen extends ConsumerStatefulWidget {
   //: 삭제 버튼을 눌렀을 경우
   VoidCallback? onDelPressed;
 
+  String? title;
+
   InputModalScreen(
       {required this.scrollController,
       required this.isEdit,
@@ -34,6 +37,7 @@ class InputModalScreen extends ConsumerStatefulWidget {
       required this.onSavePressed,
       this.isDelButton,
       this.onDelPressed,
+      this.title,
       super.key});
 
   @override
@@ -96,11 +100,18 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
                 Icons.arrow_back_ios,
                 color: Colors.blue,
               )),
-          widget.isDelButton == true ? Expanded(child: SizedBox()) : SizedBox(),
+          if (!_isTitleNull())
+            Text(
+              widget.title!,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+
+          if (_isDelButtonExist() && _isTitleNull())
+            Expanded(child: SizedBox()),
           TextButton(
             onPressed: widget.onSavePressed,
             child: Text(
-              widget.isEdit ? 'EDIT' : 'ADD',
+              widget.isEdit ? 'EDIT'.tr() : 'ADD'.tr(),
               // style: widget.textStyle
               //     ?.copyWith(color: Theme.of(context).iconTheme.color),
             ),
@@ -110,12 +121,20 @@ class _InputModalScreenState extends ConsumerState<InputModalScreen> {
             TextButton(
               onPressed: widget.onDelPressed,
               child: Text(
-                "DEL",
+                "DEL".tr(),
                 style: TextStyle(color: Colors.red),
               ),
             )
         ],
       ),
     );
+  }
+
+  bool _isTitleNull() {
+    return widget.title == null;
+  }
+
+  bool _isDelButtonExist() {
+    return widget.isDelButton == true;
   }
 }

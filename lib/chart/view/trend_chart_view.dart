@@ -32,7 +32,7 @@ class TrendChartView extends StatelessWidget {
               ),
               TransactionTrendChart(),
               _padding(),
-              TrendChartToolTip()
+              // TrendChartToolTip()
             ],
           ),
         ),

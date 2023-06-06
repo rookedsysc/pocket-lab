@@ -81,15 +81,15 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     return AppBar(
       actions: [
-        IconButton(
-            onPressed: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
-                  context: context, builder: (context) => SubscribeScreen());
-            },
-            icon: Icon(
-              Icons.attach_money,
-              color: theme.iconTheme.color,
-            ))
+        // IconButton(
+        //     onPressed: () {
+        //       CupertinoScaffold.showCupertinoModalBottomSheet(
+        //           context: context, builder: (context) => SubscribeScreen());
+        //     },
+        //     icon: Icon(
+        //       Icons.attach_money,
+        //       color: theme.iconTheme.color,
+        //     ))
       ],
       leading: IconButton(
         onPressed: () => zoomDrawerController.toggle!(),

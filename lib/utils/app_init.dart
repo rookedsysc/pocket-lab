@@ -21,6 +21,7 @@ class AppInit {
     await _categoryInit();
     await DailyBudget().add(ref);
     await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
+    await ref.read(walletRepositoryProvider.notifier).syncState();
   }
 
   Future<void> _walletInit() async {

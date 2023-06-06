@@ -1,15 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pocket_lab">
+    package="com.timelabs.pocketlab">
    <application
        android:name="${applicationName}"
        android:icon="@mipmap/launcher_icon"
-       android:label="pocket_lab">
+       android:label="Pocket Lab">
        <meta-data
            android:name="com.google.android.gms.ads.APPLICATION_ID"
            android:value="ca-app-pub-2767008024281414~7598071182" />
 
        <activity
-           android:name=".MainActivity"
+           android:name="com.timelabs.pocketlab.MainActivity"
            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
            android:exported="true"
            android:hardwareAccelerated="true"

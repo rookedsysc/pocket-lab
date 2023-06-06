@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:pocket_lab/common/provider/isar_provider.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/repository/trend_repository.dart';
+import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
 final walletRepositoryProvider =
     StateNotifierProvider<WalletRepository, Wallet>((ref) {
@@ -13,6 +15,11 @@ class WalletRepository extends StateNotifier<Wallet> {
   WalletRepository({required this.ref})
       : super(Wallet(name: "", budget: BudgetModel())) {
         getIsSelectedWallet();
+  }
+
+  Future<void> syncState() async {
+    final isar = await ref.read(isarProvieder.future);
+    state = (await isar.wallets.where().findAll()).first;
   }
 
   ///# 모든 지갑 stream으로 가져오기
@@ -83,6 +90,7 @@ class WalletRepository extends StateNotifier<Wallet> {
         if (value != null) {
           value.isSelected = false;
           await isar.wallets.put(value);
+          state = value;
         }
       });
     });
@@ -111,11 +119,11 @@ class WalletRepository extends StateNotifier<Wallet> {
   Future<void> deleteWallet(Wallet wallet) async {
     final isar = await ref.read(isarProvieder.future);
 
-    
-
     await isar.writeTxn(() async {
       await isar.wallets.delete(wallet.id);
     });
+
+    await syncState();
   }
 
   ///# 지갑이 비어있는지 확인

@@ -93,8 +93,11 @@ class TrendRepositoryNotifier extends StateNotifier<Trend> {
   ///# 해당 walletId를 가지고 있는 데이터 전부 삭제하기
   Future<void> deleteTrend(int walletId) async {
     final isar = await ref.read(isarProvieder.future);
+    final List<Trend> _trends = await isar.trends.filter().walletIdEqualTo(walletId).findAll();
+    final List<int> _trendIds = _trends.map((e) => e.id).toList();
+
     await isar.writeTxn(() async {
-      await isar.trends.filter().walletIdEqualTo(walletId).deleteAll();
+      await isar.trends.deleteAll(_trendIds);
     });
   }
 

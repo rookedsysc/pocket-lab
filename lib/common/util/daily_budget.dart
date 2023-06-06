@@ -29,6 +29,7 @@ class DailyBudget {
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
     //# 모든 wallets을 반복
     for (Wallet wallet in wallets) {
+
       await ref.read(trendRepositoryProvider.notifier)
           .syncTrend(wallet.id);
       if (wallet.budgetType == BudgetType.dontSet) {
@@ -38,31 +39,48 @@ class DailyBudget {
                 .read(transactionRepositoryProvider.notifier)
                 .getLastDailyBudgetByWalletId(wallet))
             ?.date;
-            
-        double _dailyBudgetAmount = await _getSecificDateBudget(
-            _lastDailyBudgetDate,
-            budget: wallet.budget,
-            ref: ref);
-        await _addTodayBudget(
-            wallet: wallet, amount: _dailyBudgetAmount, ref: ref);
 
+        if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
+          double _dailyBudgetAmount = await _getSecificDateBudget(
+              _lastDailyBudgetDate,
+              budget: wallet.budget,
+              ref: ref);
+          await _addTodayBudget(
+              wallet: wallet, amount: _dailyBudgetAmount, ref: ref);
+        }
         continue;
       }
-      final double _budgetAmount =
-          await _getBudgetAmount(wallet: wallet, ref: ref);
 
-      //: 입력할 예산이 없는 경우 loop를 빠져나감
-      if (_budgetAmount == 0 || _budgetAmount.isNaN) {
-        continue;
-      }
-      await _addTodayBudget(
-          wallet: wallet, amount: _budgetAmount, ref: ref);
-      debugPrint("""GetDailyBudget Calss : \n\n
+      DateTime? _lastDailyBudgetDate = (await ref
+          .read(transactionRepositoryProvider.notifier)
+          .getLastDailyBudgetByWalletId(wallet))
+          ?.date;
+
+      if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
+        final double _budgetAmount =
+            await _getBudgetAmount(wallet: wallet, ref: ref);
+
+        //: 입력할 예산이 없는 경우 loop를 빠져나감
+        if (_budgetAmount == 0 || _budgetAmount.isNaN) {
+          continue;
+        }
+        await _addTodayBudget(wallet: wallet, amount: _budgetAmount, ref: ref);
+        debugPrint("""GetDailyBudget Calss : \n\n
       Wallet: ${wallet.name} \n
       Budget Amount: $_budgetAmount \n
       """);
+      }
     }
   }
+
+  bool _hasBudgetBeenSetToday(DateTime? lastDailyBudgetDate) {
+    if (lastDailyBudgetDate == null) {
+      return false;
+    }
+    return CustomDateUtils().isSameDay(lastDailyBudgetDate, DateTime.now());
+  }
+
+
 
   //* 특정 일자에 반복되는 예산일 경우 예산 구하기
   //refactor : -> 특정 일자에 반복되는 예산 구하기 (조건이 빠짐)

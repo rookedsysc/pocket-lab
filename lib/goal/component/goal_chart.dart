@@ -128,7 +128,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: Text(
             'asset grownth nagative mention'.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
@@ -173,8 +173,13 @@ class _GoalChartState extends ConsumerState<GoalChart> {
 
     debugPrint("average : $average");
 
-    if (average < 0) {
+    if (average < 0 ) {
       return 0;
+    }
+
+    // is First Trend
+    if (average.isNaN) {
+      average = chartData.first.amount;
     }
 
     while (widget.goalAmount > totalBalance) {

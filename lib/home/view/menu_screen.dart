@@ -1,6 +1,8 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
@@ -60,11 +62,14 @@ class MenuScreen extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () {
-            showModalBottomSheet(context: context, builder: (context) {
-              return WalletConfigScreen(
-                isEdit: false,
-              );
-            });
+            CupertinoScaffold.showCupertinoModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return WalletConfigScreen(
+                  isEdit: false,
+                );
+              },
+            );
           },
           icon: Icon(
             Icons.add,

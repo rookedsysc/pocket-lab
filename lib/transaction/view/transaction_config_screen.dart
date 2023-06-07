@@ -192,7 +192,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
         ///# 새로 추가하는 경우
         if (widget.transaction == null) {
-          changeWalletBalance(_transaction);
+          await changeWalletBalance(_transaction);
           await ref
               .read(transactionRepositoryProvider.notifier)
               .configTransaction(_transaction);
@@ -203,7 +203,7 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
 
         ///# 기존에 있던 것을 수정하는 경우
         else {
-          changeWalletBalance(widget.transaction!);
+          await changeWalletBalance(widget.transaction!);
           await ref
               .read(transactionRepositoryProvider.notifier)
               .configTransaction(widget.transaction!);
@@ -218,10 +218,11 @@ class _TransactionScreenState extends ConsumerState<TransactionConfigScreen> {
   }
 
   //# Transaction Type에 따라서 기존 wallet의 잔고에 + -
-  void changeWalletBalance(Transaction transaction) async {
+  Future<void> changeWalletBalance(Transaction transaction) async {
     Wallet? _wallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.walletId);
+    
     Wallet? _toWallet = await ref
         .read(walletRepositoryProvider.notifier)
         .getSpecificWallet(transaction.toWallet);

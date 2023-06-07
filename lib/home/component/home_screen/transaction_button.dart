@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/transaction/view/transaction_config_screen.dart';
 
 enum TransactionType { remittance, income, expenditure }
@@ -74,10 +76,10 @@ class TransactionButton extends StatelessWidget {
     }
 
     return cardButton(
-        icon: _icon,
-        onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (context) {
+      icon: _icon,
+      onPressed: () => CupertinoScaffold.showCupertinoModalBottomSheet(
+        context: context,
+        builder: (context) {
           return TransactionConfigScreen(
             isEdit: false,
             transactionType: transactionType,

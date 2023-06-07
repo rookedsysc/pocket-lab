@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_slidable.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
@@ -188,7 +189,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
 
   SlidableActionCallback _onEditPressed() {
     return (_) {
-      showModalBottomSheet(
+      CupertinoScaffold.showCupertinoModalBottomSheet(
           context: context,
           builder: (context) {
             return WalletConfigScreen(

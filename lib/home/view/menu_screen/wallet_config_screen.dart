@@ -36,6 +36,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("build");
     return InputModalScreen(
         scrollController: ref.watch(walletConfigScrollProvider),
         isEdit: widget.isEdit,

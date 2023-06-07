@@ -45,11 +45,9 @@ class InputModalScreen extends ConsumerStatefulWidget {
 }
 
 class _InputModalScreenState extends ConsumerState<InputModalScreen> {
-  double _bottomInsets = 0; 
 
   @override
   Widget build(BuildContext context) {
-    _bottomInsets = MediaQuery.of(context).viewInsets.bottom;
     // debugPrint(_bottomInsets.toString());
     return Scaffold(
       body: Material(

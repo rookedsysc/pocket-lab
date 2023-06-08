@@ -115,6 +115,7 @@ class CategoryEditableList extends ConsumerWidget {
         showModalBottomSheet(
             context: context,
             builder: (context) {
+              ref.read(colorProvider.notifier).updateShouldNotify(Colors.blue, ColorUtils.stringToColor(category.color));
               return CategoryInputModalScreen(
                 category: category,
                 isEdit: true,

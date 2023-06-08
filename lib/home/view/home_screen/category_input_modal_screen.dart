@@ -25,7 +25,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
   final ScrollController _scrollController = ScrollController();
   @override
   void didChangeDependencies() {
-    if (widget.category == null) {
+    if (!widget.isEdit) {
       widget.category = TransactionCategory(color: 'ffffff', name: '');
     } 
     super.didChangeDependencies();
@@ -85,9 +85,11 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
       inputField: TextTypeTextFormField(
         hintText: widget.isEdit == true ? widget.category!.name : null,
         onSaved: (newValue) {
-          widget.category!.name = newValue!;
+          if (newValue != null && newValue.isNotEmpty) {
+            widget.category!.name = newValue;
+          }
         },
-        validator: widget.isEdit ? null :  (value) {
+        validator: widget.isEdit ? null : (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
           }
@@ -107,8 +109,8 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
         await ref
             .watch(categoryRepositoryProvider.notifier)
             .configCategory(widget.category!);
-        Navigator.pop(context);
       }
+      Navigator.pop(context);
     };
   }
 }

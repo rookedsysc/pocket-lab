@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final colorProvider = StateProvider<Color>((ref) { return Colors.blue;
+final colorProvider = StateProvider<Color>((ref) {
+  return Colors.blue;
 });
 
 class ColorPickerAlertDialog extends ConsumerWidget {
@@ -23,7 +24,7 @@ class ColorPickerAlertDialog extends ConsumerWidget {
       ),
       content: SingleChildScrollView(
         child: HueRingPicker(
-          pickerColor: Theme.of(context).primaryColor,
+          pickerColor: ref.watch(colorProvider),
           onColorChanged: (color) {
             ref.refresh(colorProvider.notifier).update((state) => color);
           },

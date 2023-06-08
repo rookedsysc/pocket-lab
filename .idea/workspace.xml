@@ -12,9 +12,8 @@
     <list default="true" id="f804cacb-11f3-401f-af44-61668d480b84" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/view/widget/category_editable_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/widget/category_editable_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/view/widget/color_picker_alert_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/widget/color_picker_alert_dialog.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,12 +112,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
-          <line>286</line>
+          <line>281</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
-          <line>287</line>
+          <line>282</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
@@ -133,17 +132,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
-          <line>248</line>
+          <line>247</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
-          <line>250</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
-          <line>253</line>
+          <line>248</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>

@@ -20,10 +20,10 @@ class TransactionButtons extends StatelessWidget {
           transactionType: TransactionType.income,
           context: context,
         ),
-        TransactionButton(
-          transactionType: TransactionType.remittance,
-          context: context,
-        ),
+        // TransactionButton(
+        //   transactionType: TransactionType.remittance,
+        //   context: context,
+        // ),
         TransactionButton(
           transactionType: TransactionType.expenditure,
           context: context,

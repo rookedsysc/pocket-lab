@@ -10,7 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f804cacb-11f3-401f-af44-61668d480b84" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,39 +112,39 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/repository/wallet_repository.dart</url>
-          <line>114</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>286</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/repository/wallet_repository.dart</url>
-          <line>116</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>287</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
-          <line>165</line>
-          <option name="timeStamp" value="5" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>25</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
-          <line>27</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>112</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
-          <line>31</line>
-          <option name="timeStamp" value="7" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>248</line>
+          <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
-          <line>168</line>
-          <option name="timeStamp" value="8" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>250</line>
+          <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
-          <line>171</line>
-          <option name="timeStamp" value="9" />
+          <url>file://$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart</url>
+          <line>253</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

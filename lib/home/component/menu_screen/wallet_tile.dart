@@ -7,6 +7,7 @@ import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/provider/budget_type_provider.dart';
 import 'package:pocket_lab/home/repository/trend_repository.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
@@ -24,6 +25,7 @@ class WalletTile extends ConsumerStatefulWidget {
 class _MenuTileState extends ConsumerState<WalletTile> {
   @override
   Widget build(BuildContext context) {
+    debugPrint("build");
     final zoomDrawerController = ref.watch(zoomDrawerControllerProvider);
     return GestureDetector(
       onTap: () async {
@@ -189,6 +191,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
 
   SlidableActionCallback _onEditPressed() {
     return (_) {
+      ref.read(budgetTypeProvider.notifier).setBudgetType(widget.wallet.budgetType);
       CupertinoScaffold.showCupertinoModalBottomSheet(
           context: context,
           builder: (context) {

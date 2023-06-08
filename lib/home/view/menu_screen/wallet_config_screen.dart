@@ -33,19 +33,22 @@ class WalletConfigScreen extends ConsumerStatefulWidget {
 
 class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   Wallet _wallet = Wallet(budget: BudgetModel(), name: '');
+  BudgetType budgetType = BudgetType.dontSet;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
+    debugPrint("help!");
     if (!widget.isEdit) {
       ref.read(budgetTypeProvider.notifier).setBudgetType(BudgetType.dontSet);
     }
+
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("build");
     return InputModalScreen(
         scrollController: ref.watch(walletConfigScrollProvider),
         isEdit: widget.isEdit,
@@ -104,10 +107,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   }
 
   List<InputTile> _inputTileList(BuildContext context) {
-    BudgetType budgetType = ref.read(budgetTypeProvider);
-    if(widget.isEdit) {
-      budgetType = widget.wallet!.budgetType;
-    }
+
+    budgetType = ref.read(budgetTypeProvider);
 
     bool _isSpecificDateType = budgetType == BudgetType.perSpecificDate;
     bool _isDontSetType = budgetType == BudgetType.dontSet;
@@ -243,12 +244,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   }
 
   InputTile _selectBudgetTypeInputTile() {
-    BudgetType initialValue = BudgetType.dontSet;
-    if(widget.isEdit) {
-      initialValue = widget.wallet!.budgetType;
-    } else {
-      initialValue = ref.read(budgetTypeProvider);
-    }
+    BudgetType initialValue = ref.read(budgetTypeProvider);
 
     return InputTile(
       fieldName: "wallet config screen.select budget type".tr(),
@@ -279,12 +275,13 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               .toList(),
           onChanged: (BudgetType? val) {
             ref.read(budgetTypeProvider.notifier).setBudgetType(val!);
-            if (widget.wallet == null) {
+            if (!widget.isEdit) {
               _wallet.budgetType = val;
               ref.read(budgetTypeProvider.notifier).setBudgetType(val);
-              return;
+            } else {
+              widget.wallet!.budgetType = val;
+              ref.read(budgetTypeProvider.notifier).setBudgetType(val);
             }
-            widget.wallet?.budgetType = val;
             if (mounted) {
               setState(() {});
             }

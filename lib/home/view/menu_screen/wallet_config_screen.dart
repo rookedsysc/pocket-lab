@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -36,7 +37,8 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   @override
   void didChangeDependencies() {
-    if (widget.isEdit) {
+    if (!widget.isEdit) {
+      ref.read(budgetTypeProvider.notifier).setBudgetType(BudgetType.dontSet);
     }
     super.didChangeDependencies();
   }
@@ -102,9 +104,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   }
 
   List<InputTile> _inputTileList(BuildContext context) {
-    BudgetType budgetType = BudgetType.dontSet;
-    if (!widget.isEdit) {
-      budgetType = ref.watch(budgetTypeProvider);
+    BudgetType budgetType = ref.read(budgetTypeProvider);
+    if(widget.isEdit) {
+      budgetType = widget.wallet!.budgetType;
     }
 
     bool _isSpecificDateType = budgetType == BudgetType.perSpecificDate;
@@ -242,6 +244,11 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   InputTile _selectBudgetTypeInputTile() {
     BudgetType initialValue = BudgetType.dontSet;
+    if(widget.isEdit) {
+      initialValue = widget.wallet!.budgetType;
+    } else {
+      initialValue = ref.read(budgetTypeProvider);
+    }
 
     return InputTile(
       fieldName: "wallet config screen.select budget type".tr(),
@@ -278,6 +285,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               return;
             }
             widget.wallet?.budgetType = val;
+            if (mounted) {
+              setState(() {});
+            }
           }),
     );
   }

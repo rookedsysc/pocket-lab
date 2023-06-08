@@ -38,7 +38,7 @@ class CategoryEditableList extends ConsumerWidget {
                 height: 8.0,
               ),
               Container(
-                height: 500,
+                height: MediaQuery.of(context).size.height / 3,
                 child: ReorderableGridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 4,

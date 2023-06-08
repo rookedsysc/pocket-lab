@@ -8,6 +8,7 @@ import 'package:pocket_lab/calendar/layout/week_header_layout.dart';
 import 'package:pocket_lab/calendar/model/calendar_model.dart';
 import 'package:pocket_lab/calendar/provider/calendar_provider.dart';
 import 'package:pocket_lab/common/constant/ad_unit_id.dart';
+import 'package:pocket_lab/common/provider/payment_status_provider.dart';
 import 'package:pocket_lab/common/widget/banner_ad_container.dart';
 import 'dart:io' show Platform;
 
@@ -54,7 +55,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 24, right: 8, left: 8),
                         child: Calendar(),
-                      )
+                      ),
+                      if(!ref.watch(paymentStatusProvider))SizedBox(height: 50,)
                   ],
                 ),
                 Align(

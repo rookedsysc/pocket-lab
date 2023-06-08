@@ -80,9 +80,6 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               //: add mode
               await walletRepository.configWallet(_wallet);
               await DailyBudget().add(ref);
-              await ref
-                  .read(trendRepositoryProvider.notifier)
-                  .syncTrend(_wallet.id);
             }
 
             Navigator.of(context).pop();
@@ -245,7 +242,6 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   InputTile _selectBudgetTypeInputTile() {
     BudgetType initialValue = BudgetType.dontSet;
-
 
     return InputTile(
       fieldName: "wallet config screen.select budget type".tr(),

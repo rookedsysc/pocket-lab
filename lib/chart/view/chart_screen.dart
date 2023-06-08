@@ -89,7 +89,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen>
                       ),
                     ),
                     //: banner 사이즈
-                    if (ref.watch(paymentStatusProvider))
+                    if (!ref.watch(paymentStatusProvider))
                       SizedBox(
                         height: 50,
                       )

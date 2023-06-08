@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/constant/ad_unit_id.dart';
+import 'package:pocket_lab/common/provider/payment_status_provider.dart';
 import 'package:pocket_lab/common/widget/banner_ad_container.dart';
 import 'package:pocket_lab/goal/component/goal_section.dart';
 import 'package:pocket_lab/home/component/home_screen/transaction_button.dart';
@@ -56,7 +57,7 @@ class HomeScreen extends ConsumerWidget {
                         child: CategoryEditableList(),
                       ),
                       //: banner 높이 
-                      SizedBox(height: 50,)
+                      if(!ref.watch(paymentStatusProvider))SizedBox(height: 50,)
                     ],
                   ),
                 ),

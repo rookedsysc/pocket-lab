@@ -27,51 +27,60 @@ class DailyBudget {
   Future<void> add(WidgetRef ref) async {
     List<Wallet> wallets =
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
+    await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
     //# 모든 wallets을 반복
     for (Wallet wallet in wallets) {
-      await ref.read(trendRepositoryProvider.notifier)
-          .syncTrend(wallet.id);
+
       if (wallet.budgetType == BudgetType.dontSet) {
         continue;
       } else if (wallet.budgetType == BudgetType.perSpecificDate && wallet.budget.isExist) {
-        DateTime? _lastDailyBudgetDate = (await ref
-                .read(transactionRepositoryProvider.notifier)
-                .getLastDailyBudgetByWalletId(wallet))
-            ?.date;
-
-        if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
-          double _dailyBudgetAmount = await _getSecificDateBudget(
-              _lastDailyBudgetDate,
-              budget: wallet.budget,
-              ref: ref);
-          await _addTodayBudget(
-              wallet: wallet, amount: _dailyBudgetAmount, ref: ref);
-        }
-        continue;
+        _specificDateDailyBudgetADD(ref: ref, wallet: wallet);
+      } else {
+        _otherTypeBudgetADD(ref: ref, wallet: wallet);
       }
+    }
 
-      DateTime? _lastDailyBudgetDate = (await ref
-          .read(transactionRepositoryProvider.notifier)
-          .getLastDailyBudgetByWalletId(wallet))
-          ?.date;
+    await ref.read(trendRepositoryProvider.notifier).allWalletsSync();
+  }
 
-      if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
-        final double _budgetAmount =
-            await _getBudgetAmount(wallet: wallet, ref: ref);
+  Future<void> _otherTypeBudgetADD(
+      {required WidgetRef ref, required Wallet wallet}) async {
+    DateTime? _lastDailyBudgetDate = (await ref
+        .read(transactionRepositoryProvider.notifier)
+        .getLastDailyBudgetByWalletId(wallet))
+        ?.date;
 
-        //: 입력할 예산이 없는 경우 loop를 빠져나감
-        if (_budgetAmount == 0 || _budgetAmount.isNaN) {
-          continue;
-        }
-        await _addTodayBudget(wallet: wallet, amount: _budgetAmount, ref: ref);
-        debugPrint("""GetDailyBudget Calss : \n\n
+    if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
+      final double _budgetAmount =
+      await _getBudgetAmount(wallet: wallet, ref: ref);
+
+      if (_budgetAmount == 0 || _budgetAmount.isNaN) {
+        return;
+      }
+      await _addTodayBudget(wallet: wallet, amount: _budgetAmount, ref: ref);
+      debugPrint("""GetDailyBudget Calss : \n\n
       Wallet: ${wallet.name} \n
       Budget Amount: $_budgetAmount \n
       """);
-      }
     }
   }
 
+  Future<void> _specificDateDailyBudgetADD({required WidgetRef ref, required Wallet wallet}) async {
+    DateTime? _lastDailyBudgetDate = (await ref
+        .read(transactionRepositoryProvider.notifier)
+        .getLastDailyBudgetByWalletId(wallet))
+        ?.date;
+
+    if (!_hasBudgetBeenSetToday(_lastDailyBudgetDate)) {
+    double _dailyBudgetAmount = await _getSecificDateBudget(
+    _lastDailyBudgetDate,
+    budget: wallet.budget,
+    ref: ref);
+    await _addTodayBudget(
+    wallet: wallet, amount: _dailyBudgetAmount, ref: ref);
+    }
+
+  }
   bool _hasBudgetBeenSetToday(DateTime? lastDailyBudgetDate) {
     if (lastDailyBudgetDate == null) {
       return false;

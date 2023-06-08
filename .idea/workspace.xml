@@ -10,39 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f804cacb-11f3-401f-af44-61668d480b84" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80 1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80 2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/screenshots/eng/iphone6.5/1.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/screenshots/eng/iphone6.5/2.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/screenshots/eng/iphone6.5/3.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/screenshots/eng/iphone6.5/6.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/pocket_lab/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/profile/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/profile/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/102.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/common/provider/payment_status_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/common/provider/payment_status_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/common/util/daily_budget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/common/util/daily_budget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/repository/trend_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/repository/trend_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/repository/wallet_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/repository/wallet_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/view/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/home_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pocket_lab.iml" beforeDir="false" afterPath="$PROJECT_DIR$/pocket_lab.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/icon_original/3631642_budget_finance_money_icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/icon_original/3631642_budget_finance_money_icon.svg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +68,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
@@ -151,8 +122,38 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
-          <line>164</line>
+          <line>165</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
+          <line>27</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
+          <line>30</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
+          <line>168</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart</url>
+          <line>171</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
+          <line>36</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/common/util/daily_budget.dart</url>
+          <line>41</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

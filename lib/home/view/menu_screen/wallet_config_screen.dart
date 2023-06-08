@@ -22,7 +22,7 @@ final walletConfigScrollProvider = Provider<ScrollController>((ref) {
 });
 
 class WalletConfigScreen extends ConsumerStatefulWidget {
-  Wallet? wallet = Wallet(budget: BudgetModel(), name: '');
+  Wallet? wallet;
   bool isEdit;
   WalletConfigScreen({required this.isEdit, this.wallet, super.key});
 
@@ -33,6 +33,13 @@ class WalletConfigScreen extends ConsumerStatefulWidget {
 class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   Wallet _wallet = Wallet(budget: BudgetModel(), name: '');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void didChangeDependencies() {
+    if (widget.isEdit) {
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +71,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             //: widget.wallet != null일 경우는 edit mode
             if (widget.wallet != null) {
               await walletRepository.configWallet(widget.wallet!);
+              await DailyBudget().add(ref);
               await ref
                   .read(trendRepositoryProvider.notifier)
                   .syncTrend(widget.wallet!.id);
@@ -71,11 +79,11 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               //: 선택된 아이콘 저장
               //: add mode
               await walletRepository.configWallet(_wallet);
+              await DailyBudget().add(ref);
               await ref
                   .read(trendRepositoryProvider.notifier)
                   .syncTrend(_wallet.id);
             }
-            await DailyBudget().add(ref);
 
             Navigator.of(context).pop();
           }
@@ -97,9 +105,9 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   }
 
   List<InputTile> _inputTileList(BuildContext context) {
-    BudgetType budgetType = ref.watch(budgetTypeProvider);
-    if (widget.wallet != null) {
-      budgetType = widget.wallet!.budgetType;
+    BudgetType budgetType = BudgetType.dontSet;
+    if (!widget.isEdit) {
+      budgetType = ref.watch(budgetTypeProvider);
     }
 
     bool _isSpecificDateType = budgetType == BudgetType.perSpecificDate;
@@ -238,14 +246,6 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   InputTile _selectBudgetTypeInputTile() {
     BudgetType initialValue = BudgetType.dontSet;
 
-    ///: edit mode일 경우
-    ///: 해당 wallet의 budgetType을 가져옴
-    if (widget.wallet != null) {
-      debugPrint("Select Budget Type : ${widget.wallet!.budgetType.name}");
-      initialValue = widget.wallet!.budgetType;
-    } else {
-      initialValue = ref.read(budgetTypeProvider);
-    }
 
     return InputTile(
       fieldName: "wallet config screen.select budget type".tr(),

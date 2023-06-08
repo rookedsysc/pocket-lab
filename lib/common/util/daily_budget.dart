@@ -29,7 +29,6 @@ class DailyBudget {
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
     //# 모든 wallets을 반복
     for (Wallet wallet in wallets) {
-
       await ref.read(trendRepositoryProvider.notifier)
           .syncTrend(wallet.id);
       if (wallet.budgetType == BudgetType.dontSet) {

@@ -88,5 +88,6 @@
   },
   "EDIT" : "수정",
   "ADD" : "추가",
-  "DEL" : "삭제"
+  "DEL" : "삭제",
+  "wallet delete alert" : "You must have at least one wallet."
 }

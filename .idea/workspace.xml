@@ -10,10 +10,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f804cacb-11f3-401f-af44-61668d480b84" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/256 2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/home/view/widget/category_editable_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/widget/category_editable_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset/translations/en-US.json" beforeDir="false" afterPath="$PROJECT_DIR$/asset/translations/en-US.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset/translations/ko-KR.json" beforeDir="false" afterPath="$PROJECT_DIR$/asset/translations/ko-KR.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/80.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/goal/component/goal_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/goal/component/goal_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/component/menu_screen/wallet_tile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/view/home_screen/category_input_modal_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/home_screen/category_input_modal_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/menu_screen/wallet_config_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/home/view/widget/color_picker_alert_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/home/view/widget/color_picker_alert_dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/transaction/model/category_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/transaction/model/category_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/transaction/repository/category_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/transaction/repository/category_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils/app_init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/app_init.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +82,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>

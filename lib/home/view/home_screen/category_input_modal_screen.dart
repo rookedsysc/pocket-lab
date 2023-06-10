@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
@@ -10,7 +11,7 @@ import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
 class CategoryInputModalScreen extends ConsumerStatefulWidget {
   TransactionCategory? category;
@@ -22,13 +23,22 @@ class CategoryInputModalScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
+
   @override
-  void didChangeDependencies() {
+  void initState() {
     if (!widget.isEdit) {
       widget.category = TransactionCategory(color: 'ffffff', name: '');
-    } 
-    super.didChangeDependencies();
+    }
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    _formKey.currentState?.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +77,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (context) => ColorPickerAlertDialog());
+                builder: (context) => ColorPickerAlertDialog(onColorChanged: _onColorChanged(ref),));
           },
           child: Text(
             "category input modal screen.color picker".tr(),
@@ -79,6 +89,19 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
         ));
   }
 
+  _onColorChanged(WidgetRef ref) {
+    return (Color color) {
+      ref.read(colorProvider.notifier).update((state) => color);
+      if (widget.category != null) {
+        widget.category!.color = ColorUtils.colorToHexString(color);
+      }
+
+      if (mounted) {
+        setState(() {});
+      }
+    };
+  }
+
   InputTile _categoryNameInputTile() {
     return InputTile(
       fieldName: "category input modal screen.name".tr(),
@@ -88,6 +111,7 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           if (newValue != null && newValue.isNotEmpty) {
             widget.category!.name = newValue;
           }
+          return;
         },
         validator: widget.isEdit ? null : (value) {
           if (value == null || value.isEmpty) {
@@ -95,22 +119,40 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           }
           return null;
         },
-        onTap: () {},
+        onTap: () {
+
+        },
       ),
     );
   }
 
   VoidCallback _onSavePressed() {
     return () async {
-      widget.category!.color =
-          ColorUtils.colorToHexString(ref.watch(colorProvider.notifier).state);
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-        await ref
-            .watch(categoryRepositoryProvider.notifier)
-            .configCategory(widget.category!);
+      if (_formKey.currentState == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Current State is Null."),
+          ),
+        );
+        Navigator.of(context).pop();
       }
-      Navigator.pop(context);
+      if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Validator passed."),
+          ),
+        );
+        _formKey.currentState!.save();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Validator passed."),
+          ),
+        );
+        await ref
+            .read(categoryRepositoryProvider.notifier)
+            .configCategory(category: widget.category!, isEdit: widget.isEdit);
+        Navigator.pop(context);
+      }
     };
   }
 }

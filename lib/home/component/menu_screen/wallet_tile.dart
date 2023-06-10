@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -158,7 +159,7 @@ class _MenuTileState extends ConsumerState<WalletTile> {
       if (_walletCount == 1) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("지갑은 최소 한 개 이상 있어야 합니다."),
+            content: Text("wallet delete alert".tr()),
           ),
         );
 

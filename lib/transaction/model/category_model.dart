@@ -13,6 +13,6 @@ class TransactionCategory {
     this.id = Isar.autoIncrement,
     required this.name,
     required this.color,
-    this.order = 0,
+    this.order = 999,
   });
 }

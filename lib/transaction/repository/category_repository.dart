@@ -46,10 +46,12 @@ class CategoryRepository extends StateNotifier<List<TransactionCategory>> {
   }
 
   //# 카테고리 추가
-  Future<void> configCategory(TransactionCategory category) async {
+  Future<void> configCategory({required TransactionCategory category, required bool isEdit}) async {
     final Isar isar = await ref.read(isarProvieder.future);
-    int order = _getNextOrder();
-    category.order = order;
+    if (!isEdit) {
+      category.order = _getNextOrder();
+    }
+
     await isar.writeTxn(() async {
       await isar.transactionCategorys.put(category);
     });

@@ -60,9 +60,11 @@ class _TrendChartLayoutState extends ConsumerState<TrendChartLayout> {
               axisLine: AxisLine(width: 0),
               majorGridLines: MajorGridLines(width: 0.25, color: Colors.grey.shade200),
             ),
-      
+            
             ///# 스크롤 가능하게 설정
             zoomPanBehavior: ZoomPanBehavior(
+              //: 가로로만 스크롤 가능함
+              zoomMode: ZoomMode.x,
               enablePanning: true,
             ),
             tooltipBehavior: _tooltipBehavior,

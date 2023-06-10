@@ -156,7 +156,7 @@ class _GoalChartState extends ConsumerState<GoalChart> {
         await ref.read(walletRepositoryProvider.notifier).getAllWalletsFuture();
     wallets.map((e) => totalBalance += e.balance).toList();
 
-    _getFutureChartData(totalBalance);
+    futureDays = _getFutureChartData(totalBalance);
 
     if (mounted) {
       setState(() {});
@@ -173,13 +173,13 @@ class _GoalChartState extends ConsumerState<GoalChart> {
 
     debugPrint("average : $average");
 
-    if (average < 0 ) {
-      return 0;
-    }
-
     // is First Trend
     if (average.isNaN) {
-      average = chartData.first.amount;
+      return chartData.last.amount.toInt();
+    }
+
+    if (average < 0 ) {
+      return 0;
     }
 
     while (widget.goalAmount > totalBalance) {

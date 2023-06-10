@@ -56,6 +56,8 @@ class _CalendarState extends ConsumerState<Calendar> {
                 shouldFillViewport: true,
                 //: header 없앰
                 headerVisible: false,
+                //: 세로 스크롤 안되게 함
+                availableGestures: AvailableGestures.horizontalSwipe,
                 focusedDay: _focusedDay,
                 firstDay: DateTime.now().subtract(Duration(days: 365 * 1000)),
                 lastDay: DateTime.now().add(Duration(days: 365 * 1000)),

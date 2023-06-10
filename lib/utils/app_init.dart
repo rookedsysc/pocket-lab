@@ -44,17 +44,29 @@ class AppInit {
         await categoryRepository.getAllCategories();
     if (categories.isEmpty) {
       await categoryRepository.configCategory(
-          TransactionCategory(name: "init category.unclassified".tr(), color: "D3D3D3")); //: 연한 흰색
+          category: TransactionCategory(
+              name: "init category.unclassified".tr(), color: "D3D3D3"),
+          isEdit: false); //: 연한 흰색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "init category.food".tr(), color: "0067A3")); //: 파랑
+          category: TransactionCategory(
+              name: "init category.food".tr(), color: "0067A3"),
+          isEdit: false); //: 파랑
       await categoryRepository.configCategory(
-          TransactionCategory(name: "init category.hobby".tr(), color: "ff0000")); //: 빨간색
+          category: TransactionCategory(
+              name: "init category.hobby".tr(), color: "ff0000"),
+          isEdit: false); //: 빨간색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "init category.cost of living".tr(), color: "ffff00")); //: 노란색
-      await categoryRepository.configCategory(TransactionCategory(
-          name: "init category.fashion".tr(), color: "800080")); //: 보라색
+          category: TransactionCategory(
+              name: "init category.cost of living".tr(), color: "ffff00"),
+          isEdit: false); //: 노란색
       await categoryRepository.configCategory(
-          TransactionCategory(name: "init category.study".tr(), color: "008000")); //: 초록색
+          category: TransactionCategory(
+              name: "init category.fashion".tr(), color: "800080"),
+          isEdit: false); //: 보라색
+      await categoryRepository.configCategory(
+          category: TransactionCategory(
+              name: "init category.study".tr(), color: "008000"),
+          isEdit: false); //: 초록색
     }
     ref.read(categoryRepositoryProvider.notifier).syncCategoryCache();
   }

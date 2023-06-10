@@ -311,13 +311,14 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
   //# 지갑 이름
   InputTile _walletNameInputTile() {
     return InputTile(
-        fieldName: "wallet config screen.wallet name".tr(),
-        inputField: TextTypeTextFormField(
-            validator:
-                widget.wallet == null ? _walletNameInputTileValidator() : null,
-            onTap: _onTap,
-            onSaved: (_walletNameInputTileOnSaved),
-            hintText: widget.wallet?.name ?? null));
+      fieldName: "wallet config screen.wallet name".tr(),
+      inputField: TextTypeTextFormField(
+          validator:
+              widget.wallet == null ? _walletNameInputTileValidator() : null,
+          onTap: _onTap,
+          onSaved: (_walletNameInputTileOnSaved),
+          hintText: widget.wallet?.name ?? null),
+    );
   }
 
   void _onTap() {

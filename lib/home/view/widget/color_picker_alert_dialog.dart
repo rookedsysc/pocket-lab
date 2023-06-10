@@ -7,7 +7,9 @@ final colorProvider = StateProvider<Color>((ref) {
 });
 
 class ColorPickerAlertDialog extends ConsumerWidget {
-  const ColorPickerAlertDialog({super.key});
+  final ValueChanged<Color> onColorChanged;
+  
+  const ColorPickerAlertDialog({required this.onColorChanged,super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,13 +27,12 @@ class ColorPickerAlertDialog extends ConsumerWidget {
       content: SingleChildScrollView(
         child: HueRingPicker(
           pickerColor: ref.watch(colorProvider),
-          onColorChanged: (color) {
-            ref.refresh(colorProvider.notifier).update((state) => color);
-          },
+          onColorChanged: onColorChanged,
           enableAlpha: false,
           displayThumbColor: true,
         ),
       ),
     );
   }
+
 }

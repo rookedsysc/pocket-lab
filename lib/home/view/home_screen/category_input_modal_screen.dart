@@ -11,29 +11,20 @@ import 'package:pocket_lab/transaction/model/category_model.dart';
 import 'package:pocket_lab/transaction/repository/category_repository.dart';
 import 'package:pocket_lab/transaction/repository/transaction_repository.dart';
 
-
-
 class CategoryInputModalScreen extends ConsumerStatefulWidget {
   TransactionCategory? category;
-  final bool isEdit; 
-  CategoryInputModalScreen({required this.isEdit,this.category,super.key});
+  final bool isEdit;
+  CategoryInputModalScreen({required this.isEdit, this.category, super.key});
 
   @override
-  ConsumerState<CategoryInputModalScreen> createState() => _CategoryInputModalScreenState();
+  ConsumerState<CategoryInputModalScreen> createState() =>
+      _CategoryInputModalScreenState();
 }
 
-class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScreen> {
+class _CategoryInputModalScreenState
+    extends ConsumerState<CategoryInputModalScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    if (!widget.isEdit) {
-      widget.category = TransactionCategory(color: 'ffffff', name: '');
-    }
-    super.initState();
-  }
-
 
   @override
   void dispose() {
@@ -77,7 +68,9 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (context) => ColorPickerAlertDialog(onColorChanged: _onColorChanged(ref),));
+                builder: (context) => ColorPickerAlertDialog(
+                      onColorChanged: _onColorChanged(ref),
+                    ));
           },
           child: Text(
             "category input modal screen.color picker".tr(),
@@ -113,41 +106,29 @@ class _CategoryInputModalScreenState extends ConsumerState<CategoryInputModalScr
           }
           return;
         },
-        validator: widget.isEdit ? null : (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
-        onTap: () {
-
-        },
+        validator: widget.isEdit
+            ? null
+            : (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+        onTap: () {},
       ),
     );
   }
 
   VoidCallback _onSavePressed() {
     return () async {
-      if (_formKey.currentState == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Current State is Null."),
-          ),
-        );
-        Navigator.of(context).pop();
-      }
       if (_formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Validator passed."),
-          ),
-        );
+        if (widget.category == null) {
+          String _color = ColorUtils.colorToHexString(
+              ref.read(colorProvider.notifier).state);
+          widget.category =
+              TransactionCategory(color: _color, name: 'initail name');
+        }
         _formKey.currentState!.save();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Validator passed."),
-          ),
-        );
         await ref
             .read(categoryRepositoryProvider.notifier)
             .configCategory(category: widget.category!, isEdit: widget.isEdit);

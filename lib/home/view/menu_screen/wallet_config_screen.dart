@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/custom_text_form_field.dart';
 import 'package:pocket_lab/common/component/input_tile.dart';
+import 'package:pocket_lab/common/provider/date_picker_time_provider.dart';
 import 'package:pocket_lab/common/util/custom_number_utils.dart';
 import 'package:pocket_lab/common/util/date_utils.dart';
 import 'package:pocket_lab/common/util/daily_budget.dart';
@@ -39,10 +40,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   @override
   void didChangeDependencies() {
-    debugPrint("help!");
-    if (!widget.isEdit) {
-      ref.read(budgetTypeProvider.notifier).setBudgetType(BudgetType.dontSet);
-    }
+
 
     super.didChangeDependencies();
   }
@@ -64,6 +62,16 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
             //: 선택된 주기 확인
             widget.wallet?.budget.budgetPeriod = getBudgetPeriod();
             _wallet.budget.budgetPeriod = getBudgetPeriod();
+
+            //: budgetType 저장
+            _wallet.budgetType = ref.read(budgetTypeProvider);
+            widget.wallet?.budgetType = ref.read(budgetTypeProvider);
+
+            //: budgetDate 저장
+            debugPrint("datePickerTimeProvider : ${ref.read(datePickerTimeProvider)}");
+            _wallet.budget.budgetDate = ref.read(datePickerTimeProvider);
+            widget.wallet?.budget.budgetDate =
+                ref.read(datePickerTimeProvider);
 
             //: 선택된 아이콘 저장
             widget.wallet?.imgAddr =
@@ -176,15 +184,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
       };
 
   InputTile _isSpecificDateInputTile(bool isSpecificDateType) {
-    late String _selectedDate;
-    if (widget.wallet?.budget.budgetDate != null) {
-      _selectedDate = DateTimeDateUtils()
-          .dateToFyyyyMMdd(widget.wallet!.budget.budgetDate!);
-    } else {
-      _selectedDate = _wallet.budget.budgetDate == null
-          ? "wallet config screen.select date".tr()
-          : CustomDateUtils().dateToFyyyyMMdd(_wallet.budget.budgetDate!);
-    }
+    late String _selectedDate = CustomDateUtils().dateToFyyyyMMdd(ref.watch(datePickerTimeProvider));
     return InputTile(
         fieldName: "wallet config screen.select date".tr(),
         inputField: TextButton(
@@ -209,7 +209,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
       height: 400,
       child: SfDateRangePicker(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        initialSelectedDate: widget.wallet?.budget.budgetDate ?? DateTime.now(),
+        initialSelectedDate: ref.watch(datePickerTimeProvider),
         minDate: DateTime.now(),
         maxDate: DateTime(
             DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
@@ -225,6 +225,7 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
               textStyle: Theme.of(context).textTheme.bodySmall),
         ),
         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+          ref.read(datePickerTimeProvider.notifier).state = args.value;
           if (widget.wallet == null) {
             _wallet.budget.budgetDate = args.value;
             _wallet.budget.originDay = args.value.day;
@@ -245,7 +246,6 @@ class _WalletConfigScreenState extends ConsumerState<WalletConfigScreen> {
 
   InputTile _selectBudgetTypeInputTile() {
     BudgetType initialValue = ref.read(budgetTypeProvider);
-
     return InputTile(
       fieldName: "wallet config screen.select budget type".tr(),
       // hint: "none / perWeek / perMonth / perSpecificDate",

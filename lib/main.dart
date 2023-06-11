@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_lab/common/constant/init_screen.dart';
+import 'package:pocket_lab/common/provider/provider_logger.dart';
 import 'package:pocket_lab/goal/view/goal_screen.dart';
 import 'package:pocket_lab/home/view/drawer_screen.dart';
 import 'package:sheet/route.dart';
@@ -14,6 +15,9 @@ void main() async {
   await EasyLocalization.ensureInitialized();
 
   runApp(ProviderScope(
+    observers: [
+      Logger()
+    ],
     child: EasyLocalization(
         supportedLocales: [
           const Locale('en', 'US'),

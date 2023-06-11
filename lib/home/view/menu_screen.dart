@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pocket_lab/common/component/header_collection.dart';
 import 'package:pocket_lab/home/component/menu_screen/wallet_tile.dart';
 import 'package:pocket_lab/home/model/wallet_model.dart';
+import 'package:pocket_lab/home/provider/budget_type_provider.dart';
 import 'package:pocket_lab/home/repository/wallet_repository.dart';
 import 'package:pocket_lab/home/view/menu_screen/wallet_config_screen.dart';
 
@@ -23,7 +23,7 @@ class MenuScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: _walletHeader(context),
+              child: _walletHeader(context, ref),
             ),
             _walletListStreamBuilder(ref)
           ],
@@ -53,7 +53,7 @@ class MenuScreen extends ConsumerWidget {
         });
   }
 
-  Row _walletHeader(BuildContext context) {
+  Row _walletHeader(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -62,6 +62,9 @@ class MenuScreen extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () {
+            ref
+                .read(budgetTypeProvider.notifier)
+                .setBudgetType(BudgetType.dontSet);
             CupertinoScaffold.showCupertinoModalBottomSheet(
               context: context,
               builder: (context) {

@@ -135,7 +135,8 @@ class DailyBudget {
             CustomDateUtils().diffDays(_budgetDate, DateTime.now());
         //: 마지막 예산일 ~ 오늘 날짜까지의 예산을 더해줌
         _dailyBudgetAmount += budget.balance! / _diffDays;
-        budget.balance = budget.balance! - budget.balance! / _diffDays;
+        budget.balance = budget.balance! - (budget.balance! / _diffDays);
+        lastDailyBudgetDate = DateTime.now();
       }
     } while (lastDailyBudgetDate == null ||
         CustomDateUtils().isBeforeDay(lastDailyBudgetDate, DateTime.now()));

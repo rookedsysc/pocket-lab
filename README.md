@@ -3,14 +3,10 @@
 Welcome to the repository for my first ever application! This project has been a labor of love for two months and has been a journey of countless trials and errors. While there are still many imperfections as this is my initial attempt, I aim to further develop and stabilize it as I use this app as a stepping stone for future projects!
 
 ## Screen Shots
-![8](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/ba060d6b-be9a-4487-a8d4-bc9efa1ab94a)
-![7](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/c92f3e30-fc1a-4bdc-ac98-b591c4f1c285)
-![6](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/739b7c8b-8d02-41e4-976c-d7bcb42d5b2f)
-![5](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/e9b8615c-fd7c-4578-a6cf-c557489dcd92)
-![4](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/bf0994a0-ae57-497d-8c7a-aa1fc203fbfc)
-![3](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/4d27c41e-e4d2-464e-b0e9-39cec20c6e3c)
-![2](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/97d593e2-f18e-4464-896d-958596a3601e)
-![1](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/f42940b3-0a7b-4bae-850b-863903c22315)
+| ![1](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/f42940b3-0a7b-4bae-850b-863903c22315) | ![2](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/97d593e2-f18e-4464-896d-958596a3601e) | ![3](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/4d27c41e-e4d2-464e-b0e9-39cec20c6e3c) | ![4](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/bf0994a0-ae57-497d-8c7a-aa1fc203fbfc) |
+| ---- | ---- | ---- | ---- |
+| ![5](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/e9b8615c-fd7c-4578-a6cf-c557489dcd92) | ![6](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/739b7c8b-8d02-41e4-976c-d7bcb42d5b2f) | ![7](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/c92f3e30-fc1a-4bdc-ac98-b591c4f1c285) | ![8](https://github.com/rookedsysc/Pocket-Lab/assets/67862775/ba060d6b-be9a-4487-a8d4-bc9efa1ab94a) |
+
 
 ## Differentiation
 
